@@ -37,7 +37,7 @@ class ProxyList implements ProxyListInterface
      */
     public function getProxyList(string $proxyClassName): array
     {
-        if (!isset(class_implements($proxyClassName)['Letov\Flycatcher\Modules\Proxy\ProxyInterface'])) {
+        if (!isset(class_implements($proxyClassName)[__NAMESPACE__ . '\ProxyInterface'])) {
             throw new Exception($proxyClassName . ' does not implement ProxyInterface.');
         }
         $this->getActiveProxyList();

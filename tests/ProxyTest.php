@@ -1,9 +1,11 @@
 <?php
 
+namespace Letov\Flycatcher\Modules\Proxy;
+
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Letov\Flycatcher\Modules\Proxy\ProxyList;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 class ProxyTest extends TestCase
@@ -21,7 +23,7 @@ class ProxyTest extends TestCase
      */
     function testProxy()
     {
-        $proxy = self::$container->make("Letov\Flycatcher\Modules\Proxy\Proxy", [
+        $proxy = self::$container->make(__NAMESPACE__ . "\Proxy", [
             'ip' => '12.34.56.78',
             'port' => 9,
             'user' => 'fakeUser',
