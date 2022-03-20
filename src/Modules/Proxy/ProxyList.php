@@ -37,7 +37,7 @@ class ProxyList implements ProxyListInterface
      */
     public function getProxyList(string $proxyClassName): array
     {
-        if (!isset(class_implements($proxyClassName)[__NAMESPACE__ . '\ProxyInterface'])) {
+        if (!isset(class_implements($proxyClassName)[ProxyInterface::class])) {
             throw new Exception($proxyClassName . ' does not implement ProxyInterface.');
         }
         $this->getActiveProxyList();

@@ -11,12 +11,19 @@
   ],
   "require": {
     "php-di/php-di": "6.0.0",
-    "slruslan/php-proxy6": "1.1",
+    "slruslan/php-proxy6": "1.1"
+  },
+  "require-dev": {
     "phpunit/phpunit": "^8.5|^9.0"
   },
   "autoload": {
     "psr-4": {
       "Letov\\Flycatcher\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Letov\\Flycatcher\\Tests\\": "tests/"
     }
   }
 }
