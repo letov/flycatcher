@@ -2,7 +2,7 @@
 
 namespace Letov\Flycatcher\Modules\Proxy;
 
-class Proxy
+class Proxy implements ProxyInterface
 {
     public String $ip;
     public String $port;
@@ -27,4 +27,3 @@ class Proxy
         return "$this->user:$this->pass";
     }
 }
-

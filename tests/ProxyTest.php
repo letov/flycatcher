@@ -1,24 +1,40 @@
 <?php
 
-namespace Proxy;
-
-use Exception;
-use Letov\Flycatcher\Modules\Proxy\Proxy;
-use Letov\Flycatcher\Modules\Proxy\Proxy6List;
+use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
+use Letov\Flycatcher\Modules\Proxy\ProxyList;
 use PHPUnit\Framework\TestCase;
 
 class ProxyTest extends TestCase
 {
-    function testProxy() {
-        $proxy = new Proxy("12.34.56.78","9","user","pass");
-        $this->assertSame("12.34.56.78:9",$proxy->getSocket());
-        $this->assertSame("user:pass",$proxy->getAuth());
+    private static Container $container;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$container = new Container();
     }
 
-    function testProxy6List() {
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    function testProxy()
+    {
+        $proxy = self::$container->make("Letov\Flycatcher\Modules\Proxy\Proxy", [
+            'ip' => '12.34.56.78',
+            'port' => 9,
+            'user' => 'fakeUser',
+            'pass' => 'fakePass'
+        ]);
+        $this->assertSame("12.34.56.78:9",$proxy->getSocket());
+        $this->assertSame("fakeUser:fakePass",$proxy->getAuth());
+    }
+
+    function testProxyList()
+    {
         $this->expectException(Exception::class);
-        $proxyList = new Proxy6List("fakeKey", 10);
-        $proxyList->getProxyList();
+        new ProxyList("fakeKey", 10);
     }
 
 }

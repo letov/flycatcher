@@ -2,14 +2,16 @@
 
 namespace Letov\Flycatcher\Modules\Proxy;
 
+use DI\Container;
 use Exception;
 use Slruslan\Proxy6\ProxyState;
 use Slruslan\Proxy6\ProxyType;
 use Slruslan\Proxy6\ProxyVersion;
 use Slruslan\Proxy6\Wrapper;
 
-class Proxy6List extends AbstractProxyList
+class ProxyList implements ProxyListInterface
 {
+
     private Wrapper $api;
     private object $list;
     private int $proxyNeededCount;
@@ -25,7 +27,7 @@ class Proxy6List extends AbstractProxyList
         try {
             $this->api->getBalance();
         } catch (Exception $e) {
-            throw new Exception('Invalid key');
+            throw new Exception('Invalid key.');
         }
         $this->proxyNeededCount = $proxyNeededCount;
     }
@@ -33,19 +35,27 @@ class Proxy6List extends AbstractProxyList
     /**
      * @throws Exception
      */
-    public function getProxyList(): array
+    public function getProxyList(string $proxyClassName): array
     {
-        $this->list = $this->api->getProxy(ProxyState::ACTIVE);
+        if (!isset(class_implements($proxyClassName)['ProxyInterface'])) {
+            throw new Exception($proxyClassName . 'does not implement ProxyInterface.');
+        }
+        $this->getActiveProxyList();
         if (!isset($this->list->list_count)) {
-            throw new Exception('Cant get proxy');
+            throw new Exception('Cant get proxy.');
         }
         $this->checkProxyCount();
-        $this->setType();
-        $result = [Proxy::class];
+        $this->setSock5Type();
+        $result = [ProxyInterface::class];
+        $container = new Container();
         foreach ($this->list as $proxy) {
-            $result[] = new Proxy($proxy->ip, $proxy->port, $proxy->user, $proxy->pass);
+            $result[] = $container->make($proxyClassName, (array)$proxy);
         }
         return $result;
+    }
+
+    private function getActiveProxyList() {
+        $this->list = $this->api->getProxy(ProxyState::ACTIVE);
     }
 
     /**
@@ -56,14 +66,14 @@ class Proxy6List extends AbstractProxyList
         if ($this->list < $this->proxyNeededCount) {
             $buyCount = $this->proxyNeededCount - $this->list->list_count;
             $this->api->buy($buyCount, 30, 'ru', ProxyVersion::IPV4);
-            $this->getProxyList();
+            $this->getActiveProxyList();
             if ($this->list < $this->proxyNeededCount) {
-                throw new Exception('Need more money in Proxy6 service');
+                throw new Exception('Need more money in Proxy6 service.');
             }
         }
     }
 
-    private function setType()
+    private function setSock5Type()
     {
         $keys = [];
         foreach ($this->list as $proxy) {
