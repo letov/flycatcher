@@ -6,7 +6,7 @@ interface ProxyListInterface
 {
     /**
      * @param string $proxyClassName Class name implements ProxyInterface.
-     * @return array Return [ProxyInterface::class]
+     * @return array Return [ProxyInterface]
      */
     public function getProxyList(string $proxyClassName): array;
 }

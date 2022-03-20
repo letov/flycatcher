@@ -13,7 +13,7 @@ class ProxyList implements ProxyListInterface
 {
 
     private Wrapper $api;
-    private object $list;
+    private object $response;
     private int $proxyNeededCount;
 
     /**
@@ -37,25 +37,25 @@ class ProxyList implements ProxyListInterface
      */
     public function getProxyList(string $proxyClassName): array
     {
-        if (!isset(class_implements($proxyClassName)['ProxyInterface'])) {
-            throw new Exception($proxyClassName . 'does not implement ProxyInterface.');
+        if (!isset(class_implements($proxyClassName)['Letov\Flycatcher\Modules\Proxy\ProxyInterface'])) {
+            throw new Exception($proxyClassName . ' does not implement ProxyInterface.');
         }
         $this->getActiveProxyList();
-        if (!isset($this->list->list_count)) {
+        if (!isset($this->response->list_count)) {
             throw new Exception('Cant get proxy.');
         }
         $this->checkProxyCount();
         $this->setSock5Type();
-        $result = [ProxyInterface::class];
+        $result = [];
         $container = new Container();
-        foreach ($this->list as $proxy) {
+        foreach ($this->response->list as $proxy) {
             $result[] = $container->make($proxyClassName, (array)$proxy);
         }
         return $result;
     }
 
     private function getActiveProxyList() {
-        $this->list = $this->api->getProxy(ProxyState::ACTIVE);
+        $this->response = $this->api->getProxy(ProxyState::ACTIVE);
     }
 
     /**
@@ -63,11 +63,11 @@ class ProxyList implements ProxyListInterface
      */
     private function checkProxyCount()
     {
-        if ($this->list < $this->proxyNeededCount) {
-            $buyCount = $this->proxyNeededCount - $this->list->list_count;
+        if ($this->response->list_count < $this->proxyNeededCount) {
+            $buyCount = $this->proxyNeededCount - $this->response->list_count;
             $this->api->buy($buyCount, 30, 'ru', ProxyVersion::IPV4);
             $this->getActiveProxyList();
-            if ($this->list < $this->proxyNeededCount) {
+            if ($this->response < $this->proxyNeededCount) {
                 throw new Exception('Need more money in Proxy6 service.');
             }
         }
@@ -76,7 +76,8 @@ class ProxyList implements ProxyListInterface
     private function setSock5Type()
     {
         $keys = [];
-        foreach ($this->list as $proxy) {
+        foreach ($this->response->list as $proxy) {
+
             $keys[] = $proxy->id;
         }
         $this->api->setType($keys, ProxyType::SOCKS5);

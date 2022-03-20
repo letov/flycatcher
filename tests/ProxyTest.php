@@ -31,6 +31,9 @@ class ProxyTest extends TestCase
         $this->assertSame("fakeUser:fakePass",$proxy->getAuth());
     }
 
+    /**
+     * @throws Exception
+     */
     function testProxyList()
     {
         $this->expectException(Exception::class);
