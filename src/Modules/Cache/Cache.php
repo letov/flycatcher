@@ -2,28 +2,21 @@
 
 namespace Letov\Flycatcher\Modules\Cache;
 
-use DI\Container;
-use DI\DependencyException;
-use DI\NotFoundException;
-use Letov\Flycatcher\Modules\ShellCmd\ShellCmd;
+use Letov\Flycatcher\Modules\ShellCmd\ShellCmdInterface;
 
 class Cache implements CacheInterface
 {
     private int $maxFileLifetimeSecond;
     private bool $imageAlwaysFresh;
-    private Container $container;
+    private ShellCmdInterface $stat;
 
-    public function __construct(int $maxFileLifetimeSecond, bool $imageAlwaysFresh)
+    public function __construct(int $maxFileLifetimeSecond, bool $imageAlwaysFresh, ShellCmdInterface $stat)
     {
         $this->maxFileLifetimeSecond = $maxFileLifetimeSecond;
         $this->imageAlwaysFresh = $imageAlwaysFresh;
-        $this->container = new Container();
+        $this->stat = $stat;
     }
 
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
     public function valid(string $filePath): bool
     {
         if (!file_exists($filePath)) {
@@ -48,16 +41,11 @@ class Cache implements CacheInterface
         return (time() - filemtime($filePath)) > $this->maxFileLifetimeSecond;
     }
 
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
     private function isZeroSize(string $filePath): bool
     {
-        return 0 == (int)$this->container->get(ShellCmd::class)
-                    ->addArg("--printf", "%s", "=")
-                    ->addFlag($filePath)
-                    ->run("stat");
+        return 0 == (int)$this->stat
+                    ->addArg($filePath)
+                    ->run();
     }
 
     private function isImageFile(string $filePath): bool

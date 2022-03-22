@@ -2,6 +2,8 @@
 
 namespace Letov\Flycatcher\Tests\Modules\Cache;
 
+use DI\DependencyException;
+use DI\NotFoundException as NotFoundExceptionAlias;
 use Letov\Flycatcher\Modules\Cache\Cache;
 use PHPUnit\Framework\TestCase;
 use ReflectionException as ReflectionExceptionAlias;
@@ -11,9 +13,14 @@ class CacheTest extends TestCase
 {
     public Cache $cache;
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundExceptionAlias
+     */
     public function setUp(): void
     {
-        $this->cache = new Cache(1, true);
+        $container = require __DIR__ . '/../../bootstrap.dev.php';
+        $this->cache = $container->get('Cache');
     }
 
     /**

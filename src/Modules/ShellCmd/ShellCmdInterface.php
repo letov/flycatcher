@@ -4,7 +4,8 @@ namespace Letov\Flycatcher\Modules\ShellCmd;
 
 interface ShellCmdInterface
 {
-    public function addFlag(string $flag);
-    public function addArg(string $name, string $value, string $glue = " ");
-    public function run($cmd);
+    public function addArg(string $name, string $value = ""): ShellCmd;
+    public function updateArg(string $name, string $value = ""): ShellCmd;
+    public function removeArg(string $name): ShellCmd;
+    public function run();
 }
