@@ -11,7 +11,8 @@
   ],
   "require": {
     "php-di/php-di": "6.0.0",
-    "slruslan/php-proxy6": "1.1"
+    "slruslan/php-proxy6": "1.1",
+    "nette/php-generator": "3.6"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.5|^9.0"

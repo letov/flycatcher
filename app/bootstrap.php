@@ -4,6 +4,8 @@ use DI\ContainerBuilder;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+ArgsSupportShellCmdCodegen::generate();
+
 $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/config.php');
 /*$builder->enableCompilation(__DIR__ . '/tmp');

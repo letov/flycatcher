@@ -5,11 +5,10 @@ namespace Letov\Flycatcher\Tests\Modules\Cache;
 use DI\DependencyException;
 use DI\NotFoundException as NotFoundExceptionAlias;
 use Letov\Flycatcher\Modules\Cache\Cache;
-use PHPUnit\Framework\TestCase;
+use Letov\Flycatcher\Tests\TestCaseIncludeContainer;
 use ReflectionException as ReflectionExceptionAlias;
-use ReflectionMethod;
 
-class CacheTest extends TestCase
+class CacheTest extends TestCaseIncludeContainer
 {
     public Cache $cache;
 
@@ -19,20 +18,8 @@ class CacheTest extends TestCase
      */
     public function setUp(): void
     {
-        $container = require __DIR__ . '/../../bootstrap.dev.php';
-        $this->cache = $container->get('Cache');
-    }
-
-    /**
-     * @throws ReflectionExceptionAlias
-     */
-    public function reflectionMethod($class, $methodName, $args)
-    {
-        $method = new ReflectionMethod(get_class($class), $methodName);
-        $method->setAccessible(true);
-        return count($args) > 0 ?
-            $method->invokeArgs($class, $args) :
-            $method->invoke($class);
+        parent::setUp();
+        $this->cache = $this->container->get('Cache');
     }
 
     /**
@@ -61,10 +48,13 @@ class CacheTest extends TestCase
 
     /**
      * @throws ReflectionExceptionAlias
+     * @throws DependencyException
+     * @throws NotFoundExceptionAlias
      */
     public function testisImageFile() {
         $filePath = "/tmp/testisImageFile.png";
-        shell_exec("wget -q -O $filePath https://static.pleer.ru/i/logo.png");
+        $imgUrl = $this->container->get('Test.urlImage');
+        shell_exec("wget -q -O $filePath $imgUrl");
         $this->assertTrue($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $filePath]));
         shell_exec("echo \"crushImageStructure\" > $filePath");
         $this->assertFalse($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $filePath]));

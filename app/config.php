@@ -1,8 +1,8 @@
 <?php
 
 use Letov\Flycatcher\Modules\Cache\Cache;
-use Letov\Flycatcher\Modules\Proxy\Proxy6;
-use Letov\Flycatcher\Modules\Proxy\Proxy6Service;
+use Letov\Flycatcher\Modules\Proxy\Proxy6Service\Proxy6;
+use Letov\Flycatcher\Modules\Proxy\Proxy6Service\Proxy6Service;
 use Letov\Flycatcher\Modules\ShellCmd\ShellCmd;
 
 return [
@@ -12,13 +12,14 @@ return [
     'cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)
         ->constructor(
-            DI\get('cache.maxFileLifetimeSecond'),
-            DI\get('cache.imageAlwaysFresh'),
-            DI\get('shellCmd.stat'
+                DI\get('cache.maxFileLifetimeSecond'),
+                DI\get('cache.imageAlwaysFresh'),
+                DI\get('shellCmd.stat'
             )
         ),
     'shellCmd' => DI\create(ShellCmd::class),
-    'shellCmd.stat' => DI\create('shellCmd')
-        ->constructor('stat', '=')
+    'shellCmd.stat' => DI\create(ShellCmd::class)
+        ->constructor('stat')
+        ->method('updateArgDelimiter', '=')
         ->method('addArg', '--printf', '%s')
 ];

@@ -2,28 +2,15 @@
 
 namespace Letov\Flycatcher\Tests\Modules\Proxy;
 
-use DI\Container;
 use DI\DependencyException;
-use DI\NotFoundException as NotFoundExceptionAlias;
-use Exception;
-use PHPUnit\Framework\TestCase;
+use DI\NotFoundException;
+use Letov\Flycatcher\Tests\TestCaseIncludeContainer;
 
-class ProxyTest extends TestCase
+class ProxyTest extends TestCaseIncludeContainer
 {
-    public Container $container;
-
     /**
      * @throws DependencyException
-     * @throws NotFoundExceptionAlias
-     */
-    public function setUp(): void
-    {
-        $this->container = require __DIR__ . '/../../bootstrap.dev.php';
-    }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundExceptionAlias
+     * @throws NotFoundException
      */
     function testProxy()
     {
@@ -41,20 +28,11 @@ class ProxyTest extends TestCase
 
     /**
      * @throws DependencyException
-     * @throws NotFoundExceptionAlias
+     * @throws NotFoundException
      */
     function testProxyService()
     {
-        $realApiKey = "";
-        $this->expectException(Exception::class);
-        $proxyList = $this->container
-            ->make('ProxyService',
-                array(
-                    "apiKey" => $realApiKey,
-                    "proxyNeededCount" => 1
-                ))
-            ->getProxyList();
-        $this->assertSame(1, count($proxyList));
-        $this->assertSame(2, count(explode(":", $proxyList[0]->getSocket())));
+        $proxyList = $this->container->get("ProxyService")->getProxyList();
+        $this->assertGreaterThan(0, count($proxyList));
     }
 }

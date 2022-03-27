@@ -2,29 +2,20 @@
 
 namespace Letov\Flycatcher\Tests\Modules\ShellCmd;
 
-use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException as NotFoundExceptionAlias;
 use Exception;
-use Letov\Flycatcher\Modules\ShellCmd\ShellCmd;
-use PHPUnit\Framework\TestCase;
+use Letov\Flycatcher\Tests\TestCaseIncludeContainer;
 
-class ShellCmdTest extends TestCase
+class ShellCmdTest extends TestCaseIncludeContainer
 {
-    public Container $container;
-
     /**
      * @throws DependencyException
      * @throws NotFoundExceptionAlias
      */
-    public function setUp(): void
-    {
-        $this->container = require __DIR__ . '/../../bootstrap.dev.php';
-    }
-
     public function testShellCmd()
     {
-        $shellCmd = $this->container->make('shellCmd',
+        $shellCmd = $this->container->make('ShellCmd',
             array('cmd' => 'echo')
         );
         $this->assertSame("flycatcher",
@@ -40,9 +31,15 @@ class ShellCmdTest extends TestCase
         );
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundExceptionAlias
+     */
     public function testShellCmdThrow()
     {
         $this->expectException(Exception::class);
-        new ShellCmd("fakeCommand");
+        $this->container->make('ShellCmd',
+            array('cmd' => 'fakeCommand')
+        );
     }
 }
