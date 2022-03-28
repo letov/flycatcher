@@ -1,12 +1,12 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Downloader\Classes;
+namespace Letov\Flycatcher\Modules\Downloader\Units;
 
 use Exception as ExceptionAlias;
-use Letov\Flycatcher\Modules\Downloader\ArgsSupport\ArgsSupportShellCmd;
 use Letov\Flycatcher\Modules\Downloader\DownloaderInterface;
+use Letov\Flycatcher\Modules\Downloader\ShellCmdSupport\AbstractShellCmdSupport;
 
-class Wget extends ArgsSupportShellCmd
+class Wget extends AbstractShellCmdSupport
     implements DownloaderInterface
 {
     /**
@@ -48,15 +48,15 @@ class Wget extends ArgsSupportShellCmd
 
     private function setShellCmdProxyArgs()
     {
-        $proxy = $this->getProxy() && $this->getProxy()->getType() == 'https' ? $this->getProxy() : null;
-        $proxySocket = $proxy ? $proxy->getSocket() : null;
-        $proxyUser = $proxy ? $proxy->getUser() : null;
-        $proxyPass = $proxy ? $proxy->getPass() : null;
+        if (empty($this->getProxy()) || $this->getProxy()->getType() != 'https')
+        {
+            return;
+        }
         $this->shellCmd
             ->addArg("-e", "use_proxy=yes")
-            ->addArg("-e", "https_proxy=$proxySocket")
-            ->addArg("--proxy-user", $proxyUser)
-            ->addArg("--proxy-password", $proxyPass);
+            ->addArg("-e", "https_proxy={$this->getProxy()->getSocket()}")
+            ->addArg("--proxy-user", $this->getProxy()->getUser())
+            ->addArg("--proxy-password", $this->getProxy()->getPass());
     }
 
     private function setShellCmdHeaderArgs()

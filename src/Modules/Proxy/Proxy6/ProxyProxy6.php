@@ -1,10 +1,10 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Proxy\Proxy6Service;
+namespace Letov\Flycatcher\Modules\Proxy\Proxy6;
 
 use Letov\Flycatcher\Modules\Proxy\ProxyInterface;
 
-class Proxy6 implements ProxyInterface
+class ProxyProxy6 implements ProxyInterface
 {
     private object $proxy;
 

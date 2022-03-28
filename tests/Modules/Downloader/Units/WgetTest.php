@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\Modules\Downloader;
+namespace Letov\Flycatcher\Tests\Modules\Downloader\Units;
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -14,15 +14,14 @@ class WgetTest extends TestCaseIncludeContainer
      */
     public function testWgetDownloader()
     {
-        $tmpCookie = '/tmp/cookies';
-        @unlink($tmpCookie);
         $proxyList = $this->container->get("ProxyService")->getProxyList('https');
+        sleep(1);
         $this->assertGreaterThan(0, count($proxyList));
-        $wgetDownloader = $this->container->make('Wget', array(
+        $wget = $this->container->make('Wget', array(
             'args' => array(
-                'Proxy' => $proxyList[0],
+                'ProxyProxy6' => $proxyList[0],
                 'TimeOut' => $this->container->get('Downloader.timeout'),
-                'CookieFilePath' => $tmpCookie,
+                'CookieFilePath' => $this->tmpCookie,
                 'HttpMethod' => 'GET',
                 'Payload' => implode("=", array(
                     'someData' => 'someValue',
@@ -31,21 +30,17 @@ class WgetTest extends TestCaseIncludeContainer
                 'Headers' => array(
                     'User-Agent' => 'someUserAgent',
                     'Referer' => 'https://someReferer.com',
-                    'Accept' => $this->container->get('Header.accept'),
-                    'Accept-Language' => $this->container->get('Header.acceptLanguage'),
-                    'Accept-Encoding' => $this->container->get('Header.acceptEncoding'),
-                    'Connection' => $this->container->get('Header.connection'),
+                    'Accept' => $this->container->get('Downloader.accept'),
+                    'Accept-Language' => $this->container->get('Downloader.acceptLanguage'),
+                    'Accept-Encoding' => $this->container->get('Downloader.acceptEncoding'),
+                    'Connection' => $this->container->get('Downloader.connection'),
                 ),
             ),
             'shellCmd' => $this->container->get("ShellCmd.wget")
         ));
-        $tmpFile = '/tmp/testDownload';
-        @unlink($tmpFile);
-        $wgetDownloader->downloadFile('https://google.ru/fakeUrl/fakeUrl', $tmpFile);
-        $this->assertFileDoesNotExist($tmpFile);
-        $wgetDownloader->downloadFile($this->container->get('Test.urlImage'), $tmpFile);
-        $this->assertFileExists($tmpFile);
-        @unlink($tmpFile);
-        @unlink($tmpCookie);
+        $wget->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);
+        $this->assertFileDoesNotExist($this->tmpFile);
+        $wget->downloadFile($this->container->get('Test.urlImage'), $this->tmpFile);
+        $this->assertFileExists($this->tmpFile);
     }
 }

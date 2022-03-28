@@ -23,7 +23,5 @@ class ArgsSupportTest extends TestCaseIncludeContainer
             'TestMethodName' => 'TestArgValue'
         )));
         $this->assertEquals('TestArgValue', $this->reflectionMethod($argsSupport, 'getArg', ['methodName' => 'getTestMethodName']));
-        $this->expectException(Exception::class);
-        $this->reflectionMethod($argsSupport, 'getArg', ['methodName' => 'fake']);
     }
 }

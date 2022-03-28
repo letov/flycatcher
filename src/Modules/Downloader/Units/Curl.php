@@ -1,11 +1,11 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Downloader\Classes;
+namespace Letov\Flycatcher\Modules\Downloader\Units;
 
-use Letov\Flycatcher\Modules\Downloader\ArgsSupport\ArgsSupportShellCmd;
 use Letov\Flycatcher\Modules\Downloader\DownloaderInterface;
+use Letov\Flycatcher\Modules\Downloader\ShellCmdSupport\AbstractShellCmdSupport;
 
-class Curl extends ArgsSupportShellCmd
+class Curl extends AbstractShellCmdSupport
     implements DownloaderInterface
 {
 
@@ -45,8 +45,12 @@ class Curl extends ArgsSupportShellCmd
 
     private function setShellCmdProxyArgs()
     {
-        $proxySocket = $this->getProxy() ? $this->getProxy()->getType() . "://" . $this->getProxy()->getSocket() : null;
-        $proxyAuth = $this->getProxy() ? $this->getProxy()->getAuth() : null;
+        if (empty($this->getProxy()))
+        {
+            return;
+        }
+        $proxySocket = $this->getProxy()->getType() . "://" . $this->getProxy()->getSocket();
+        $proxyAuth = $this->getProxy()->getAuth();
         $this->shellCmd
             ->addArg("--proxy", $proxySocket)
             ->addArg("--proxy-user", $proxyAuth);

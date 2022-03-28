@@ -5,6 +5,7 @@ namespace Letov\Flycatcher\Tests;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException as NotFoundExceptionAlias;
+use Letov\Flycatcher\Modules\Proxy\ProxyInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionException as ReflectionExceptionAlias;
 use ReflectionMethod;
@@ -12,6 +13,8 @@ use ReflectionMethod;
 class TestCaseIncludeContainer extends TestCase
 {
     protected Container $container;
+    protected string $tmpFile;
+    protected string $tmpCookie;
 
     /**
      * @throws DependencyException
@@ -20,6 +23,21 @@ class TestCaseIncludeContainer extends TestCase
     public function setUp(): void
     {
         $this->container = require 'bootstrap.dev.php';
+        $this->tmpFile = '/tmp/test_download_' . $this->generateRandomString();
+        $this->tmpCookie = '/tmp/test_cookie_' . $this->generateRandomString();
+        @unlink($this->tmpFile);
+        @unlink($this->tmpCookie);
+    }
+
+    public function tearDown(): void
+    {
+        @unlink($this->tmpFile);
+        @unlink($this->tmpCookie);
+    }
+
+    function generateRandomString($length = 20) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            ceil($length/strlen($x)) )),1,$length);
     }
 
     /**

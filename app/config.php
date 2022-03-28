@@ -1,13 +1,13 @@
 <?php
 
 use Letov\Flycatcher\Modules\Cache\Cache;
-use Letov\Flycatcher\Modules\Proxy\Proxy6Service\Proxy6;
-use Letov\Flycatcher\Modules\Proxy\Proxy6Service\Proxy6Service;
+use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyProxy6;
+use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyServiceProxy6;
 use Letov\Flycatcher\Modules\ShellCmd\ShellCmd;
 
 return [
-    'Proxy' => DI\create(Proxy6::class),
-    'ProxyService' => DI\create(Proxy6Service::class),
+    'ProxyProxy6' => DI\create(ProxyProxy6::class),
+    'ProxyServiceProxy6' => DI\create(ProxyServiceProxy6::class),
     'cache.maxFileLifetimeSecond' => 1,
     'cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)

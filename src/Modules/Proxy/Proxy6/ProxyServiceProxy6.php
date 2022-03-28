@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Proxy\Proxy6Service;
+namespace Letov\Flycatcher\Modules\Proxy\Proxy6;
 
 use Exception;
 use Letov\Flycatcher\Modules\Proxy\ProxyServiceInterface;
@@ -9,7 +9,7 @@ use Slruslan\Proxy6\ProxyType;
 use Slruslan\Proxy6\ProxyVersion;
 use Slruslan\Proxy6\Wrapper;
 
-class Proxy6Service implements ProxyServiceInterface
+class ProxyServiceProxy6 implements ProxyServiceInterface
 {
 
     private Wrapper $api;
@@ -56,7 +56,7 @@ class Proxy6Service implements ProxyServiceInterface
         foreach ($this->response->list as $proxy) {
             if (('socks5' == $proxyType  && ProxyType::SOCKS5 == $proxy->type) ||
                 ('https' == $proxyType && ProxyType::HTTPS == $proxy->type)){
-                $result[] = new Proxy6($proxy);
+                $result[] = new ProxyProxy6($proxy);
             }
         }
         return $result;
@@ -76,7 +76,7 @@ class Proxy6Service implements ProxyServiceInterface
             $this->api->buy($buyCount, 30, "ru", ProxyVersion::IPV4);
             $this->updateResponse();
             if (true === $this->throwIfLessMinCount && $this->response < $this->minCount) {
-                throw new Exception("Need more money in Proxy6 service");
+                throw new Exception("Need more money in ProxyProxy6 service");
             }
         }
     }
