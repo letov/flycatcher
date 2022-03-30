@@ -8,5 +8,6 @@ interface ShellCmdInterface
     public function addArg(string $name, string $value = ""): ShellCmd;
     public function addArgUnsafe(string $value): ShellCmd;
     public function removeFromTail(int $count): ShellCmd;
+    public function removeAll(): ShellCmd;
     public function run(): ?string;
 }

@@ -29,6 +29,7 @@
     "nette/php-generator": "3.6",
     "adminanticaptcha/anticaptcha-php": "dev-master",
     "dimabdc/php-fast-simple-html-dom-parser": "dev-master",
+    "jonnyw/php-phantomjs": "^4.6.1",
     "ext-json": "*"
   },
   "require-dev": {

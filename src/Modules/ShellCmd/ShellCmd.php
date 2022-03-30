@@ -52,6 +52,12 @@ class ShellCmd implements ShellCmdInterface
         return $this;
     }
 
+    public function removeAll(): ShellCmd
+    {
+        $this->args = [];
+        return $this;
+    }
+
     public function run(): ?string
     {
         $cmdWithArgs[] = $this->cmd;

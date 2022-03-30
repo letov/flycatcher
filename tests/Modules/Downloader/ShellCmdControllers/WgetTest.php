@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\Modules\Downloader\Controllers;
+namespace Letov\Flycatcher\Tests\Modules\Downloader\ShellCmdControllers;
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -18,14 +18,14 @@ class WgetTest extends TestCaseIncludeContainer
         $this->assertGreaterThan(0, count($proxyList));
         $wget = $this->container->make('Wget', array(
             'args' => array(
-                'ProxyProxy6' => $proxyList[0],
+                'Proxy' => $proxyList[0],
                 'TimeOut' => $this->container->get('Downloader.timeout'),
                 'CookieFilePath' => $this->tmpCookie,
                 'HttpMethod' => 'GET',
-                'Payload' => implode("=", array(
-                    'someData' => 'someValue',
-                    'moreData' => 'moreValue'
-                )),
+                'PayloadForm' => array(
+                    'name1' => 'value&val1',
+                    'name2' => 'value% val2'
+                ),
                 'Headers' => array(
                     'User-Agent' => 'someUserAgent',
                     'Referer' => 'https://someReferer.com',
@@ -34,8 +34,8 @@ class WgetTest extends TestCaseIncludeContainer
                     'Accept-Encoding' => $this->container->get('Downloader.acceptEncoding'),
                     'Connection' => $this->container->get('Downloader.connection'),
                 ),
+                'ShellCmd' => $this->container->get("ShellCmd.wget")
             ),
-            'shellCmd' => $this->container->get("ShellCmd.wget")
         ));
         $wget->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);
         $this->assertFileDoesNotExist($this->tmpFile);

@@ -3,15 +3,26 @@
 // DO NOT EDIT
 namespace Letov\Flycatcher\Modules\Downloader\ArgsSupport;
 
-abstract class AbstractArgsSupport implements ArgInterfaces\CookieArgInterface, ArgInterfaces\HeadersArgInterface, ArgInterfaces\HttpMethodArgInterface, ArgInterfaces\PayloadArgInterface, ArgInterfaces\PhantomJSCaptchaApiKeyInterface, ArgInterfaces\PhantomJSCaptchaSignInterface, ArgInterfaces\PhantomJSConnectorInterface, ArgInterfaces\PhantomJSMaxExecTimeInterface, ArgInterfaces\ProxyArgInterface, ArgInterfaces\TimeOutArgInterface
+abstract class AbstractArgsSupport implements ArgInterfaces\CookieArgInterface, ArgInterfaces\HeadersArgInterface, ArgInterfaces\HttpMethodArgInterface, ArgInterfaces\PayloadFormArgInterface, ArgInterfaces\PayloadRawArgInterface, ArgInterfaces\PhantomJSClientArgInterface, ArgInterfaces\PhantomJSPathArgInterface, ArgInterfaces\ProxyArgInterface, ArgInterfaces\ShellCmdArgInterface, ArgInterfaces\TimeOutArgInterface
 {
 	protected array $argsStorage;
 
 
-	protected function setArgs(array $args)
+	public function __construct(array $args)
 	{
 		$this->argsStorage = $args;
+		$this->setArgsToClient();
 	}
+
+
+	public function updateArg(array $args)
+	{
+		$this->argsStorage = array_merge($this->argsStorage, $args);
+		$this->setArgsToClient();
+	}
+
+
+	abstract protected function setArgsToClient();
 
 
 	protected function getArg(string $methodName)
@@ -39,37 +50,37 @@ abstract class AbstractArgsSupport implements ArgInterfaces\CookieArgInterface, 
 	}
 
 
-	public function getPayload(): ?string
+	public function getPayloadForm(): ?array
 	{
 		return $this->getArg(__FUNCTION__);
 	}
 
 
-	public function getPhantomJSCaptchaApiKey(): ?string
+	public function getPayloadRaw(): ?string
 	{
 		return $this->getArg(__FUNCTION__);
 	}
 
 
-	public function getPhantomJSCaptchaSign(): ?string
+	public function getPhantomJSClient(): ?\JonnyW\PhantomJs\ClientInterface
 	{
 		return $this->getArg(__FUNCTION__);
 	}
 
 
-	public function getPhantomJSConnector(): ?string
-	{
-		return $this->getArg(__FUNCTION__);
-	}
-
-
-	public function getPhantomJSMaxExecTime(): ?int
+	public function getPhantomJSPath(): ?string
 	{
 		return $this->getArg(__FUNCTION__);
 	}
 
 
 	public function getProxy(): ?\Letov\Flycatcher\Modules\Proxy\ProxyInterface
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getShellCmd(): ?\Letov\Flycatcher\Modules\ShellCmd\ShellCmdInterface
 	{
 		return $this->getArg(__FUNCTION__);
 	}

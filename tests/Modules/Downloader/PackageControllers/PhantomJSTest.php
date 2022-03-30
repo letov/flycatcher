@@ -1,22 +1,16 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\Modules\Downloader\ShellCmdControllers;
+namespace Letov\Flycatcher\Tests\Modules\Downloader\PackageControllers;
 
-use DI\DependencyException;
-use DI\NotFoundException;
 use Letov\Flycatcher\Tests\TestCaseIncludeContainer;
 
-class CurlTest extends TestCaseIncludeContainer
+class PhantomJSTest extends TestCaseIncludeContainer
 {
-    /**
-     * @throws NotFoundException
-     * @throws DependencyException
-     */
-    public function testCurl()
+    public function testPhantomJS()
     {
         $proxyList = $this->container->get("ProxyService")->getProxyList('socks5');
         $this->assertGreaterThan(0, count($proxyList));
-        $curl = $this->container->make('Curl', array(
+        $phantomJS = $this->container->make('PhantomJS', array(
             'args' => array(
                 'Proxy' => $proxyList[0],
                 'TimeOut' => $this->container->get('Downloader.timeout'),
@@ -34,12 +28,13 @@ class CurlTest extends TestCaseIncludeContainer
                     'Accept-Encoding' => $this->container->get('Downloader.acceptEncoding'),
                     'Connection' => $this->container->get('Downloader.connection'),
                 ),
-                'ShellCmd' => $this->container->get("ShellCmd.curl")
+                'PhantomJSClient' => $this->container->get('PhantomJS.client'),
+                'PhantomJSPath' => $this->container->get('PhantomJS.path'),
             ),
         ));
-        $curl->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);
+        $phantomJS->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);
         $this->assertFileDoesNotExist($this->tmpFile);
-        $curl->downloadFile($this->container->get('Test.urlImage'), $this->tmpFile);
+        $phantomJS->downloadFile($this->container->get('Test.urlImage'), $this->tmpFile);
         $this->assertFileExists($this->tmpFile);
     }
 }

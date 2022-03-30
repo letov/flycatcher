@@ -36,6 +36,7 @@ class CacheTest extends TestCaseIncludeContainer
      * @throws ReflectionExceptionAlias
      */
     public function testIsZeroSize() {
+        shell_exec("touch $this->tmpFile");
         $this->assertTrue($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
         shell_exec("echo \"test\" > $this->tmpFile");
         $this->assertFalse($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));

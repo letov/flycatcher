@@ -1,10 +1,11 @@
 <?php
 
+use JonnyW\PhantomJs\Client;
 use Letov\Flycatcher\Modules\Cache\Cache;
 use Letov\Flycatcher\Modules\Captcha\Anticaptcha\ImageToTextAnticaptcha;
-use Letov\Flycatcher\Modules\Downloader\Controllers\Curl;
-use Letov\Flycatcher\Modules\Downloader\Controllers\PhantomJS;
-use Letov\Flycatcher\Modules\Downloader\Controllers\Wget;
+use Letov\Flycatcher\Modules\Downloader\PackageControllers\PhantomJS;
+use Letov\Flycatcher\Modules\Downloader\ShellCmdControllers\Curl;
+use Letov\Flycatcher\Modules\Downloader\ShellCmdControllers\Wget;
 use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyProxy6;
 use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyServiceProxy6;
 use Letov\Flycatcher\Modules\ShellCmd\ShellCmd;
@@ -45,24 +46,19 @@ return [
         ),
     'DomParser' => DI\create(\Letov\Flycatcher\Modules\DomParser\PhpHtmlParser\DomDocument::class),
     'ShellCmd' => DI\create(ShellCmd::class),
-    'ShellCmd.stat' => DI\create(ShellCmd::class)
-        ->constructor('stat', '=')
-        ->method('addArg', '--printf', '%s'),
-    'ShellCmd.curl' => DI\create(ShellCmd::class)
-        ->constructor(DI\get('Curl.path')),
-    'ShellCmd.wget' => DI\create(ShellCmd::class)
-        ->constructor(DI\get('Wget.path')),
-    'ShellCmd.phantomjs' => DI\create(ShellCmd::class)
-        ->constructor(DI\get('PhantomJS.path'), '=')
-        ->method('addArg', '--web-security', 'no')
-        ->method('addArg', '--ignore-ssl-errors', 'true')
-        ->method('addArg', '--ssl-protocol', 'any'),
-    'Curl.path' => 'curl',
+    'ShellCmd.stat' => function() {
+        return (new ShellCmd('stat', '='))
+            ->addArg('--printf', '%s');
+    },
+    'ShellCmd.curl' => function() {
+        return new ShellCmd('curl');
+    },
+    'ShellCmd.wget' => function() {
+        return new ShellCmd('wget');
+    },
     'Curl' => DI\create(Curl::class),
-    'Wget.path' => 'wget',
     'Wget' => DI\create(Wget::class),
-    'PhantomJS.path' => 'phantomjs',
-    'PhantomJS.connector' => 'PhantomJSIncludeCaptchaSolve.js',
-    'PhantomJS.maxExecTime' => 60,
     'PhantomJS' => DI\create(PhantomJS::class),
+    'PhantomJS.client' => DI\factory([Client::class, 'getInstance']),
+    'PhantomJS.path' => '/usr/local/bin/phantomjs',
 ];
