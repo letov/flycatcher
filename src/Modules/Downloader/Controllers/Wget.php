@@ -1,10 +1,10 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Downloader\Units;
+namespace Letov\Flycatcher\Modules\Downloader\Controllers;
 
 use Exception as ExceptionAlias;
+use Letov\Flycatcher\Modules\Downloader\AbstractShellCmdSupport;
 use Letov\Flycatcher\Modules\Downloader\DownloaderInterface;
-use Letov\Flycatcher\Modules\Downloader\ShellCmdSupport\AbstractShellCmdSupport;
 
 class Wget extends AbstractShellCmdSupport
     implements DownloaderInterface
@@ -14,12 +14,12 @@ class Wget extends AbstractShellCmdSupport
      */
     public function downloadFile($url, $filePath)
     {
-        $shellCmd = clone $this->shellCmd;
-        $httpCode = (int)$shellCmd
+        $httpCode = (int)$this->shellCmd
             ->addArg("--output-document", $filePath)
             ->addArg($url)
-            ->addUnsafeSuffix("2>&1 | grep 'HTTP/' | awk '{print $2}'")
+            ->addArgUnsafe("2>&1 | grep 'HTTP/' | awk '{print $2}'")
             ->run();
+        $this->shellCmd->removeFromTail(3);
         if (200 !== $httpCode) {
             @unlink($filePath);
         }

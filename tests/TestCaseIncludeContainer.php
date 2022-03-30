@@ -23,19 +23,12 @@ class TestCaseIncludeContainer extends TestCase
     public function setUp(): void
     {
         $this->container = require 'bootstrap.dev.php';
-        $this->tmpFile = '/tmp/test_download_' . $this->generateRandomString();
-        $this->tmpCookie = '/tmp/test_cookie_' . $this->generateRandomString();
-        @unlink($this->tmpFile);
-        @unlink($this->tmpCookie);
+        $this->tmpFile = $this->container->get('Dir.Tests') . 'download_' . $this->generateRandomString();
+        $this->tmpCookie = $this->container->get('Dir.Tests') . 'cookie_' . $this->generateRandomString();
     }
 
-    public function tearDown(): void
+    function generateRandomString($length = 20)
     {
-        @unlink($this->tmpFile);
-        @unlink($this->tmpCookie);
-    }
-
-    function generateRandomString($length = 20) {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
             ceil($length/strlen($x)) )),1,$length);
     }

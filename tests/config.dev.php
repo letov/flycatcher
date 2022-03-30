@@ -1,18 +1,18 @@
 <?php
 
-use DI\Container;
 use Letov\Flycatcher\Modules\Cache\Cache;
 use Letov\Flycatcher\Modules\Captcha\Anticaptcha\ImageToTextAnticaptcha;
-use Letov\Flycatcher\Modules\Downloader\Units\Curl;
-use Letov\Flycatcher\Modules\Downloader\Units\PhantomJS;
-use Letov\Flycatcher\Modules\Downloader\Units\Wget;
+use Letov\Flycatcher\Modules\Downloader\Controllers\Curl;
+use Letov\Flycatcher\Modules\Downloader\Controllers\PhantomJS;
+use Letov\Flycatcher\Modules\Downloader\Controllers\Wget;
 use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyProxy6;
 use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyServiceProxy6;
 use Letov\Flycatcher\Modules\ShellCmd\ShellCmd;
-use Psr\Container\ContainerInterface;
 
-return array(
+return [
     'Test.urlImage' => 'https://static.pleer.ru/i/logo.png',
+    'Dir.TempStorage' => '/tmp/flycatcher_storage/',
+    'Dir.Tests' => DI\string('{Dir.TempStorage}tests/'),
     'Downloader.accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Downloader.acceptLanguage' => 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
     'Downloader.acceptEncoding' => 'gzip, deflate',
@@ -53,16 +53,16 @@ return array(
     'ShellCmd.wget' => DI\create(ShellCmd::class)
         ->constructor(DI\get('Wget.path')),
     'ShellCmd.phantomjs' => DI\create(ShellCmd::class)
-        ->constructor(DI\get('PhantomJS.path')),
+        ->constructor(DI\get('PhantomJS.path'), '=')
+        ->method('addArg', '--web-security', 'no')
+        ->method('addArg', '--ignore-ssl-errors', 'true')
+        ->method('addArg', '--ssl-protocol', 'any'),
     'Curl.path' => 'curl',
     'Curl' => DI\create(Curl::class),
     'Wget.path' => 'wget',
     'Wget' => DI\create(Wget::class),
     'PhantomJS.path' => 'phantomjs',
+    'PhantomJS.connector' => 'PhantomJSIncludeCaptchaSolve.js',
+    'PhantomJS.maxExecTime' => 60,
     'PhantomJS' => DI\create(PhantomJS::class),
-
-    'testFactory' => DI\decorate(function ($a, $b) {
-        print_r($a);
-        return new DateTime();
-    })
-);
+];

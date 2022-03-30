@@ -15,57 +15,53 @@ class ShellCmd implements ShellCmdInterface
      */
     public function __construct(string $cmd, string $argDelimiter = " ")
     {
-        $cmd = addslashes($cmd);
-        if (empty(trim(shell_exec("command -v \"$cmd\" && echo \"ok\"")))) {
+        $cmd = $this->escape($cmd);
+        if (empty(trim(shell_exec("command -v $cmd && echo \"ok\"")))) {
             throw new Exception("Command $cmd not found");
         }
         $this->cmd = $cmd;
-        $this->argDelimiter = $argDelimiter;
+        $this->argDelimiter = addslashes($argDelimiter);
+    }
+
+    private function escape($string): string
+    {
+        return "\"" . addslashes($string) . "\"";
     }
 
     public function addArg(string $name, ?string $value = ""): ShellCmd
     {
         if (null !== $value) {
-            $this->args[] = [addslashes($name), empty($value) ? $value : addslashes($value)];
+            $this->args[] = [
+                $this->escape($name),
+                empty($value) ? null : $this->escape($value)
+            ];
         }
         return $this;
     }
 
-    public function updateArg(string $name, string $value): ShellCmd
-    {
-        foreach ($this->args as $key => $arg) {
-            if (addslashes($name) == addslashes($arg[0])) {
-                $this->args[$key][1] = addslashes($value);
-            }
-        }
-        return $this;
-    }
-
-    public function addUnsafeSuffix($value): ShellCmd
+    public function addArgUnsafe(string $value): ShellCmd
     {
         $this->args[] = [$value, null];
         return $this;
     }
 
-    public function removeArg(string $name): ShellCmd
+    public function removeFromTail(int $count): ShellCmd
     {
-        foreach ($this->args as $key => $arg) {
-            if (addslashes($name) == addslashes($arg[0])) {
-                unset($this->args[$key]);
-            }
-        }
+        $totalCount = count($this->args);
+        array_splice($this->args, $totalCount - $count, $count);
         return $this;
     }
 
-    public function run(): string
+    public function run(): ?string
     {
         $cmdWithArgs[] = $this->cmd;
         foreach ($this->args as $arg) {
             $cmdWithArgs[] = empty($arg[1]) ?
                 $arg[0] :
-                $arg[0] . $this->argDelimiter . "\"" . $arg[1] . "\"";
+                $arg[0] . $this->argDelimiter . $arg[1];
         }
         $cmd = implode(" ", $cmdWithArgs);
+        echo $cmd . "\n";
         return shell_exec($cmd);
     }
 }

@@ -5,8 +5,8 @@ namespace Letov\Flycatcher\Modules\ShellCmd;
 interface ShellCmdInterface
 {
     public function __construct(string $cmd, string $argDelimiter = " ");
-    public function addArg(string $name, ?string $value = ""): ShellCmd;
-    public function updateArg(string $name, string $value): ShellCmd;
-    public function removeArg(string $name): ShellCmd;
-    public function run(): string;
+    public function addArg(string $name, string $value = ""): ShellCmd;
+    public function addArgUnsafe(string $value): ShellCmd;
+    public function removeFromTail(int $count): ShellCmd;
+    public function run(): ?string;
 }

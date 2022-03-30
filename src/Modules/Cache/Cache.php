@@ -43,9 +43,11 @@ class Cache implements CacheInterface
 
     private function isZeroSize(string $filePath): bool
     {
-        return 0 == (int)$this->stat
+        $result = 0 == (int)$this->stat
                     ->addArg($filePath)
                     ->run();
+        $this->stat->removeFromTail(1);
+        return $result;
     }
 
     private function isImageFile(string $filePath): bool

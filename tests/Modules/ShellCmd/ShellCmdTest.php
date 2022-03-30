@@ -35,7 +35,7 @@ class ShellCmdTest extends TestCaseIncludeContainer
      * @throws DependencyException
      * @throws NotFoundExceptionAlias
      */
-    public function testShellCmdThrow()
+    public function testWrongsCmd()
     {
         $this->expectException(Exception::class);
         $this->container->make('ShellCmd',

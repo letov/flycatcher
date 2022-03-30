@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\Modules\Downloader\Units;
+namespace Letov\Flycatcher\Tests\Modules\Downloader\Controllers;
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -15,7 +15,6 @@ class CurlTest extends TestCaseIncludeContainer
     public function testCurl()
     {
         $proxyList = $this->container->get("ProxyService")->getProxyList('socks5');
-        sleep(1);
         $this->assertGreaterThan(0, count($proxyList));
         $curl = $this->container->make('Curl', array(
             'args' => array(

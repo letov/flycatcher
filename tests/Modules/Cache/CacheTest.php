@@ -26,24 +26,19 @@ class CacheTest extends TestCaseIncludeContainer
      * @throws ReflectionExceptionAlias
      */
     public function testIsFileExpire() {
-        $filePath = "/tmp/testIsFileExpire";
-        shell_exec("touch $filePath");
-        $this->assertFalse($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $filePath]));
+        shell_exec("touch $this->tmpFile");
+        $this->assertFalse($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $this->tmpFile]));
         sleep(2);
-        $this->assertTrue($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $filePath]));
-        @unlink($filePath);
+        $this->assertTrue($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $this->tmpFile]));
     }
 
     /**
      * @throws ReflectionExceptionAlias
      */
     public function testIsZeroSize() {
-        $filePath = "/tmp/testIsZeroSize";
-        shell_exec("touch $filePath");
-        $this->assertTrue($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $filePath]));
-        shell_exec("echo \"test\" > $filePath");
-        $this->assertFalse($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $filePath]));
-        @unlink($filePath);
+        $this->assertTrue($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
+        shell_exec("echo \"test\" > $this->tmpFile");
+        $this->assertFalse($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
     }
 
     /**
@@ -52,12 +47,10 @@ class CacheTest extends TestCaseIncludeContainer
      * @throws NotFoundExceptionAlias
      */
     public function testisImageFile() {
-        $filePath = "/tmp/testisImageFile.png";
         $imgUrl = $this->container->get('Test.urlImage');
-        shell_exec("wget -q -O $filePath $imgUrl");
-        $this->assertTrue($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $filePath]));
-        shell_exec("echo \"crushImageStructure\" > $filePath");
-        $this->assertFalse($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $filePath]));
-        @unlink($filePath);
+        shell_exec("wget -q -O $this->tmpFile $imgUrl");
+        $this->assertTrue($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $this->tmpFile]));
+        shell_exec("echo \"crushImageStructure\" > $this->tmpFile");
+        $this->assertFalse($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $this->tmpFile]));
     }
 }

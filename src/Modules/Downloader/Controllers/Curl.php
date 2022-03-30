@@ -1,9 +1,9 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Downloader\Units;
+namespace Letov\Flycatcher\Modules\Downloader\Controllers;
 
+use Letov\Flycatcher\Modules\Downloader\AbstractShellCmdSupport;
 use Letov\Flycatcher\Modules\Downloader\DownloaderInterface;
-use Letov\Flycatcher\Modules\Downloader\ShellCmdSupport\AbstractShellCmdSupport;
 
 class Curl extends AbstractShellCmdSupport
     implements DownloaderInterface
@@ -11,11 +11,11 @@ class Curl extends AbstractShellCmdSupport
 
     public function downloadFile($url, $filePath)
     {
-        $shellCmd = clone $this->shellCmd;
-        $httpCode = (int)$shellCmd
+        $httpCode = (int)$this->shellCmd
             ->addArg("--output", $filePath)
             ->addArg($url)
             ->run();
+        $this->shellCmd->removeFromTail(2);
         if (200 !== $httpCode) {
             @unlink($filePath);
         }

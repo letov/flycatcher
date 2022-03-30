@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\Modules\Downloader\Units;
+namespace Letov\Flycatcher\Tests\Modules\Downloader\Controllers;
 
 use DI\DependencyException;
 use DI\NotFoundException;
@@ -15,7 +15,6 @@ class WgetTest extends TestCaseIncludeContainer
     public function testWgetDownloader()
     {
         $proxyList = $this->container->get("ProxyService")->getProxyList('https');
-        sleep(1);
         $this->assertGreaterThan(0, count($proxyList));
         $wget = $this->container->make('Wget', array(
             'args' => array(
