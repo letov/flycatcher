@@ -2,7 +2,7 @@
 
 namespace Letov\Flycatcher\Modules\Downloader\ArgsSupport\ArgInterfaces;
 
-interface PayloadArgInterface
+interface PayloadRawArgInterface
 {
     public function getPayload(): ?string;
 }
