@@ -4,7 +4,7 @@ namespace Letov\Flycatcher\Tests\Modules\Captcha\Anticaptcha;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Letov\Flycatcher\Modules\Downloader\ShellCmdControllers\Curl;
+use Letov\Flycatcher\Modules\Downloader\Shells\Curl;
 use Letov\Flycatcher\Tests\TestCaseIncludeContainer;
 
 class ImageToTextAnticaptchaTest extends TestCaseIncludeContainer
@@ -17,14 +17,15 @@ class ImageToTextAnticaptchaTest extends TestCaseIncludeContainer
      */
     public function testAnticaptcha()
     {
-        $this->curl = $this->container->make('Curl', array('args' =>
+        $argsSupport = $this->container->make('ArgSupport', array('args' =>
             array(
                 'HttpMethod' => 'GET',
                 'TimeOut' => $this->container->get('Downloader.timeout'),
                 'CookieFilePath' => $this->tmpCookie,
-                'ShellCmd' => $this->container->get("ShellCmd.curl")
+                'Shell' => $this->container->get("Shell.curl")
             )
         ));
+        $this->curl = $this->container->make('Curl', array('argsSupport' => $argsSupport));
         $this->curl->downloadFile("http://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
         $this->getCaptchaImage();
         $this->sendForm();
@@ -40,7 +41,7 @@ class ImageToTextAnticaptchaTest extends TestCaseIncludeContainer
         $captchaText = $this->container
             ->get('Captcha.imageToText')
             ->solve($this->tmpFile);
-        $this->curl->updateArg(
+        $this->curl->updateArgs(
             array(
                 'HttpMethod' => 'POST',
                 'Headers' => array(

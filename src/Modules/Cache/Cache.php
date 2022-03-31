@@ -2,15 +2,15 @@
 
 namespace Letov\Flycatcher\Modules\Cache;
 
-use Letov\Flycatcher\Modules\ShellCmd\ShellCmdInterface;
+use Letov\Flycatcher\Modules\Shell\ShellInterface;
 
 class Cache implements CacheInterface
 {
     private int $maxFileLifetimeSecond;
     private bool $imageAlwaysFresh;
-    private ShellCmdInterface $stat;
+    private ShellInterface $stat;
 
-    public function __construct(int $maxFileLifetimeSecond, bool $imageAlwaysFresh, ShellCmdInterface $stat)
+    public function __construct(int $maxFileLifetimeSecond, bool $imageAlwaysFresh, ShellInterface $stat)
     {
         $this->maxFileLifetimeSecond = $maxFileLifetimeSecond;
         $this->imageAlwaysFresh = $imageAlwaysFresh;

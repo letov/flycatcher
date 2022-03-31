@@ -1,10 +1,10 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\ShellCmd;
+namespace Letov\Flycatcher\Modules\Shell;
 
 use Exception;
 
-class ShellCmd implements ShellCmdInterface
+class Shell implements ShellInterface
 {
     private string $cmd;
     private array $args;
@@ -28,7 +28,7 @@ class ShellCmd implements ShellCmdInterface
         return "\"" . addslashes($string) . "\"";
     }
 
-    public function addArg(string $name, ?string $value = ""): ShellCmd
+    public function addArg(string $name, ?string $value = ""): Shell
     {
         if (null !== $value) {
             $this->args[] = [
@@ -39,20 +39,20 @@ class ShellCmd implements ShellCmdInterface
         return $this;
     }
 
-    public function addArgUnsafe(string $value): ShellCmd
+    public function addArgUnsafe(string $value): Shell
     {
         $this->args[] = [$value, null];
         return $this;
     }
 
-    public function removeFromTail(int $count): ShellCmd
+    public function removeFromTail(int $count): Shell
     {
         $totalCount = count($this->args);
         array_splice($this->args, $totalCount - $count, $count);
         return $this;
     }
 
-    public function removeAll(): ShellCmd
+    public function removeAll(): Shell
     {
         $this->args = [];
         return $this;

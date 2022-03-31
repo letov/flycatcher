@@ -3,7 +3,7 @@
 use Letov\Flycatcher\Modules\Cache\Cache;
 use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyProxy6;
 use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyServiceProxy6;
-use Letov\Flycatcher\Modules\ShellCmd\ShellCmd;
+use Letov\Flycatcher\Modules\Shell\Shell;
 
 return [
     'ProxyProxy6' => DI\create(ProxyProxy6::class),
@@ -14,11 +14,11 @@ return [
         ->constructor(
                 DI\get('cache.maxFileLifetimeSecond'),
                 DI\get('cache.imageAlwaysFresh'),
-                DI\get('shellCmd.stat'
+                DI\get('shell.stat'
             )
         ),
-    'shellCmd' => DI\create(ShellCmd::class),
-    'shellCmd.stat' => DI\create(ShellCmd::class)
+    'shell' => DI\create(Shell::class),
+    'shell.stat' => DI\create(Shell::class)
         ->constructor('stat')
         ->method('updateArgDelimiter', '=')
         ->method('addArg', '--printf', '%s')

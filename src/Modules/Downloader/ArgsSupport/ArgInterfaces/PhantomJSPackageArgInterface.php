@@ -4,7 +4,8 @@ namespace Letov\Flycatcher\Modules\Downloader\ArgsSupport\ArgInterfaces;
 
 use JonnyW\PhantomJs\ClientInterface;
 
-interface PhantomJSClientArgInterface
+interface PhantomJSPackageArgInterface
 {
     public function getPhantomJSClient(): ?ClientInterface;
+    public function getPhantomJSPath(): ?string;
 }
