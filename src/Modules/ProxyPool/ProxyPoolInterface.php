@@ -1,8 +1,8 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Proxy;
+namespace Letov\Flycatcher\Modules\ProxyPool;
 
-interface ProxyServiceInterface
+interface ProxyPoolInterface
 {
     public function getProxyList(string $proxyType = 'socks5'): array;
 }

@@ -7,9 +7,9 @@ use JonnyW\PhantomJs\ClientInterface;
 use JonnyW\PhantomJs\Http\RequestInterface;
 use JonnyW\PhantomJs\Http\ResponseInterface;
 use Letov\Flycatcher\Modules\Downloader\ArgsSupport\ArgsSupportInterfacePackage;
-use Letov\Flycatcher\Modules\Downloader\DownloadInterface;
+use Letov\Flycatcher\Modules\Downloader\DownloaderInterface;
 
-class PhantomJSPackage implements DownloadInterface
+class PhantomJSPackage implements DownloaderInterface
 {
     protected ArgsSupportInterfacePackage $argsSupport;
     protected ClientInterface $client;

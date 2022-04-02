@@ -2,7 +2,7 @@
 
 namespace Letov\Flycatcher\Modules\Downloader\ArgsSupport\ArgInterfaces;
 
-use Letov\Flycatcher\Modules\Proxy\ProxyInterface;
+use Letov\Flycatcher\Modules\ProxyPool\ProxyInterface;
 
 interface HttpBaseArgInterface
 {

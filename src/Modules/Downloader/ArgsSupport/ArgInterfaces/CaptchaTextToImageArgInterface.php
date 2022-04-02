@@ -9,4 +9,5 @@ interface CaptchaTextToImageArgInterface
     public function getCaptchaImageSelector(): ?string;
     public function getCaptchaInputSelector(): ?string;
     public function getCaptchaFormSelector(): ?string;
+    public function getCaptchaSendIncorrectSolveReport(): ?bool;
 }

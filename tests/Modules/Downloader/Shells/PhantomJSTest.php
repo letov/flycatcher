@@ -23,14 +23,20 @@ class PhantomJSTest extends TestCaseIncludeContainer
                         'User-Agent' => 'someUserAgent',
                         'Referer' => 'https://someReferer.com',
                     ),
+                    'PayloadForm' => array(
+                        'message' => 'test',
+                    ),
                     'CaptchaApiKey' => $this->container->get("Anticaptcha.apiKey"),
                     'CaptchaSign' => 'Try to recognize symbols on the picture',
                     'CaptchaImageSelector' => '#htest_image',
                     'CaptchaInputSelector' => '#vericode',
                     'CaptchaFormSelector' => '#image_captcha_demo_form',
+                    'CaptchaSendIncorrectSolveReport' => false,
                     'PhantomJSConnector' => $this->container->get('PhantomJS.connector.captchaImageToText'),
                     'PhantomJSViewportWidth' => 800,
                     'PhantomJSViewportHeight' => 480,
+                    'PhantomJSSnapshotPath' => $this->tmpFile . "_snap.png",
+                    'PhantomJSSnapshotSelector' => 'body',
                     'Shell' => $this->container->get("Shell.phantomJS")
                 )
             ))

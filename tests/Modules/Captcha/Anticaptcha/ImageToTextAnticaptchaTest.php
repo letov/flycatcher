@@ -55,7 +55,6 @@ class ImageToTextAnticaptchaTest extends TestCaseIncludeContainer
             )
         );
         $this->curl->downloadFile("http://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
-
     }
 
     /**

@@ -5,7 +5,7 @@ namespace Letov\Flycatcher\Tests;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException as NotFoundExceptionAlias;
-use Letov\Flycatcher\Modules\Proxy\ProxyInterface;
+use Letov\Flycatcher\Modules\ProxyPool\ProxyInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionException as ReflectionExceptionAlias;
 use ReflectionMethod;

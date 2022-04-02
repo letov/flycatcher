@@ -69,6 +69,12 @@ class ArgsSupport implements ArgsSupportInterfacePackage
 	}
 
 
+	public function getCaptchaSendIncorrectSolveReport(): ?bool
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
 	public function getCookieFilePath(): ?string
 	{
 		return $this->getArg(__FUNCTION__);
@@ -99,7 +105,7 @@ class ArgsSupport implements ArgsSupportInterfacePackage
 	}
 
 
-	public function getProxy(): ?\Letov\Flycatcher\Modules\Proxy\ProxyInterface
+	public function getProxy(): ?\Letov\Flycatcher\Modules\ProxyPool\ProxyInterface
 	{
 		return $this->getArg(__FUNCTION__);
 	}
@@ -124,6 +130,18 @@ class ArgsSupport implements ArgsSupportInterfacePackage
 
 
 	public function getPhantomJSViewportHeight(): ?int
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPhantomJSSnapshotSelector(): ?string
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPhantomJSSnapshotPath(): ?string
 	{
 		return $this->getArg(__FUNCTION__);
 	}

@@ -1,12 +1,12 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\Modules\Proxy\Proxy6;
+namespace Letov\Flycatcher\Tests\Modules\ProxyPool\Proxy6;
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Letov\Flycatcher\Tests\TestCaseIncludeContainer;
 
-class ProxyServiceProxy6Test extends TestCaseIncludeContainer
+class ProxyProxy6Test extends TestCaseIncludeContainer
 {
     /**
      * @throws DependencyException

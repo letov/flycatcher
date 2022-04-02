@@ -9,8 +9,8 @@ use Letov\Flycatcher\Modules\Downloader\Packages\PhantomJSPackage;
 use Letov\Flycatcher\Modules\Downloader\Shells\Curl;
 use Letov\Flycatcher\Modules\Downloader\Shells\PhantomJS;
 use Letov\Flycatcher\Modules\Downloader\Shells\Wget;
-use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyProxy6;
-use Letov\Flycatcher\Modules\Proxy\Proxy6\ProxyServiceProxy6;
+use Letov\Flycatcher\Modules\ProxyPool\Proxy6\ProxyProxy6;
+use Letov\Flycatcher\Modules\ProxyPool\Proxy6\ProxyPoolProxy6;
 use Letov\Flycatcher\Modules\Shell\Shell;
 use Psr\Container\ContainerInterface;
 
@@ -23,13 +23,13 @@ return [
     'Downloader.acceptEncoding' => 'gzip, deflate',
     'Downloader.connection' => 'keep-alive',
     'Downloader.timeout' => 15,
-    'Downloader.timeoutWithCaptcha' => 30,
+    'Downloader.timeoutWithCaptcha' => 60,
     'Proxy' => DI\create(ProxyProxy6::class),
     'Proxy6.apiKey' => "fceed63ebe-0d6f24275b-dfcbe32351",
     'Proxy6.minCount' => 3,
     'Proxy6.throwIfLessMinCount' => false,
     'Proxy6.httpsCount' => 1,
-    'ProxyService' => DI\create(ProxyServiceProxy6::class)
+    'ProxyPool' => DI\create(ProxyPoolProxy6::class)
         ->constructor(
             DI\get('Proxy6.apiKey'),
             DI\get('Proxy6.minCount'),
@@ -69,7 +69,7 @@ return [
     'Wget' => DI\create(Wget::class),
     'PhantomJS' => DI\create(PhantomJS::class),
     'PhantomJS.path' => '/usr/local/bin/phantomjs',
-    'PhantomJS.connector.captchaImageToText' => 'PhantomJSCaptchaText.js',
+    'PhantomJS.connector.captchaImageToText' => 'PahntomJSConnectors/PhantomJSCaptchaText.js',
     'PhantomJSPackage' => DI\create(PhantomJSPackage::class),
     'PhantomJSPackage.serviceContainer' => DI\factory([serviceContainer::class, 'getInstance']),
     'PhantomJSPackage.client' => DI\factory([Client::class, 'getInstance']),

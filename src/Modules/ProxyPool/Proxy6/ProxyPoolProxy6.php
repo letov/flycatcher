@@ -1,15 +1,15 @@
 <?php
 
-namespace Letov\Flycatcher\Modules\Proxy\Proxy6;
+namespace Letov\Flycatcher\Modules\ProxyPool\Proxy6;
 
 use Exception;
-use Letov\Flycatcher\Modules\Proxy\ProxyServiceInterface;
+use Letov\Flycatcher\Modules\ProxyPool\ProxyPoolInterface;
 use Slruslan\Proxy6\ProxyState;
 use Slruslan\Proxy6\ProxyType;
 use Slruslan\Proxy6\ProxyVersion;
 use Slruslan\Proxy6\Wrapper;
 
-class ProxyServiceProxy6 implements ProxyServiceInterface
+class ProxyPoolProxy6 implements ProxyPoolInterface
 {
 
     private Wrapper $api;

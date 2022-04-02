@@ -2,7 +2,7 @@
 
 namespace Letov\Flycatcher\Modules\Downloader;
 
-interface DownloadInterface
+interface DownloaderInterface
 {
     public function downloadFile($url, $filePath);
 }

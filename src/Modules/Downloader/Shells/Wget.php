@@ -2,9 +2,9 @@
 
 namespace Letov\Flycatcher\Modules\Downloader\Shells;
 
-use Letov\Flycatcher\Modules\Downloader\DownloadInterface;
+use Letov\Flycatcher\Modules\Downloader\DownloaderInterface;
 
-class Wget extends AbstractShellSupport implements DownloadInterface
+class Wget extends AbstractShellSupport implements DownloaderInterface
 {
 
     public function downloadFile($url, $filePath)

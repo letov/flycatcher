@@ -2,8 +2,6 @@
 
 namespace Letov\Flycatcher\Tests\Modules\Cache;
 
-use DI\DependencyException;
-use DI\NotFoundException as NotFoundExceptionAlias;
 use Letov\Flycatcher\Modules\Cache\Cache;
 use Letov\Flycatcher\Tests\TestCaseIncludeContainer;
 use ReflectionException as ReflectionExceptionAlias;
@@ -12,10 +10,6 @@ class CacheTest extends TestCaseIncludeContainer
 {
     public Cache $cache;
 
-    /**
-     * @throws DependencyException
-     * @throws NotFoundExceptionAlias
-     */
     public function setUp(): void
     {
         parent::setUp();

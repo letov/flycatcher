@@ -2,9 +2,9 @@
 
 namespace Letov\Flycatcher\Modules\Downloader\Shells;
 
-use Letov\Flycatcher\Modules\Downloader\DownloadInterface;
+use Letov\Flycatcher\Modules\Downloader\DownloaderInterface;
 
-class PhantomJS extends AbstractShellSupport implements DownloadInterface
+class PhantomJS extends AbstractShellSupport implements DownloaderInterface
 {
     public function downloadFile($url, $filePath)
     {
@@ -13,6 +13,8 @@ class PhantomJS extends AbstractShellSupport implements DownloadInterface
             ->addArg(__DIR__ . "/" . $this->argsSupport->getPhantomJSConnector())
             ->addArg("--viewport-width", $this->argsSupport->getPhantomJSViewportWidth())
             ->addArg("--viewport-height", $this->argsSupport->getPhantomJSViewportHeight())
+            ->addArg("--snapshot-selector", $this->argsSupport->getPhantomJSSnapshotSelector())
+            ->addArg("--snapshot-path", $this->argsSupport->getPhantomJSSnapshotPath())
             ->addArg("--file-path", $filePath)
             ->addArg("--url", $url)
             ->addArg("--connect-timeout", $this->argsSupport->getTimeOut());
@@ -20,7 +22,8 @@ class PhantomJS extends AbstractShellSupport implements DownloadInterface
         $this->setPayload($shell);
         $this->setCaptcha($shell);
         $response = $shell->run();
-        if (false === str_contains($response, 'SUCCESS'))
+        echo $response;
+        if (false === stripos($response, 'SUCCESS'))
         {
             @unlink($filePath);
         }
@@ -89,6 +92,7 @@ class PhantomJS extends AbstractShellSupport implements DownloadInterface
             ->addArg("--captcha-sign", $this->argsSupport->getCaptchaSign())
             ->addArg("--captcha-image-selector", $this->argsSupport->getCaptchaImageSelector())
             ->addArg("--captcha-input-selector", $this->argsSupport->getCaptchaInputSelector())
-            ->addArg("--captcha-form-selector", $this->argsSupport->getCaptchaFormSelector());
+            ->addArg("--captcha-form-selector", $this->argsSupport->getCaptchaFormSelector())
+            ->addArg("--captcha-incorrect-report", $this->argsSupport->getCaptchaSendIncorrectSolveReport() ? 1 : 0);
     }
 }

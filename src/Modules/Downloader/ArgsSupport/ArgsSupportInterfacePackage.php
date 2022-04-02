@@ -32,6 +32,9 @@ interface ArgsSupportInterfacePackage extends ArgInterfaces\BrowserDiskCacheArgI
 	function getCaptchaFormSelector(): ?string;
 
 
+	function getCaptchaSendIncorrectSolveReport(): ?bool;
+
+
 	function getCookieFilePath(): ?string;
 
 
@@ -47,7 +50,7 @@ interface ArgsSupportInterfacePackage extends ArgInterfaces\BrowserDiskCacheArgI
 	function getPayloadRaw(): ?string;
 
 
-	function getProxy(): ?\Letov\Flycatcher\Modules\Proxy\ProxyInterface;
+	function getProxy(): ?\Letov\Flycatcher\Modules\ProxyPool\ProxyInterface;
 
 
 	function getTimeOut(): ?int;
@@ -60,6 +63,12 @@ interface ArgsSupportInterfacePackage extends ArgInterfaces\BrowserDiskCacheArgI
 
 
 	function getPhantomJSViewportHeight(): ?int;
+
+
+	function getPhantomJSSnapshotSelector(): ?string;
+
+
+	function getPhantomJSSnapshotPath(): ?string;
 
 
 	function getPhantomJSClient(): ?\JonnyW\PhantomJs\ClientInterface;
