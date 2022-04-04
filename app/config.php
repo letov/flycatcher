@@ -1,9 +1,9 @@
 <?php
 
-use Letov\Flycatcher\Modules\Cache\Cache;
-use Letov\Flycatcher\Modules\ProxyPool\Proxy6\ProxyProxy6;
-use Letov\Flycatcher\Modules\ProxyPool\Proxy6\ProxyPoolProxy6;
-use Letov\Flycatcher\Modules\Shell\Shell;
+use Letov\Flycatcher\Cache\Cache;
+use Letov\Flycatcher\ProxyPool\Proxy6\ProxyPoolProxy6;
+use Letov\Flycatcher\ProxyPool\Proxy6\ProxyProxy6;
+use Letov\Flycatcher\Shell\Shell;
 
 return [
     'ProxyProxy6' => DI\create(ProxyProxy6::class),

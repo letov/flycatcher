@@ -24,16 +24,17 @@
     }
   },
   "require": {
-    "php-di/php-di": "6.0.0",
-    "slruslan/php-proxy6": "1.1",
-    "nette/php-generator": "3.6",
+    "ext-gearman": "*",
+    "php-di/php-di": "dev-master",
+    "slruslan/php-proxy6": "dev-master",
+    "nette/php-generator": "dev-master",
     "adminanticaptcha/anticaptcha-php": "dev-master",
     "dimabdc/php-fast-simple-html-dom-parser": "dev-master",
-    "jonnyw/php-phantomjs": "^4.6.1",
-    "ext-json": "*"
+    "jonnyw/php-phantomjs": "dev-master"
   },
   "require-dev": {
-    "phpunit/phpunit": "^8.5|^9.0"
+    "phpunit/phpunit": "9.5.0",
+    "ext-pcntl": "*"
   },
   "autoload": {
     "classmap": ["vendor/adminanticaptcha/anticaptcha-php"],
