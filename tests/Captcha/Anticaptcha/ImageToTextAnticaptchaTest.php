@@ -20,7 +20,7 @@ class ImageToTextAnticaptchaTest extends TestCaseContainer
         $argsSupport = $this->container->make('ArgSupport', array('args' =>
             array(
                 'HttpMethod' => 'GET',
-                'TimeOut' => $this->container->get('Downloader.timeout'),
+                'Timeout' => $this->container->get('Downloader.timeout'),
                 'CookieFilePath' => $this->tmpCookie,
                 'Shell' => $this->container->get("Curl.shell")
             )

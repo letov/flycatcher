@@ -17,7 +17,7 @@ class CurlTest extends TestCaseContainer
         $curl = $this->container->make('Curl', array(
             'argsSupport' => $this->container->make('ArgSupport', array(
                 'args' =>  array(
-                    'TimeOut' => $this->container->get('Downloader.timeout'),
+                    'Timeout' => $this->container->get('Downloader.timeout'),
                     'CookieFilePath' => $this->tmpCookie,
                     'HttpMethod' => 'GET',
                     'PayloadForm' => array(

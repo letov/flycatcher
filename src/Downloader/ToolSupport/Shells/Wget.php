@@ -30,15 +30,15 @@ class Wget extends AbstractShellSupport implements DownloadToolInterface
         $this->shell
             ->addArg("--method", $this->argsSupport->getHttpMethod())
             ->addArg("--compression=auto")
-            ->addArg("--connect-timeout", $this->argsSupport->getTimeOut())
+            ->addArg("--connect-timeout", $this->argsSupport->getTimeout())
             ->addArg("--server-response");
     }
 
     private function setCookies()
     {
         $this->shell
-            ->addArg("--load-cookies", $this->argsSupport->getCookieFilePath())
-            ->addArg("--save-cookies", $this->argsSupport->getCookieFilePath())
+            ->addArg("--load-cookies", $this->fileNameAddPid($this->argsSupport->getCookieFilePath()))
+            ->addArg("--save-cookies", $this->fileNameAddPid($this->argsSupport->getCookieFilePath()))
             ->addArg("--keep-session-cookies");
     }
 

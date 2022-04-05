@@ -37,9 +37,9 @@ class Curl extends AbstractShellSupport implements DownloadToolInterface
     private function setCookies()
     {
         $this->shell
-            ->addArg("--cookie", $this->argsSupport->getCookieFilePath())
-            ->addArg("--cookie-jar", $this->argsSupport->getCookieFilePath())
-            ->addArg("--connect-timeout", $this->argsSupport->getTimeOut());
+            ->addArg("--cookie", $this->fileNameAddPid($this->argsSupport->getCookieFilePath()))
+            ->addArg("--cookie-jar", $this->fileNameAddPid($this->argsSupport->getCookieFilePath()))
+            ->addArg("--connect-timeout", $this->argsSupport->getTimeout());
     }
 
     private function setProxy()

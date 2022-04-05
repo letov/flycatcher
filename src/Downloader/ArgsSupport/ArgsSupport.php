@@ -33,7 +33,7 @@ class ArgsSupport implements ArgsSupportInterface
 	}
 
 
-	public function getTimeOut(): ?int
+	public function getTimeout(): ?int
 	{
 		return $this->getArg(__FUNCTION__);
 	}

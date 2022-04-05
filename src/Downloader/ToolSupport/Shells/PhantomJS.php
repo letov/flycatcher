@@ -14,10 +14,10 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
             ->addArg("--viewport-width", $this->argsSupport->getPhantomJSViewportWidth())
             ->addArg("--viewport-height", $this->argsSupport->getPhantomJSViewportHeight())
             ->addArg("--snapshot-selector", $this->argsSupport->getPhantomJSSnapshotSelector())
-            ->addArg("--snapshot-path", $this->argsSupport->getPhantomJSSnapshotPath())
+            ->addArg("--snapshot-path", $this->fileNameAddPid($this->argsSupport->getPhantomJSSnapshotPath()))
             ->addArg("--file-path", $filePath)
             ->addArg("--url", $url)
-            ->addArg("--connect-timeout", $this->argsSupport->getTimeOut());
+            ->addArg("--connect-timeout", $this->argsSupport->getTimeout());
         $this->setHeaders($shell);
         $this->setPayload($shell);
         $this->setCaptcha($shell);
@@ -43,14 +43,14 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
         {
             $this->shell
                 ->addArg("--disk-cache", "true")
-                ->addArg("--disk-cache-path", $this->argsSupport->getDiskCachePath());
+                ->addArg("--disk-cache-path", $this->dirAddPid($this->argsSupport->getDiskCachePath()));
         }
-        $this->shell->addArg("--local-storage-path", $this->argsSupport->getLocalStoragePath());
+        $this->shell->addArg("--local-storage-path", $this->dirAddPid($this->argsSupport->getLocalStoragePath()));
     }
 
     private function setCookies()
     {
-        $this->shell->addArg("--cookies-file", $this->argsSupport->getCookieFilePath());
+        $this->shell->addArg("--cookies-file", $this->fileNameAddPid($this->argsSupport->getCookieFilePath()));
     }
 
     private function setProxy()
@@ -93,6 +93,6 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
             ->addArg("--captcha-image-selector", $this->argsSupport->getCaptchaImageSelector())
             ->addArg("--captcha-input-selector", $this->argsSupport->getCaptchaInputSelector())
             ->addArg("--captcha-form-selector", $this->argsSupport->getCaptchaFormSelector())
-            ->addArg("--captcha-incorrect-report", $this->argsSupport->getCaptchaSendIncorrectSolveReport() ? 1 : 0);
+            ->addArg("--captcha-incorrect-report", $this->argsSupport->getCaptchaSendIncorrectSolveReport() ? 1 : null);
     }
 }

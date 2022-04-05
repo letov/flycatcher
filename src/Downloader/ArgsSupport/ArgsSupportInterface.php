@@ -14,7 +14,7 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 	function getProxy(): ?\Letov\Flycatcher\ProxyPool\ProxyInterface;
 
 
-	function getTimeOut(): ?int;
+	function getTimeout(): ?int;
 
 
 	function getCookieFilePath(): ?string;

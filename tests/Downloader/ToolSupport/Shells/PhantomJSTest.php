@@ -17,7 +17,7 @@ class PhantomJSTest extends TestCaseContainer
         $phantomJS = $this->container->make('PhantomJS', array(
             'argsSupport' => $this->container->make('ArgSupport', array(
                 'args' =>  array(
-                    'TimeOut' => $this->container->get('Downloader.timeoutWithCaptcha'),
+                    'Timeout' => $this->container->get('Downloader.timeoutWithCaptcha'),
                     'CookieFilePath' => $this->tmpCookie,
                     'Headers' => array(
                         'User-Agent' => 'someUserAgent',

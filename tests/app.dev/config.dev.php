@@ -5,20 +5,24 @@ use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
-use Letov\Flycatcher\Downloader\ToolSupport\Packages\PhantomJSPackage;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Curl;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\PhantomJS;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Wget;
 use Letov\Flycatcher\ProxyPool\Proxy6\ProxyPoolProxy6;
 use Letov\Flycatcher\ProxyPool\Proxy6\ProxyProxy6;
 use Letov\Flycatcher\Shell\Shell;
-use Letov\Flycatcher\Worker\DownloadToolWorker;
+use Letov\Flycatcher\Tests\Downloader\ToolSupport\Packages\PhantomJSPackage;
+use Letov\Flycatcher\WorkerPool\WorkerDownloadTool;
+use Letov\Flycatcher\WorkerPool\WorkerPool;
 use Psr\Container\ContainerInterface;
 
 return [
     'Test.urlImage' => 'https://static.pleer.ru/i/logo.png',
-    'Dir.TempStorage' => '/tmp/flycatcher_storage/',
-    'Dir.Tests' => DI\string('{Dir.TempStorage}tests/'),
+    'RootDir' => '/tmp/flycatcher_storage/',
+    'Dirs' => array(
+        'tests' => DI\string('{RootDir}tests/'),
+        'browsersData' => DI\string('{RootDir}browsers_data/'),
+    ),
     'Downloader.accept' => 'text/html,applicPhantomJSPackageation/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Downloader.acceptLanguage' => 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
     'Downloader.acceptEncoding' => 'gzip, deflate',
@@ -42,9 +46,12 @@ return [
         ->constructor(
             DI\get('Anticaptcha.apiKey'),
         ),
-    'GearmanWorker' => DI\create(GearmanWorker::class),
-    'GearmanClient' => DI\create(GearmanClient::class),
-    'DownloadToolWorker' => DI\create(DownloadToolWorker::class),
+    'Gearman.worker' => DI\create(GearmanWorker::class),
+    'Gearman.client' => DI\create(GearmanClient::class),
+    'Gearman.host' => '127.0.0.1',
+    'Gearman.port' => 4730,
+    'Worker.pool' => DI\create(WorkerPool::class),
+    'Worker.downloadToolWorker' => DI\create(WorkerDownloadTool::class),
     'Cache.maxFileLifetimeSecond' => 1,
     'Cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)

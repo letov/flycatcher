@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\Downloader\ToolSupport\Packages;
+namespace Letov\Flycatcher\Tests\Downloader\ToolSupport\Packages;
 
 use Exception;
 use JonnyW\PhantomJs\ClientInterface;
@@ -67,8 +67,8 @@ class PhantomJSPackage implements ToolSupportInterface, DownloaderInterface
 
     private function setTimeout()
     {
-        if (!empty($this->argsSupport->getTimeOut())) {
-            $this->request->setTimeout($this->argsSupport->getTimeOut() * 1000);
+        if (!empty($this->argsSupport->getTimeout())) {
+            $this->request->setTimeout($this->argsSupport->getTimeout() * 1000);
         }
     }
 

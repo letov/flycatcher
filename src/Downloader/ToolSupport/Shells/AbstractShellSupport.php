@@ -34,5 +34,31 @@ abstract class AbstractShellSupport implements ToolSupportInterface
         $this->setArgsToClient();
     }
 
+    protected function fileNameAddPid(?string $fileName): ?string
+    {
+        if (null === $fileName)
+        {
+            return null;
+        }
+        $base = pathinfo($fileName);
+        $pid = posix_getpid();
+        $extension = isset($base['extension']) ? ".{$base['extension']}" : "";
+        return "{$base['dirname']}/{$base['filename']}_$pid{$extension}";
+    }
+
+    protected function dirAddPid(?string $dirName): ?string
+    {
+        if (null === $dirName)
+        {
+            return null;
+        }
+        $pid = posix_getpid();
+        $newDir = "{$dirName}/$pid";
+        if (!file_exists($newDir)) {
+            mkdir($newDir);
+        }
+        return $newDir;
+    }
+
     abstract protected function setArgsToClient();
 }

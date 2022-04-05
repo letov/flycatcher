@@ -87,7 +87,7 @@ function checkSolution(inputArgs, solution, taskId) {
     waitFor(waitLoadPageAfterSubmit, loadedAfterSubmit, inputArgs, taskId,20000, 1000);
 }
 
-function waitFor(testFx, onReady, inputArgs, taskId, timeOutMillis, nextCheckTimeOutMillis) {
+function waitFor(testFx, onReady, inputArgs, taskId, timeOutMillis, nextCheckTimeoutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000,
         start = new Date().getTime(),
         condition = false,
@@ -103,7 +103,7 @@ function waitFor(testFx, onReady, inputArgs, taskId, timeOutMillis, nextCheckTim
                     clearInterval(interval);
                 }
             }
-        }, nextCheckTimeOutMillis);
+        }, nextCheckTimeoutMillis);
 }
 
 function submitForm(inputArgs, solution) {

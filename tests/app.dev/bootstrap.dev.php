@@ -1,6 +1,7 @@
 <?php
 
 use DI\ContainerBuilder;
+use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\CodeGenerator\CodeGeneratorInterface;
 use Letov\Flycatcher\CodeGenerator\CodeGeneratorManager;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupportCodeGenerator;
@@ -19,17 +20,10 @@ $builder->addDefinitions(__DIR__ . '/config.dev.php');
 $container = $builder->build();
 
 $container
-    ->make('Shell', array('cmd' => 'rm'))
-    ->addArg('-rf')
-    ->addArg($container->get('Dir.TempStorage'))
-    ->run();
-$container
-    ->make('Shell', array('cmd' => 'mkdir'))
-    ->addArg($container->get('Dir.TempStorage'))
-    ->run();
-$container
-    ->make('Shell', array('cmd' => 'mkdir'))
-    ->addArg($container->get('Dir.Tests'))
-    ->run();
+    ->get('Cache')
+    ->setAppDirs(
+        $container->get('RootDir'),
+        $container->get('Dirs')
+    );
 
 return $container;
