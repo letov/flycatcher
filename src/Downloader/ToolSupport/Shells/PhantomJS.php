@@ -37,8 +37,7 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
         $this->shell
             ->addArg("--web-security", "no")
             ->addArg("--ignore-ssl-errors", "true")
-            ->addArg("--ssl-protocol", "any")
-            ->addArg("--web-security", "no");
+            ->addArg("--ssl-protocol", "any");
         if (!empty($this->argsSupport->getDiskCachePath()))
         {
             $this->shell

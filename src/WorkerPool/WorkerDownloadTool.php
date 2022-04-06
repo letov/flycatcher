@@ -26,11 +26,20 @@ class WorkerDownloadTool implements WorkerInterface
         $this->gearmanWorker->addFunction("download", function ($job)
         {
             $workload = unserialize($job->workload());
-            if (!isset($workload['url']) || !isset($workload['filePath']))
+            if (isset($workload['url']) && isset($workload['filePath']))
             {
-                return serialize("");
+                $this->downloadTool->downloadFile($workload['url'], $workload['filePath']);
             }
-            $this->downloadTool->downloadFile($workload['url'], $workload['filePath']);
+            return serialize("");
+        });
+        $this->gearmanWorker->addFunction("updateArgs", function ($job)
+        {
+            $workload = unserialize($job->workload());
+            if (isset($workload['args']))
+            {
+                $this->downloadTool->updateArgs($workload['args']);
+            }
+            return serialize("");
         });
         while ($this->gearmanWorker->work()) { }
     }

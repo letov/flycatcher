@@ -67,7 +67,6 @@ class Shell implements ShellInterface
                 $arg[0] . $this->argDelimiter . $arg[1];
         }
         $cmd = implode(" ", $cmdWithArgs);
-        echo $cmd . "\n";
         return shell_exec($cmd);
     }
 }

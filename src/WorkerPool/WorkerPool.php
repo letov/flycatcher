@@ -11,6 +11,7 @@ class WorkerPool implements WorkerPoolInterface
 {
     protected Container $container;
     protected string $workerName;
+    protected string $workerDownloadToolName;
     protected array $workerArgs;
     protected int $workerCount;
     protected int $workerCountCheckDelay;
@@ -23,12 +24,14 @@ class WorkerPool implements WorkerPoolInterface
      */
     public function __construct(Container $container,
                                 string $workerName,
+                                string $workerDownloadToolName,
                                 array $workerArgs,
                                 int $workerCount,
                                 int $workerCountCheckDelay)
     {
         $this->container = $container;
         $this->workerName = $workerName;
+        $this->workerDownloadToolName = $workerDownloadToolName;
         $this->workerArgs = $workerArgs;
         $this->workerCount = $workerCount;
         $this->workerCountCheckDelay = $workerCountCheckDelay;
@@ -55,6 +58,12 @@ class WorkerPool implements WorkerPoolInterface
     {
         declare(ticks = 1);
         pcntl_signal(SIGTERM, function () {
+            foreach($this->workerPids as $pid) {
+                posix_kill($pid, SIGKILL);
+            }
+            exit;
+        });
+        pcntl_signal(SIGINT, function () {
             foreach($this->workerPids as $pid) {
                 posix_kill($pid, SIGKILL);
             }
@@ -100,7 +109,7 @@ class WorkerPool implements WorkerPoolInterface
                 "gearmanWorker" => $this->container->get('Gearman.worker'),
                 "gearmanHost" => $this->container->get('Gearman.host'),
                 "gearmanPort" => $this->container->get('Gearman.port'),
-                "downloadTool" => $this->container->make('PhantomJS', array(
+                "downloadTool" => $this->container->make($this->workerDownloadToolName, array(
                     'argsSupport' => $this->container->make('ArgSupport', array(
                         'args' => $this->workerArgs
                     ))

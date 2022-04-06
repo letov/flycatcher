@@ -29,20 +29,26 @@ class WorkerPoolTest extends TestCaseContainer
             echo "COMPLETE SOME WORKER TASK\n";
         });
         $client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
-        for ($i = 0; $i < $this->workerCount; $i++) {
+        for ($i = 0; $i < $this->workerCount; $i++)
+        {
             $client->addTask("download", serialize(array(
                 'url' => 'http://democaptcha.com/demo-form-eng/image.html',
                 'filePath' => $this->tmpFile . "_res_" . $i,
             )));
         }
         $client->runTasks();
-        for ($i = 0; $i < $this->workerCount; $i++) {
+        for ($i = 0; $i < $this->workerCount; $i++)
+        {
             $filePath = $this->tmpFile . "_res_" . $i;
             $this->assertStringContainsString("Your message has been sent", file_get_contents($filePath));
         }
         $this->workerPool->stop();
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     protected function createPhantomWorkerPool()
     {
         $args = array(
@@ -64,8 +70,6 @@ class WorkerPoolTest extends TestCaseContainer
             'CaptchaFormSelector' => '#image_captcha_demo_form',
             'CaptchaSendIncorrectSolveReport' => false,
             'PhantomJSConnector' => $this->container->get('PhantomJS.connector.captchaImageToText'),
-            'PhantomJSViewportWidth' => 800,
-            'PhantomJSViewportHeight' => 480,
             'PhantomJSSnapshotSelector' => 'body',
             'PhantomJSSnapshotPath' => $this->tmpFile . "_snap.png",
             'Shell' => $this->container->get("PhantomJS.shell")
@@ -73,9 +77,10 @@ class WorkerPoolTest extends TestCaseContainer
         $this->workerPool = $this->container->make("Worker.pool", array(
             'container' => $this->container,
             'workerName' => 'downloadToolWorker',
+            'workerDownloadToolName' => 'PhantomJS',
             'workerArgs' => $args,
             'workerCount' => $this->workerCount + 5,
-            'workerCountCheckDelay' => 60,
+            'workerCountCheckDelay' => $this->container->get('Worker.countCheckDelay'),
         ));
     }
 }

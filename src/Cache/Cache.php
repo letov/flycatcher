@@ -2,9 +2,6 @@
 
 namespace Letov\Flycatcher\Cache;
 
-use DI\Container;
-use DI\DependencyException;
-use DI\NotFoundException;
 use Letov\Flycatcher\Shell\ShellInterface;
 
 class Cache implements CacheInterface
@@ -37,6 +34,7 @@ class Cache implements CacheInterface
         $this->createDirIfNotExist($rootDir);
         $this->createDirIfNotExist($dirs['tests']);
         $this->createDirIfNotExist($dirs['browsersData']);
+        $this->createDirIfNotExist($dirs['download']);
         $this->emptyDir($dirs['tests']);
         $this->emptyDir($dirs['browsersData']);
     }

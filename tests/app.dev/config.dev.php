@@ -4,6 +4,7 @@ use JonnyW\PhantomJs\Client;
 use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
+use Letov\Flycatcher\Spyder\SpyderDepth;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Curl;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\PhantomJS;
@@ -18,10 +19,11 @@ use Psr\Container\ContainerInterface;
 
 return [
     'Test.urlImage' => 'https://static.pleer.ru/i/logo.png',
-    'RootDir' => '/tmp/flycatcher_storage/',
+    'RootDir' => '/tmp/flycatcher_storage',
     'Dirs' => array(
-        'tests' => DI\string('{RootDir}tests/'),
-        'browsersData' => DI\string('{RootDir}browsers_data/'),
+        'tests' => DI\string('{RootDir}/tests'),
+        'browsersData' => DI\string('{RootDir}/browsers_data'),
+        'download' => DI\string('{RootDir}/download'),
     ),
     'Downloader.accept' => 'text/html,applicPhantomJSPackageation/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Downloader.acceptLanguage' => 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
@@ -52,6 +54,7 @@ return [
     'Gearman.port' => 4730,
     'Worker.pool' => DI\create(WorkerPool::class),
     'Worker.downloadToolWorker' => DI\create(WorkerDownloadTool::class),
+    'Worker.countCheckDelay' => 60,
     'Cache.maxFileLifetimeSecond' => 1,
     'Cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)
@@ -84,4 +87,5 @@ return [
     'PhantomJSPackage' => DI\create(PhantomJSPackage::class),
     'PhantomJSPackage.serviceContainer' => DI\factory([serviceContainer::class, 'getInstance']),
     'PhantomJSPackage.client' => DI\factory([Client::class, 'getInstance']),
+    'SpyderDepth' => DI\create(SpyderDepth::class),
 ];
