@@ -6,7 +6,7 @@
   "authors": [
     {
       "name": "ruslan",
-      "email": "email@example.com"
+      "email": "ruslan.leto@gmail.com"
     }
   ],
   "repositories": {
@@ -25,16 +25,17 @@
   },
   "require": {
     "ext-gearman": "*",
+    "ext-pcntl": "*",
+    "ext-posix": "*",
+    "ext-json": "*",
     "php-di/php-di": "dev-master",
     "slruslan/php-proxy6": "dev-master",
     "nette/php-generator": "dev-master",
     "adminanticaptcha/anticaptcha-php": "dev-master",
     "dimabdc/php-fast-simple-html-dom-parser": "dev-master",
-    "ext-pcntl": "*",
-    "ext-posix": "*"
+    "jonnyw/php-phantomjs": "dev-master"
   },
   "require-dev": {
-    "jonnyw/php-phantomjs": "dev-master",
     "phpunit/phpunit": "9.5.0"
   },
   "autoload": {

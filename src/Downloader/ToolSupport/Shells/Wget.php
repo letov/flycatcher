@@ -9,14 +9,13 @@ class Wget extends AbstractShellSupport implements DownloadToolInterface
 
     public function downloadFile($url, $filePath)
     {
-        $httpCode = (int)$this->shell
+        $httpCode = $this->shell
             ->addArg("--output-document", $filePath)
             ->addArg($url)
             ->addArgUnsafe("2>&1 | grep 'HTTP/' | awk '{print $2}'")
             ->run();
         $this->shell->removeFromTail(3);
-        if (200 !== $httpCode)
-        {
+        if (false === stripos($httpCode, '200')) {
             @unlink($filePath);
         }
     }
@@ -44,8 +43,7 @@ class Wget extends AbstractShellSupport implements DownloadToolInterface
 
     private function setProxy()
     {
-        if (!empty($this->argsSupport->getProxy()) && $this->argsSupport->getProxy()->getType() == 'https')
-        {
+        if (!empty($this->argsSupport->getProxy()) && $this->argsSupport->getProxy()->getType() == 'https') {
             $this->shell
                 ->addArg("-e", "use_proxy=yes")
                 ->addArg("-e", "https_proxy={$this->argsSupport->getProxy()->getSocket()}")
@@ -56,8 +54,7 @@ class Wget extends AbstractShellSupport implements DownloadToolInterface
 
     private function setHeaders()
     {
-        if (!empty($this->argsSupport->getHeaders()))
-        {
+        if (!empty($this->argsSupport->getHeaders())) {
             foreach ($this->argsSupport->getHeaders() as $header => $value) {
                 $this->shell->addArg("--header", "$header: $value");
             }
@@ -66,8 +63,7 @@ class Wget extends AbstractShellSupport implements DownloadToolInterface
 
     private function setPayload()
     {
-        if (!empty($this->argsSupport->getPayloadRaw()) || !empty($this->argsSupport->getPayloadForm()))
-        {
+        if (!empty($this->argsSupport->getPayloadRaw()) || !empty($this->argsSupport->getPayloadForm())) {
             $data = $this->argsSupport->getPayloadRaw() ? $this->argsSupport->getPayloadRaw() : http_build_query($this->argsSupport->getPayloadForm());
             $this->shell->addArg("--body-data", $data);
         }

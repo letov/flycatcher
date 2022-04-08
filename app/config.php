@@ -12,9 +12,9 @@ return [
     'cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)
         ->constructor(
-                DI\get('cache.maxFileLifetimeSecond'),
-                DI\get('cache.imageAlwaysFresh'),
-                DI\get('shell.stat'
+            DI\get('cache.maxFileLifetimeSecond'),
+            DI\get('cache.imageAlwaysFresh'),
+            DI\get('shell.stat'
             )
         ),
     'shell' => DI\create(Shell::class),

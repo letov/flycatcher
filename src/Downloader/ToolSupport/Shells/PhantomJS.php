@@ -23,51 +23,14 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
         $this->setCaptcha($shell);
         $response = $shell->run();
         echo $response;
-        if (false === stripos($response, 'SUCCESS'))
-        {
+        if (false === stripos($response, 'SUCCESS')) {
             @unlink($filePath);
-        }
-    }
-
-    protected function setArgsToClient()
-    {
-        $this->shell = $this->argsSupport->getShell();
-        $this->setCookies();
-        $this->setProxy();
-        $this->shell
-            ->addArg("--web-security", "no")
-            ->addArg("--ignore-ssl-errors", "true")
-            ->addArg("--ssl-protocol", "any");
-        if (!empty($this->argsSupport->getDiskCachePath()))
-        {
-            $this->shell
-                ->addArg("--disk-cache", "true")
-                ->addArg("--disk-cache-path", $this->dirAddPid($this->argsSupport->getDiskCachePath()));
-        }
-        $this->shell->addArg("--local-storage-path", $this->dirAddPid($this->argsSupport->getLocalStoragePath()));
-    }
-
-    private function setCookies()
-    {
-        $this->shell->addArg("--cookies-file", $this->fileNameAddPid($this->argsSupport->getCookieFilePath()));
-    }
-
-    private function setProxy()
-    {
-        if (!empty($this->argsSupport->getProxy()))
-        {
-            $proxyType = $this->argsSupport->getProxy()->getType() == 'socks5' ? 'socks5' : 'http';
-            $this->shell
-                ->addArg("--proxy-type", $proxyType )
-                ->addArg("--proxy",  $this->argsSupport->getProxy()->getSocket() )
-                ->addArg("--proxy-auth", $this->argsSupport->getProxy()->getAuth());
         }
     }
 
     private function setHeaders($shell)
     {
-        if (!empty($this->argsSupport->getHeaders()))
-        {
+        if (!empty($this->argsSupport->getHeaders())) {
             foreach ($this->argsSupport->getHeaders() as $header => $value) {
                 $shell->addArg("--header", "$header: $value");
             }
@@ -77,8 +40,7 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
     private function setPayload($shell)
     {
         $shell->addArg("--method", $this->argsSupport->getHttpMethod());
-        if (!empty($this->argsSupport->getPayloadRaw()) || !empty($this->argsSupport->getPayloadForm()))
-        {
+        if (!empty($this->argsSupport->getPayloadRaw()) || !empty($this->argsSupport->getPayloadForm())) {
             $data = $this->argsSupport->getPayloadRaw() ? $this->argsSupport->getPayloadRaw() : http_build_query($this->argsSupport->getPayloadForm());
             $shell->addArg("--data", $data);
         }
@@ -93,5 +55,38 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
             ->addArg("--captcha-input-selector", $this->argsSupport->getCaptchaInputSelector())
             ->addArg("--captcha-form-selector", $this->argsSupport->getCaptchaFormSelector())
             ->addArg("--captcha-incorrect-report", $this->argsSupport->getCaptchaSendIncorrectSolveReport() ? 1 : null);
+    }
+
+    protected function setArgsToClient()
+    {
+        $this->shell = $this->argsSupport->getShell();
+        $this->setCookies();
+        $this->setProxy();
+        $this->shell
+            ->addArg("--web-security", "no")
+            ->addArg("--ignore-ssl-errors", "true")
+            ->addArg("--ssl-protocol", "any");
+        if (!empty($this->argsSupport->getDiskCachePath())) {
+            $this->shell
+                ->addArg("--disk-cache", "true")
+                ->addArg("--disk-cache-path", $this->dirAddPid($this->argsSupport->getDiskCachePath()));
+        }
+        $this->shell->addArg("--local-storage-path", $this->dirAddPid($this->argsSupport->getLocalStoragePath()));
+    }
+
+    private function setCookies()
+    {
+        $this->shell->addArg("--cookies-file", $this->fileNameAddPid($this->argsSupport->getCookieFilePath()));
+    }
+
+    private function setProxy()
+    {
+        if (!empty($this->argsSupport->getProxy())) {
+            $proxyType = $this->argsSupport->getProxy()->getType() == 'socks5' ? 'socks5' : 'http';
+            $this->shell
+                ->addArg("--proxy-type", $proxyType)
+                ->addArg("--proxy", $this->argsSupport->getProxy()->getSocket())
+                ->addArg("--proxy-auth", $this->argsSupport->getProxy()->getAuth());
+        }
     }
 }

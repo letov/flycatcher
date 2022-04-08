@@ -33,6 +33,24 @@ class ImageToTextAnticaptchaTest extends TestCaseContainer
     }
 
     /**
+     * @throws NotFoundException
+     * @throws DependencyException
+     */
+    function getCaptchaImage()
+    {
+        $this->curl->downloadFile(
+            $this->container
+                ->get('DomParser')
+                ->loadFromFile($this->tmpFile)
+                ->find('#htest_image')[0]
+                ->getAttribute('src'),
+            $this->tmpFile);
+        $old = $this->tmpFile;
+        $this->tmpFile .= '.jpg';
+        rename($old, $this->tmpFile);
+    }
+
+    /**
      * @throws DependencyException
      * @throws NotFoundException
      */
@@ -55,23 +73,5 @@ class ImageToTextAnticaptchaTest extends TestCaseContainer
             )
         );
         $this->curl->downloadFile("http://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
-    }
-
-    /**
-     * @throws NotFoundException
-     * @throws DependencyException
-     */
-    function getCaptchaImage()
-    {
-        $this->curl->downloadFile(
-            $this->container
-                ->get('DomParser')
-                ->loadFromFile($this->tmpFile)
-                ->find('#htest_image')[0]
-                ->getAttribute('src'),
-            $this->tmpFile);
-        $old = $this->tmpFile;
-        $this->tmpFile .= '.jpg';
-        rename($old, $this->tmpFile);
     }
 }

@@ -4,7 +4,6 @@ use JonnyW\PhantomJs\Client;
 use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
-use Letov\Flycatcher\Spyder\SpyderDepth;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Curl;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\PhantomJS;
@@ -12,9 +11,12 @@ use Letov\Flycatcher\Downloader\ToolSupport\Shells\Wget;
 use Letov\Flycatcher\ProxyPool\Proxy6\ProxyPoolProxy6;
 use Letov\Flycatcher\ProxyPool\Proxy6\ProxyProxy6;
 use Letov\Flycatcher\Shell\Shell;
+use Letov\Flycatcher\Spyder\JsonUrlTree;
+use Letov\Flycatcher\Spyder\SpyderDepth;
+use Letov\Flycatcher\Spyder\SpyderUrlList;
+use Letov\Flycatcher\Spyder\SpyderUrlTemplate;
 use Letov\Flycatcher\Tests\Downloader\ToolSupport\Packages\PhantomJSPackage;
-use Letov\Flycatcher\WorkerPool\WorkerDownloadTool;
-use Letov\Flycatcher\WorkerPool\WorkerPool;
+use Letov\Flycatcher\Worker\WorkerDownloadTool;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -52,10 +54,9 @@ return [
     'Gearman.client' => DI\create(GearmanClient::class),
     'Gearman.host' => '127.0.0.1',
     'Gearman.port' => 4730,
-    'Worker.pool' => DI\create(WorkerPool::class),
     'Worker.downloadToolWorker' => DI\create(WorkerDownloadTool::class),
-    'Worker.countCheckDelay' => 60,
-    'Cache.maxFileLifetimeSecond' => 1,
+    'Worker.downloadToolWorker.count' => 15,
+    'Cache.maxFileLifetimeSecond' => 60 * 60 * 24 * 5,
     'Cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)
         ->constructor(
@@ -65,21 +66,21 @@ return [
         ),
     'DomParser' => DI\create(\Letov\Flycatcher\DomParser\PhpHtmlParser\DomDocument::class),
     'Shell' => DI\create(Shell::class),
-    'Stat' => function() {
+    'Stat' => function () {
         return (new Shell('stat', '='))
             ->addArg('--printf', '%s');
     },
     'ArgSupport' => DI\create(ArgsSupport::class),
     'Curl' => DI\create(Curl::class),
-    'Curl.shell' => function() {
+    'Curl.shell' => function () {
         return new Shell('curl');
     },
     'Wget' => DI\create(Wget::class),
-    'Wget.shell' => function() {
+    'Wget.shell' => function () {
         return new Shell('wget');
     },
     'PhantomJS' => DI\create(PhantomJS::class),
-    'PhantomJS.shell' => function(ContainerInterface $c) {
+    'PhantomJS.shell' => function (ContainerInterface $c) {
         return new Shell($c->get('PhantomJS.path'), '=');
     },
     'PhantomJS.path' => '/usr/local/bin/phantomjs',
@@ -87,5 +88,8 @@ return [
     'PhantomJSPackage' => DI\create(PhantomJSPackage::class),
     'PhantomJSPackage.serviceContainer' => DI\factory([serviceContainer::class, 'getInstance']),
     'PhantomJSPackage.client' => DI\factory([Client::class, 'getInstance']),
+    'JsonUrlTree' => DI\create(JsonUrlTree::class),
     'SpyderDepth' => DI\create(SpyderDepth::class),
+    'SpyderUrlList' => DI\create(SpyderUrlList::class),
+    'SpyderUrlTemplate' => DI\create(SpyderUrlTemplate::class),
 ];

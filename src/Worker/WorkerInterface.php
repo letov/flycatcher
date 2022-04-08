@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\WorkerPool;
+namespace Letov\Flycatcher\Worker;
 
 interface WorkerInterface
 {

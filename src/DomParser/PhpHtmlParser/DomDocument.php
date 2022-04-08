@@ -9,12 +9,6 @@ class DomDocument implements DomDocumentInterface
 {
     private Document $dom;
 
-    public function loadFromString($html): ?DomDocumentInterface
-    {
-        $this->dom = Document::str_get_html($html);
-        return $this;
-    }
-
     public function loadFromFile($filePath): ?DomDocumentInterface
     {
         if (!file_exists($filePath)) {
@@ -22,6 +16,12 @@ class DomDocument implements DomDocumentInterface
         } else {
             return $this->loadFromString(file_get_contents($filePath));
         }
+    }
+
+    public function loadFromString($html): ?DomDocumentInterface
+    {
+        $this->dom = Document::str_get_html($html);
+        return $this;
     }
 
     public function find($selector): array

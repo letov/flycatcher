@@ -1,63 +1,54 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\WorkerPool;
+namespace Letov\Flycatcher\Tests\Worker;
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use GearmanClient;
 use Letov\Flycatcher\Tests\TestCaseContainer;
-use Letov\Flycatcher\WorkerPool\WorkerPoolInterface;
 
-class WorkerPoolTest extends TestCaseContainer
+class WorkerTest extends TestCaseContainer
 {
-    protected WorkerPoolInterface $workerPool;
-    protected int $workerCount;
+    private GearmanClient $client;
+
     /**
      * @throws DependencyException
      * @throws NotFoundException
      */
-    function testWorkerPool()
+    function testWorker()
     {
-        $this->workerCount = 2;
-        $this->createPhantomWorkerPool();
-        $client = $this->container->get('Gearman.client');
-        $client->addServer(
+        $this->client = $this->container->get('Gearman.client');
+        $this->client->addServer(
             $this->container->get('Gearman.host'),
             $this->container->get('Gearman.port')
         );
-        $client->setCompleteCallback(function()
-        {
-            echo "COMPLETE SOME WORKER TASK\n";
+        $this->client->setCompleteCallback(function ($task) {
+            echo "complete task {$task->jobHandle()} {$task->functionName()}\n";
         });
-        $client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
-        for ($i = 0; $i < $this->workerCount; $i++)
-        {
-            $client->addTask("download", serialize(array(
+        $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
+        $this->setWorkers();
+        for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count"); $i++) {
+            $this->client->addTask("download", serialize(array(
                 'url' => 'http://democaptcha.com/demo-form-eng/image.html',
                 'filePath' => $this->tmpFile . "_res_" . $i,
             )));
         }
-        $client->runTasks();
-        for ($i = 0; $i < $this->workerCount; $i++)
-        {
+        $this->client->runTasks();
+        for ($i = 0; $i < 5; $i++) {
             $filePath = $this->tmpFile . "_res_" . $i;
             $this->assertStringContainsString("Your message has been sent", file_get_contents($filePath));
         }
-        $this->workerPool->stop();
     }
 
     /**
      * @throws DependencyException
      * @throws NotFoundException
      */
-    protected function createPhantomWorkerPool()
+    function setWorkers()
     {
         $args = array(
             'CookieFilePath' => $this->tmpCookie,
             'Timeout' => $this->container->get('Downloader.timeoutWithCaptcha'),
-            'Headers' => array(
-                'User-Agent' => 'someUserAgent',
-                'Referer' => 'https://someReferer.com',
-            ),
             'PayloadForm' => array(
                 'message' => 'test',
             ),
@@ -72,15 +63,15 @@ class WorkerPoolTest extends TestCaseContainer
             'PhantomJSConnector' => $this->container->get('PhantomJS.connector.captchaImageToText'),
             'PhantomJSSnapshotSelector' => 'body',
             'PhantomJSSnapshotPath' => $this->tmpFile . "_snap.png",
-            'Shell' => $this->container->get("PhantomJS.shell")
         );
-        $this->workerPool = $this->container->make("Worker.pool", array(
-            'container' => $this->container,
-            'workerName' => 'downloadToolWorker',
-            'workerDownloadToolName' => 'PhantomJS',
-            'workerArgs' => $args,
-            'workerCount' => $this->workerCount + 5,
-            'workerCountCheckDelay' => $this->container->get('Worker.countCheckDelay'),
-        ));
+        for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count"); $i++)
+        {
+            $this->client->addTask("setDownloadTool", serialize(array(
+                'downloadToolName' => 'PhantomJS',
+                'shellName' => 'PhantomJS.shell',
+                'args' => $args
+            )));
+        }
+        $this->client->runTasks();
     }
 }

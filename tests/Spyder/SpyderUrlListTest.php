@@ -7,7 +7,7 @@ use DI\NotFoundException;
 use GearmanClient;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 
-class SpyderDepthTest extends TestCaseContainer
+class SpyderUrlListTest extends TestCaseContainer
 {
     private GearmanClient $client;
 
@@ -15,8 +15,7 @@ class SpyderDepthTest extends TestCaseContainer
      * @throws DependencyException
      * @throws NotFoundException
      */
-
-    public function testSpyderDepth()
+    public function testSpyderUrlList()
     {
         $this->client = $this->container->get('Gearman.client');
         $this->client->addServer(
@@ -28,7 +27,7 @@ class SpyderDepthTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        $this->container->make("SpyderDepth", array(
+        $this->container->make("SpyderUrlList", array(
             'host' => 'www.petshop.ru',
             'protocol' => 'https',
             'downloadDir' => $this->container->get('Dirs')['tests'],
@@ -38,15 +37,10 @@ class SpyderDepthTest extends TestCaseContainer
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
                 'jsonFilePath' => $this->container->get('Dirs')['tests'] . "/struct.json"
             )),
-            'rootPath' => '/catalog/dogs/vet/',
-            'depthLimit' => 2,
-            'includePathList' => array(
-                '/catalog/dogs/vet/vorotniki_popony',
-                '/catalog/dogs/vet/antibiotiki'
-            ),
-            'excludePathList' => array(
-                '/brand'
-            ),
+            'urlList' => array(
+                'https://www.petshop.ru/catalog/dogs/sukhoy-korm-premium-klassa-s-kuritsey-dlya-shchenkov-i-molodykh-sobak-krupnykh-i-gigantskikh-porod/',
+                'https://www.petshop.ru/catalog/dogs/syxoi/schenki/for-puppies-toy-breeds-from-2-to-10-months/',
+            )
         ));
         $this->assertFileExists($this->container->get('Dirs')['tests'] . "/struct.json");
     }
@@ -64,8 +58,8 @@ class SpyderDepthTest extends TestCaseContainer
         for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count") * 2; $i++)
         {
             $this->client->addTask("setDownloadTool", serialize(array(
-                'downloadToolName' => 'Curl',
-                'shellName' => 'Curl.shell',
+                'downloadToolName' => 'Wget',
+                'shellName' => 'Wget.shell',
                 'args' => $args
             )));
         }

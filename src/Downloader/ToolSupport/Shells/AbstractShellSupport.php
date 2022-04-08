@@ -18,14 +18,15 @@ abstract class AbstractShellSupport implements ToolSupportInterface
      */
     public function __construct(ArgsSupportInterface $argsSupport)
     {
-        if (empty($argsSupport->getShell()))
-        {
+        if (empty($argsSupport->getShell())) {
             throw new Exception("Shell command client empty");
         }
         $this->shell = $argsSupport->getShell();
         $this->argsSupport = $argsSupport;
         $this->setArgsToClient();
     }
+
+    abstract protected function setArgsToClient();
 
     public function updateArgs(array $args)
     {
@@ -36,8 +37,7 @@ abstract class AbstractShellSupport implements ToolSupportInterface
 
     protected function fileNameAddPid(?string $fileName): ?string
     {
-        if (null === $fileName)
-        {
+        if (null === $fileName) {
             return null;
         }
         $base = pathinfo($fileName);
@@ -48,8 +48,7 @@ abstract class AbstractShellSupport implements ToolSupportInterface
 
     protected function dirAddPid(?string $dirName): ?string
     {
-        if (null === $dirName)
-        {
+        if (null === $dirName) {
             return null;
         }
         $pid = posix_getpid();
@@ -59,6 +58,4 @@ abstract class AbstractShellSupport implements ToolSupportInterface
         }
         return $newDir;
     }
-
-    abstract protected function setArgsToClient();
 }

@@ -12,8 +12,7 @@ class ArgsSupportCodeGenerator
     {
 
         $allInterfaces = get_declared_interfaces();
-        array_map(function ($interfaceFile)
-        {
+        array_map(function ($interfaceFile) {
             require_once $interfaceFile;
         }, glob(__DIR__ . '/ArgInterfaces/*.php'));
         $argInterfaces = array_diff(get_declared_interfaces(), $allInterfaces);
@@ -24,8 +23,7 @@ class ArgsSupportCodeGenerator
         $argsSupportInterface = $argsSupportInterfaceNamespace->addInterface("ArgsSupportInterface");
         $argsSupportNamespace = new PhpNamespace(__NAMESPACE__);
         $argsSupport = $argsSupportNamespace->addClass("ArgsSupport");
-        foreach ($argInterfaces as $argInterface)
-        {
+        foreach ($argInterfaces as $argInterface) {
             $argsSupportInterface->addExtend($argInterface);
         }
         $argsSupport->addImplement($argsSupportInterface->getName());

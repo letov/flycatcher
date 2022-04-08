@@ -17,6 +17,16 @@ class Cache implements CacheInterface
         $this->stat = $stat;
     }
 
+    public function setAppDirs($rootDir, $dirs)
+    {
+        $this->createDirIfNotExist($rootDir);
+        $this->createDirIfNotExist($dirs['tests']);
+        $this->createDirIfNotExist($dirs['browsersData']);
+        $this->createDirIfNotExist($dirs['download']);
+        $this->emptyDir($dirs['tests']);
+        $this->emptyDir($dirs['browsersData']);
+    }
+
     private function createDirIfNotExist($dirPath)
     {
         if (!file_exists($dirPath)) {
@@ -27,16 +37,6 @@ class Cache implements CacheInterface
     private function emptyDir($dirPath)
     {
         shell_exec("rm -rf $dirPath/*");
-    }
-
-    public function setAppDirs($rootDir, $dirs)
-    {
-        $this->createDirIfNotExist($rootDir);
-        $this->createDirIfNotExist($dirs['tests']);
-        $this->createDirIfNotExist($dirs['browsersData']);
-        $this->createDirIfNotExist($dirs['download']);
-        $this->emptyDir($dirs['tests']);
-        $this->emptyDir($dirs['browsersData']);
     }
 
     public function valid(string $filePath): bool
@@ -58,16 +58,11 @@ class Cache implements CacheInterface
         return true;
     }
 
-    private function isFileExpire($filePath): bool
-    {
-        return (time() - filemtime($filePath)) > $this->maxFileLifetimeSecond;
-    }
-
     private function isZeroSize(string $filePath): bool
     {
         $result = 0 == (int)$this->stat
-                    ->addArg($filePath)
-                    ->run();
+                ->addArg($filePath)
+                ->run();
         $this->stat->removeFromTail(1);
         return $result;
     }
@@ -75,5 +70,10 @@ class Cache implements CacheInterface
     private function isImageFile(string $filePath): bool
     {
         return @is_array(getimagesize($filePath));
+    }
+
+    private function isFileExpire($filePath): bool
+    {
+        return (time() - filemtime($filePath)) > $this->maxFileLifetimeSecond;
     }
 }

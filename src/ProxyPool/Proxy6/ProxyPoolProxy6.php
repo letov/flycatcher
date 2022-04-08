@@ -38,21 +38,6 @@ class ProxyPoolProxy6 implements ProxyPoolInterface
     /**
      * @throws Exception
      */
-    public function getProxyList(string $proxyType = 'socks5'): array
-    {
-        $result = [];
-        foreach ($this->response->list as $proxy) {
-            if (('socks5' == $proxyType  && ProxyType::SOCKS5 == $proxy->type) ||
-                ('https' == $proxyType && ProxyType::HTTPS == $proxy->type)){
-                $result[] = new ProxyProxy6($proxy);
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * @throws Exception
-     */
     private function makeResponse()
     {
         $this->response = $this->api->getProxy(ProxyState::ACTIVE);
@@ -82,5 +67,20 @@ class ProxyPoolProxy6 implements ProxyPoolInterface
         $this->api->setType($keysSocks, ProxyType::SOCKS5);
         $this->api->setType($keysHttps, ProxyType::HTTPS);
         $this->response = $this->api->getProxy(ProxyState::ACTIVE);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getProxyList(string $proxyType = 'socks5'): array
+    {
+        $result = [];
+        foreach ($this->response->list as $proxy) {
+            if (('socks5' == $proxyType && ProxyType::SOCKS5 == $proxy->type) ||
+                ('https' == $proxyType && ProxyType::HTTPS == $proxy->type)) {
+                $result[] = new ProxyProxy6($proxy);
+            }
+        }
+        return $result;
     }
 }

@@ -22,7 +22,7 @@ class ProxyProxy6Test extends TestCaseContainer
                 "pass" => "fakePass",
             )
         ));
-        $this->assertSame("12.34.56.78:9",$proxy->getSocket());
-        $this->assertSame("fakeUser:fakePass",$proxy->getAuth());
+        $this->assertSame("12.34.56.78:9", $proxy->getSocket());
+        $this->assertSame("fakeUser:fakePass", $proxy->getAuth());
     }
 }

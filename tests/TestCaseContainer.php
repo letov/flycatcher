@@ -5,7 +5,6 @@ namespace Letov\Flycatcher\Tests;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException as NotFoundExceptionAlias;
-use Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionException as ReflectionExceptionAlias;
 use ReflectionMethod;
@@ -31,8 +30,8 @@ class TestCaseContainer extends TestCase
 
     function generateRandomString($length = 20)
     {
-        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            ceil($length/strlen($x)) )),1,$length);
+        return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            ceil($length / strlen($x)))), 1, $length);
     }
 
     /**

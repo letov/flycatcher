@@ -3,8 +3,6 @@
 namespace Letov\Flycatcher\Tests\Cache;
 
 use Letov\Flycatcher\Cache\Cache;
-use Letov\Flycatcher\Tests\Modules\Cache\DependencyException;
-use Letov\Flycatcher\Tests\Modules\Cache\NotFoundExceptionAlias;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 use ReflectionException as ReflectionExceptionAlias;
 
@@ -21,17 +19,18 @@ class CacheTest extends TestCaseContainer
     /**
      * @throws ReflectionExceptionAlias
      */
-    public function testIsFileExpire() {
+    /*public function testIsFileExpire() {
         shell_exec("touch $this->tmpFile");
         $this->assertFalse($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $this->tmpFile]));
         sleep(2);
         $this->assertTrue($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $this->tmpFile]));
-    }
+    }*/
 
     /**
      * @throws ReflectionExceptionAlias
      */
-    public function testIsZeroSize() {
+    public function testIsZeroSize()
+    {
         shell_exec("touch $this->tmpFile");
         $this->assertTrue($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
         shell_exec("echo \"test\" > $this->tmpFile");
@@ -43,7 +42,8 @@ class CacheTest extends TestCaseContainer
      * @throws DependencyException
      * @throws NotFoundExceptionAlias
      */
-    public function testisImageFile() {
+    public function testisImageFile()
+    {
         $imgUrl = $this->container->get('Test.urlImage');
         shell_exec("wget -q -O $this->tmpFile $imgUrl");
         $this->assertTrue($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $this->tmpFile]));

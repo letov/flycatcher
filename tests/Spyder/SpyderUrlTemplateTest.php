@@ -7,7 +7,7 @@ use DI\NotFoundException;
 use GearmanClient;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 
-class SpyderDepthTest extends TestCaseContainer
+class SpyderUrlTemplateTest extends TestCaseContainer
 {
     private GearmanClient $client;
 
@@ -15,8 +15,7 @@ class SpyderDepthTest extends TestCaseContainer
      * @throws DependencyException
      * @throws NotFoundException
      */
-
-    public function testSpyderDepth()
+    public function testSpyderUrlTemplate()
     {
         $this->client = $this->container->get('Gearman.client');
         $this->client->addServer(
@@ -28,9 +27,7 @@ class SpyderDepthTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        $this->container->make("SpyderDepth", array(
-            'host' => 'www.petshop.ru',
-            'protocol' => 'https',
+        $this->container->make("SpyderUrlTemplate", array(
             'downloadDir' => $this->container->get('Dirs')['tests'],
             'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
             'client' => $this->client,
@@ -38,15 +35,8 @@ class SpyderDepthTest extends TestCaseContainer
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
                 'jsonFilePath' => $this->container->get('Dirs')['tests'] . "/struct.json"
             )),
-            'rootPath' => '/catalog/dogs/vet/',
-            'depthLimit' => 2,
-            'includePathList' => array(
-                '/catalog/dogs/vet/vorotniki_popony',
-                '/catalog/dogs/vet/antibiotiki'
-            ),
-            'excludePathList' => array(
-                '/brand'
-            ),
+            'template' => 'https://www.petshop.ru/catalog/dogs/syxoi/schenki/#pn=%d',
+            'range' => range(1,4),
         ));
         $this->assertFileExists($this->container->get('Dirs')['tests'] . "/struct.json");
     }
@@ -64,8 +54,8 @@ class SpyderDepthTest extends TestCaseContainer
         for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count") * 2; $i++)
         {
             $this->client->addTask("setDownloadTool", serialize(array(
-                'downloadToolName' => 'Curl',
-                'shellName' => 'Curl.shell',
+                'downloadToolName' => 'Wget',
+                'shellName' => 'Wget.shell',
                 'args' => $args
             )));
         }
