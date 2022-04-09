@@ -5,6 +5,7 @@ use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
+use Letov\Flycatcher\Downloader\ToolSupport\Packages\PhantomJSPackage;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Curl;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\PhantomJS;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Wget;
@@ -15,7 +16,6 @@ use Letov\Flycatcher\Spyder\JsonUrlTree;
 use Letov\Flycatcher\Spyder\SpyderDepth;
 use Letov\Flycatcher\Spyder\SpyderUrlList;
 use Letov\Flycatcher\Spyder\SpyderUrlTemplate;
-use Letov\Flycatcher\Tests\Downloader\ToolSupport\Packages\PhantomJSPackage;
 use Letov\Flycatcher\Worker\WorkerDownloadTool;
 use Psr\Container\ContainerInterface;
 

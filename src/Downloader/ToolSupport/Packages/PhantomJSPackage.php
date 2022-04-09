@@ -1,6 +1,6 @@
 <?php
 
-namespace Letov\Flycatcher\Tests\Downloader\ToolSupport\Packages;
+namespace Letov\Flycatcher\Downloader\ToolSupport\Packages;
 
 use Exception;
 use JonnyW\PhantomJs\ClientInterface;
