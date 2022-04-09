@@ -77,5 +77,20 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 	function getPhantomJSPath(): ?string;
 
 
+	function getPhantomJSPageContentPath(): ?string;
+
+
+	function getPhantomJSPageContentMimeFilter(): ?array;
+
+
+	function getPhantomJSPageContentWait(): ?int;
+
+
+	function getPhantomJSClickSelectorMap(): ?array;
+
+
+	function getPhantomJSClickSelectorMapRepeat(): ?int;
+
+
 	function getShell(): ?\Letov\Flycatcher\Shell\ShellInterface;
 }

@@ -159,6 +159,36 @@ class ArgsSupport implements ArgsSupportInterface
 	}
 
 
+	public function getPhantomJSPageContentPath(): ?string
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPhantomJSPageContentMimeFilter(): ?array
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPhantomJSPageContentWait(): ?int
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPhantomJSClickSelectorMap(): ?array
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPhantomJSClickSelectorMapRepeat(): ?int
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
 	public function getShell(): ?\Letov\Flycatcher\Shell\ShellInterface
 	{
 		return $this->getArg(__FUNCTION__);

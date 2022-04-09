@@ -19,4 +19,14 @@ interface PhantomJSArgInterface
     public function getPhantomJSClient(): ?ClientInterface;
 
     public function getPhantomJSPath(): ?string;
+
+    public function getPhantomJSPageContentPath(): ?string;
+
+    public function getPhantomJSPageContentMimeFilter(): ?array;
+
+    public function getPhantomJSPageContentWait(): ?int;
+
+    public function getPhantomJSClickSelectorMap(): ?array;
+
+    public function getPhantomJSClickSelectorMapRepeat(): ?int;
 }

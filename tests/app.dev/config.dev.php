@@ -33,6 +33,7 @@ return [
     'Downloader.connection' => 'keep-alive',
     'Downloader.timeout' => 15,
     'Downloader.timeoutWithCaptcha' => 60,
+    'Downloader.timeoutWithPageContent' => 60,
     'Proxy' => DI\create(ProxyProxy6::class),
     'Proxy6.apiKey' => "fceed63ebe-0d6f24275b-dfcbe32351",
     'Proxy6.minCount' => 3,
@@ -84,7 +85,8 @@ return [
         return new Shell($c->get('PhantomJS.path'), '=');
     },
     'PhantomJS.path' => '/usr/local/bin/phantomjs',
-    'PhantomJS.connector.captchaImageToText' => 'PahntomJSConnectors/PhantomJSCaptchaText.js',
+    'PhantomJS.connector.captchaImageToText' => 'PahntomJSConnectors/PhantomJSConnector.js',
+    'PhantomJS.connector.pageContentWait' => 10,
     'PhantomJSPackage' => DI\create(PhantomJSPackage::class),
     'PhantomJSPackage.serviceContainer' => DI\factory([serviceContainer::class, 'getInstance']),
     'PhantomJSPackage.client' => DI\factory([Client::class, 'getInstance']),

@@ -8,6 +8,9 @@ page.open(inputArgs['url'], inputArgs['method'], inputArgs['data'], function(sta
         if (inputArgs.hasOwnProperty('snapshot-selector') && inputArgs.hasOwnProperty('snapshot-path')) {
             makeSnapshot(inputArgs);
         }
+        if (inputArgs['click-map'].length > 0) {
+            makeClicks(inputArgs);
+        }
         if (hasCaptchaSign(inputArgs)) {
             if (!validCaptchaArgs(inputArgs)) {
                 close('captcha arg error');
@@ -20,6 +23,21 @@ page.open(inputArgs['url'], inputArgs['method'], inputArgs['data'], function(sta
         close('status ' + status);
     }
 });
+
+function makeClicks(inputArgs) {
+    for(var i = 0; i < inputArgs['click-map-repeat']; i++) {
+        for (var key in inputArgs['click-map']) {
+            var selector = inputArgs['click-map'][key];
+            var elem = page.evaluate(function(selector) {
+                return document.querySelector(selector);
+            });
+            if (null !== elem) {
+                console.log('Click on ' + selector);
+                page.sendEvent('click', elem.offsetLeft, elem.offsetTop, 'left');
+            }
+        }
+    }
+}
 
 function fillForm(inputArgs) {
     console.log('fill form');
@@ -84,10 +102,10 @@ function checkSolution(inputArgs, solution, taskId) {
     if (false === submitForm(inputArgs, solution)) {
         close('captcha selectors error');
     }
-    waitFor(waitLoadPageAfterSubmit, loadedAfterSubmit, inputArgs, taskId,20000, 1000);
+    waitForCaptcha(waitLoadPageAfterSubmit, loadedAfterSubmit, inputArgs, taskId,20000, 1000);
 }
 
-function waitFor(testFx, onReady, inputArgs, taskId, timeOutMillis, nextCheckTimeoutMillis) {
+function waitForCaptcha(testFx, onReady, inputArgs, taskId, timeOutMillis, nextCheckTimeoutMillis) {
     var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000,
         start = new Date().getTime(),
         condition = false,
@@ -96,7 +114,7 @@ function waitFor(testFx, onReady, inputArgs, taskId, timeOutMillis, nextCheckTim
                 condition = testFx();
             } else {
                 if(!condition) {
-                    console.log('waitFor timeout');
+                    console.log('waitForCaptcha timeout');
                     solveCaptcha(inputArgs);
                 } else {
                     onReady(taskId);
@@ -260,20 +278,4 @@ function reportIncorrectImageCaptcha(captchaApiKey, taskId) {
     if (false === json || 0 !== json.errorId) {
         return false;
     }
-}
-
-function successClose(filePath) {
-    var content = page.content;
-    var fs = require('fs');
-    fs.write(filePath, content, 'w');
-    console.log('SUCCESS');
-    close();
-}
-
-function close(msg) {
-    if ('undefined' !== typeof msg) {
-        console.log(msg);
-    }
-    page.close();
-    phantom.exit(1)
 }

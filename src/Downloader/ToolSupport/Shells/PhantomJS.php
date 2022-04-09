@@ -17,7 +17,10 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
             ->addArg("--snapshot-path", $this->fileNameAddPid($this->argsSupport->getPhantomJSSnapshotPath()))
             ->addArg("--file-path", $filePath)
             ->addArg("--url", $url)
-            ->addArg("--connect-timeout", $this->argsSupport->getTimeout());
+            ->addArg("--connect-timeout", $this->argsSupport->getTimeout())
+            ->addArg("--disk-cache-path", $this->dirAddPid($this->argsSupport->getDiskCachePath()));
+        $this->setClickSelectorMap($shell);
+        $this->setPageContent($shell);
         $this->setHeaders($shell);
         $this->setPayload($shell);
         $this->setCaptcha($shell);
@@ -26,6 +29,27 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
         if (false === stripos($response, 'SUCCESS')) {
             @unlink($filePath);
         }
+    }
+
+    private function setClickSelectorMap($shell)
+    {
+        if (!empty($this->argsSupport->getPhantomJSClickSelectorMap())) {
+            foreach ($this->argsSupport->getPhantomJSClickSelectorMap() as $selector) {
+                $shell->addArg("--clk", $selector);
+            }
+        }
+        $shell->addArg("--click-map-repeat", $this->argsSupport->getPhantomJSClickSelectorMapRepeat());
+    }
+
+    private function setPageContent($shell)
+    {
+        $pageContentMimeFilter = empty($this->argsSupport->getPhantomJSPageContentMimeFilter()) ?
+            null :
+            implode(',', $this->argsSupport->getPhantomJSPageContentMimeFilter());
+        $shell
+            ->addArg("--page-content-path", $this->argsSupport->getPhantomJSPageContentPath())
+            ->addArg("--page-content-mime-filter", $pageContentMimeFilter)
+            ->addArg("--page-content-wait", $this->argsSupport->getPhantomJSPageContentWait());
     }
 
     private function setHeaders($shell)
