@@ -33,7 +33,8 @@ class WgetTest extends TestCaseContainer
                         'Connection' => $this->container->get('Downloader.connection'),
                     ),
                     'Shell' => $this->container->get("Wget.shell")
-                )
+                ),
+                'logger' => $this->container->get('Logger')
             ))
         ));
         $wget->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);

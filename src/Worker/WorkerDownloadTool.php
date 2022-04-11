@@ -41,7 +41,8 @@ class WorkerDownloadTool implements WorkerInterface
             $this->downloadTool = $this->container->make($workload['downloadToolName'], array(
                 'argsSupport' => $this->container->make('ArgSupport', array(
                     'args' => $args
-                ))
+                )),
+                'logger' => $this->container->get('Logger')
             ));
             return serialize("");
         });

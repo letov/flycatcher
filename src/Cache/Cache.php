@@ -20,9 +20,10 @@ class Cache implements CacheInterface
     public function setAppDirs($rootDir, $dirs)
     {
         $this->createDirIfNotExist($rootDir);
-        $this->createDirIfNotExist($dirs['tests']);
-        $this->createDirIfNotExist($dirs['browsersData']);
-        $this->createDirIfNotExist($dirs['download']);
+        foreach ($dirs as $dir)
+        {
+            $this->createDirIfNotExist($dir);
+        }
         $this->emptyDir($dirs['tests']);
         $this->emptyDir($dirs['browsersData']);
     }

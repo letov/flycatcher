@@ -25,7 +25,10 @@ class ImageToTextAnticaptchaTest extends TestCaseContainer
                 'Shell' => $this->container->get("Curl.shell")
             )
         ));
-        $this->curl = $this->container->make('Curl', array('argsSupport' => $argsSupport));
+        $this->curl = $this->container->make('Curl', array(
+            'argsSupport' => $argsSupport,
+            'logger' => $this->container->get('Logger')
+        ));
         $this->curl->downloadFile("http://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
         $this->getCaptchaImage();
         $this->sendForm();

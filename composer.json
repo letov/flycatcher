@@ -33,7 +33,8 @@
     "nette/php-generator": "dev-master",
     "adminanticaptcha/anticaptcha-php": "dev-master",
     "dimabdc/php-fast-simple-html-dom-parser": "dev-master",
-    "jonnyw/php-phantomjs": "dev-master"
+    "jonnyw/php-phantomjs": "dev-master",
+    "monolog/monolog": "dev-main"
   },
   "require-dev": {
     "phpunit/phpunit": "9.5.0"

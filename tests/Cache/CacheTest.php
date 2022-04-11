@@ -2,6 +2,8 @@
 
 namespace Letov\Flycatcher\Tests\Cache;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 use ReflectionException as ReflectionExceptionAlias;
@@ -40,7 +42,7 @@ class CacheTest extends TestCaseContainer
     /**
      * @throws ReflectionExceptionAlias
      * @throws DependencyException
-     * @throws NotFoundExceptionAlias
+     * @throws NotFoundException
      */
     public function testisImageFile()
     {

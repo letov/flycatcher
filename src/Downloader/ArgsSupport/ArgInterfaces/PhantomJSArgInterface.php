@@ -20,11 +20,11 @@ interface PhantomJSArgInterface
 
     public function getPhantomJSPath(): ?string;
 
-    public function getPhantomJSPageContentPath(): ?string;
+    public function getPhantomJSSaveContentPath(): ?string;
 
-    public function getPhantomJSPageContentMimeFilter(): ?array;
+    public function getPhantomJSSaveContentMimeFilter(): ?array;
 
-    public function getPhantomJSPageContentWait(): ?int;
+    public function getPhantomJSSaveContentWait(): ?int;
 
     public function getPhantomJSClickSelectorMap(): ?array;
 

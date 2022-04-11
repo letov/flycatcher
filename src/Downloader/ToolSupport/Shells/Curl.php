@@ -19,8 +19,9 @@ class Curl extends AbstractShellSupport implements DownloadToolInterface
         }
     }
 
-    protected function setArgsToClient()
+    protected function setArgsToShell()
     {
+        $this->shell = clone $this->argsSupport->getShell();
         $this->setCookies();
         $this->setProxy();
         $this->setHeaders();

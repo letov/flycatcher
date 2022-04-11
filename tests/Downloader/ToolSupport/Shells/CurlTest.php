@@ -33,7 +33,8 @@ class CurlTest extends TestCaseContainer
                         'Connection' => $this->container->get('Downloader.connection'),
                     ),
                     'Shell' => $this->container->get("Curl.shell")
-                )
+                ),
+                'logger' => $this->container->get('Logger')
             ))
         ));
         $curl->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);

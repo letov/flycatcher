@@ -8,8 +8,8 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
 {
     public function downloadFile($url, $filePath)
     {
-        $shell = clone $this->shell;
-        $shell
+        $shellDownloadFile = clone $this->shell;
+        $shellDownloadFile
             ->addArg(__DIR__ . "/" . $this->argsSupport->getPhantomJSConnector())
             ->addArg("--viewport-width", $this->argsSupport->getPhantomJSViewportWidth())
             ->addArg("--viewport-height", $this->argsSupport->getPhantomJSViewportHeight())
@@ -19,60 +19,65 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
             ->addArg("--url", $url)
             ->addArg("--connect-timeout", $this->argsSupport->getTimeout())
             ->addArg("--disk-cache-path", $this->dirAddPid($this->argsSupport->getDiskCachePath()));
-        $this->setClickSelectorMap($shell);
-        $this->setPageContent($shell);
-        $this->setHeaders($shell);
-        $this->setPayload($shell);
-        $this->setCaptcha($shell);
-        $response = $shell->run();
-        echo $response;
+        $this->setClickSelectorMap($shellDownloadFile);
+        $this->setPageContent($shellDownloadFile);
+        $this->setHeaders($shellDownloadFile);
+        $this->setPayload($shellDownloadFile);
+        $this->setCaptcha($shellDownloadFile);
+        $response = $shellDownloadFile->run();
+        if (!empty($this->logger)) {
+            $logs = explode("\n", $response);
+            foreach ($logs as $log) {
+                $this->logger->debug($log);
+            }
+        }
         if (false === stripos($response, 'SUCCESS')) {
             @unlink($filePath);
         }
     }
 
-    private function setClickSelectorMap($shell)
+    private function setClickSelectorMap($shellDownloadFile)
     {
         if (!empty($this->argsSupport->getPhantomJSClickSelectorMap())) {
             foreach ($this->argsSupport->getPhantomJSClickSelectorMap() as $selector) {
-                $shell->addArg("--clk", $selector);
+                $shellDownloadFile->addArg("--clk", $selector);
             }
         }
-        $shell->addArg("--click-map-repeat", $this->argsSupport->getPhantomJSClickSelectorMapRepeat());
+        $shellDownloadFile->addArg("--click-map-repeat", $this->argsSupport->getPhantomJSClickSelectorMapRepeat());
     }
 
-    private function setPageContent($shell)
+    private function setPageContent($shellDownloadFile)
     {
-        $pageContentMimeFilter = empty($this->argsSupport->getPhantomJSPageContentMimeFilter()) ?
+        $pageContentMimeFilter = empty($this->argsSupport->getPhantomJSSaveContentMimeFilter()) ?
             null :
-            implode(',', $this->argsSupport->getPhantomJSPageContentMimeFilter());
-        $shell
-            ->addArg("--page-content-path", $this->argsSupport->getPhantomJSPageContentPath())
-            ->addArg("--page-content-mime-filter", $pageContentMimeFilter)
-            ->addArg("--page-content-wait", $this->argsSupport->getPhantomJSPageContentWait());
+            implode(',', $this->argsSupport->getPhantomJSSaveContentMimeFilter());
+        $shellDownloadFile
+            ->addArg("--save-content-path", $this->argsSupport->getPhantomJSSaveContentPath())
+            ->addArg("--save-content-mime-filter", $pageContentMimeFilter)
+            ->addArg("--save-content-wait", $this->argsSupport->getPhantomJSSaveContentWait());
     }
 
-    private function setHeaders($shell)
+    private function setHeaders($shellDownloadFile)
     {
         if (!empty($this->argsSupport->getHeaders())) {
             foreach ($this->argsSupport->getHeaders() as $header => $value) {
-                $shell->addArg("--header", "$header: $value");
+                $shellDownloadFile->addArg("--header", "$header: $value");
             }
         }
     }
 
-    private function setPayload($shell)
+    private function setPayload($shellDownloadFile)
     {
-        $shell->addArg("--method", $this->argsSupport->getHttpMethod());
+        $shellDownloadFile->addArg("--method", $this->argsSupport->getHttpMethod());
         if (!empty($this->argsSupport->getPayloadRaw()) || !empty($this->argsSupport->getPayloadForm())) {
             $data = $this->argsSupport->getPayloadRaw() ? $this->argsSupport->getPayloadRaw() : http_build_query($this->argsSupport->getPayloadForm());
-            $shell->addArg("--data", $data);
+            $shellDownloadFile->addArg("--data", $data);
         }
     }
 
-    private function setCaptcha($shell)
+    private function setCaptcha($shellDownloadFile)
     {
-        $shell
+        $shellDownloadFile
             ->addArg("--captcha-api-key", $this->argsSupport->getCaptchaApiKey())
             ->addArg("--captcha-sign", $this->argsSupport->getCaptchaSign())
             ->addArg("--captcha-image-selector", $this->argsSupport->getCaptchaImageSelector())
@@ -81,9 +86,9 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
             ->addArg("--captcha-incorrect-report", $this->argsSupport->getCaptchaSendIncorrectSolveReport() ? 1 : null);
     }
 
-    protected function setArgsToClient()
+    protected function setArgsToShell()
     {
-        $this->shell = $this->argsSupport->getShell();
+        $this->shell = clone $this->argsSupport->getShell();
         $this->setCookies();
         $this->setProxy();
         $this->shell

@@ -38,8 +38,9 @@ class PhantomJSTest extends TestCaseContainer
                     'PhantomJSSnapshotPath' => $this->tmpFile . "_snap.png",
                     'PhantomJSSnapshotSelector' => 'body',
                     'Shell' => $this->container->get("PhantomJS.shell")
-                )
-            ))
+                ),
+            )),
+            'logger' => $this->container->get('Logger')
         ));
         $phantomJS->downloadFile("http://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
         $this->assertFileExists($this->tmpFile);

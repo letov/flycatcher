@@ -77,13 +77,13 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 	function getPhantomJSPath(): ?string;
 
 
-	function getPhantomJSPageContentPath(): ?string;
+	function getPhantomJSSaveContentPath(): ?string;
 
 
-	function getPhantomJSPageContentMimeFilter(): ?array;
+	function getPhantomJSSaveContentMimeFilter(): ?array;
 
 
-	function getPhantomJSPageContentWait(): ?int;
+	function getPhantomJSSaveContentWait(): ?int;
 
 
 	function getPhantomJSClickSelectorMap(): ?array;

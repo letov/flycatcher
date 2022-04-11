@@ -17,6 +17,8 @@ use Letov\Flycatcher\Spyder\SpyderDepth;
 use Letov\Flycatcher\Spyder\SpyderUrlList;
 use Letov\Flycatcher\Spyder\SpyderUrlTemplate;
 use Letov\Flycatcher\Worker\WorkerDownloadTool;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -26,8 +28,15 @@ return [
         'tests' => DI\string('{RootDir}/tests'),
         'browsersData' => DI\string('{RootDir}/browsers_data'),
         'download' => DI\string('{RootDir}/download'),
+        'logs' => DI\string('{RootDir}/logs'),
     ),
-    'Downloader.accept' => 'text/html,applicPhantomJSPackageation/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+    'Logger' => DI\factory(function ($c) {
+        $logger = new Logger('log');
+        $pid = posix_getpid();
+        $logger->pushHandler(new StreamHandler($c->get('Dirs')['logs'] . '/debug_' . $pid . '.log', Logger::DEBUG));
+        return $logger;
+    }),
+    'Downloader.accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Downloader.acceptLanguage' => 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
     'Downloader.acceptEncoding' => 'gzip, deflate',
     'Downloader.connection' => 'keep-alive',
@@ -67,22 +76,22 @@ return [
         ),
     'DomParser' => DI\create(\Letov\Flycatcher\DomParser\PhpHtmlParser\DomDocument::class),
     'Shell' => DI\create(Shell::class),
-    'Stat' => function () {
-        return (new Shell('stat', '='))
+    'Stat' => function ($c) {
+        return (new Shell('stat', $c->get('Logger'), '='))
             ->addArg('--printf', '%s');
     },
     'ArgSupport' => DI\create(ArgsSupport::class),
     'Curl' => DI\create(Curl::class),
-    'Curl.shell' => function () {
-        return new Shell('curl');
+    'Curl.shell' => function (ContainerInterface $c) {
+        return new Shell('curl', $c->get('Logger'));
     },
     'Wget' => DI\create(Wget::class),
-    'Wget.shell' => function () {
-        return new Shell('wget');
+    'Wget.shell' => function (ContainerInterface $c) {
+        return new Shell('wget', $c->get('Logger'));
     },
     'PhantomJS' => DI\create(PhantomJS::class),
     'PhantomJS.shell' => function (ContainerInterface $c) {
-        return new Shell($c->get('PhantomJS.path'), '=');
+        return new Shell($c->get('PhantomJS.path'), $c->get('Logger'), '=');
     },
     'PhantomJS.path' => '/usr/local/bin/phantomjs',
     'PhantomJS.connector.captchaImageToText' => 'PahntomJSConnectors/PhantomJSConnector.js',

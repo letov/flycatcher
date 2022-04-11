@@ -159,19 +159,19 @@ class ArgsSupport implements ArgsSupportInterface
 	}
 
 
-	public function getPhantomJSPageContentPath(): ?string
+	public function getPhantomJSSaveContentPath(): ?string
 	{
 		return $this->getArg(__FUNCTION__);
 	}
 
 
-	public function getPhantomJSPageContentMimeFilter(): ?array
+	public function getPhantomJSSaveContentMimeFilter(): ?array
 	{
 		return $this->getArg(__FUNCTION__);
 	}
 
 
-	public function getPhantomJSPageContentWait(): ?int
+	public function getPhantomJSSaveContentWait(): ?int
 	{
 		return $this->getArg(__FUNCTION__);
 	}

@@ -6,33 +6,34 @@ use Exception;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupportInterface;
 use Letov\Flycatcher\Downloader\ToolSupport\ToolSupportInterface;
 use Letov\Flycatcher\Shell\ShellInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractShellSupport implements ToolSupportInterface
 {
 
     protected ArgsSupportInterface $argsSupport;
     protected ShellInterface $shell;
+    protected ?LoggerInterface $logger;
 
     /**
      * @throws Exception
      */
-    public function __construct(ArgsSupportInterface $argsSupport)
+    public function __construct(ArgsSupportInterface $argsSupport, ?LoggerInterface $logger = null)
     {
         if (empty($argsSupport->getShell())) {
-            throw new Exception("Shell command client empty");
+            throw new Exception("Shell client empty");
         }
-        $this->shell = $argsSupport->getShell();
         $this->argsSupport = $argsSupport;
-        $this->setArgsToClient();
+        $this->logger = $logger;
+        $this->setArgsToShell();
     }
 
-    abstract protected function setArgsToClient();
+    abstract protected function setArgsToShell();
 
     public function updateArgs(array $args)
     {
         $this->argsSupport->updateArgs($args);
-        $this->shell->removeAll();
-        $this->setArgsToClient();
+        $this->setArgsToShell();
     }
 
     protected function fileNameAddPid(?string $fileName): ?string

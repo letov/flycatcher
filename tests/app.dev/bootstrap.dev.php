@@ -17,6 +17,11 @@ $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/config.dev.php');
 $container = $builder->build();
 
+set_exception_handler(function(Exception $e) use ($container) {
+    $container->get('Logger')->error((string) $e);
+    die();
+});
+
 $container
     ->get('Cache')
     ->setAppDirs(

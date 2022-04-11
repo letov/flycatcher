@@ -9,6 +9,7 @@ use JonnyW\PhantomJs\Http\ResponseInterface;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupportInterface;
 use Letov\Flycatcher\Downloader\DownloaderInterface;
 use Letov\Flycatcher\Downloader\ToolSupport\ToolSupportInterface;
+use Psr\Log\LoggerInterface;
 
 class PhantomJSPackage implements ToolSupportInterface, DownloaderInterface
 {
@@ -20,7 +21,7 @@ class PhantomJSPackage implements ToolSupportInterface, DownloaderInterface
     /**
      * @throws Exception
      */
-    public function __construct(ArgsSupportInterface $argsSupport)
+    public function __construct(LoggerInterface $logger, ArgsSupportInterface $argsSupport)
     {
         if (empty($argsSupport->getPhantomJSClient()) || empty($argsSupport->getPhantomJSPath())) {
             throw new Exception("PhantomJSClient or PhantomJSPath empty");

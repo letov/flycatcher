@@ -53,16 +53,16 @@ class SpyderPhantomJSTest extends TestCaseContainer
             'Timeout' => $this->container->get('Downloader.timeoutWithPageContent'),
             'DiskCachePath' => $this->container->get("Dirs")['browsersData'],
             'LocalStoragePath' => $this->container->get("Dirs")['browsersData'],
-            'PhantomJSPageContentPath' => $this->container->get('Dirs')['tests'] . '/page_content',
-            'PhantomJSPageContentWait' => $this->container->get('PhantomJS.connector.pageContentWait'),
-            'PhantomJSPageContentMimeFilter' => array(
+            'PhantomJSSaveContentPath' => $this->container->get('Dirs')['tests'] . '/save_content',
+            'PhantomJSSaveContentWait' => $this->container->get('PhantomJS.connector.pageContentWait'),
+            'PhantomJSSaveContentMimeFilter' => array(
                 'image/jpeg',
                 'image/png',
             ),
             'PhantomJSClickSelectorMap' => array(
                 '.slick-slide.slick-active.slick-center.slick-current',
                 '.slick-slide.slick-active.slick-current',
-                "[data-testid=ProductSlider__up]",
+                '[data-testid=ProductSlider__up]',
             ),
             'PhantomJSClickSelectorMapRepeat' => 5,
             'PhantomJSConnector' => $this->container->get('PhantomJS.connector.captchaImageToText'),

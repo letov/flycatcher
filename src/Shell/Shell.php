@@ -3,18 +3,21 @@
 namespace Letov\Flycatcher\Shell;
 
 use Exception;
+use Psr\Log\LoggerInterface;
 
 class Shell implements ShellInterface
 {
     private string $cmd;
     private array $args;
     private string $argDelimiter;
+    private ?LoggerInterface $logger;
 
     /**
      * @throws Exception
      */
-    public function __construct(string $cmd, string $argDelimiter = " ")
+    public function __construct(string $cmd, ?LoggerInterface $logger = null, string $argDelimiter = " ")
     {
+        $this->logger = $logger;
         $cmd = $this->escape($cmd);
         if (empty(trim(shell_exec("command -v $cmd && echo \"ok\"")))) {
             throw new Exception("Command $cmd not found");
@@ -67,7 +70,10 @@ class Shell implements ShellInterface
                 $arg[0] . $this->argDelimiter . $arg[1];
         }
         $cmd = implode(" ", $cmdWithArgs);
-        //file_put_contents('/tmp/shell_in', $cmd . "\n");
+        if (!empty($this->logger))
+        {
+            $this->logger->debug($cmd);
+        }
         return shell_exec($cmd);
     }
 }

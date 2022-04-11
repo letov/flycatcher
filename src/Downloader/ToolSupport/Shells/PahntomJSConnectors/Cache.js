@@ -1,77 +1,49 @@
-var fs = require('fs');
-var parseUrl = require('./parse_url.js');
+// based on this https://gist.github.com/bshamric/4717583
 
-//this is the path that QTNetwork classes uses for caching files for it's http client
-//the path should be the one that has 16 folders labeled 0,1,2,3,...,F
 exports.cachePath = '/path/to/phantomjs/cache/data/folder';
-
-//this is the extension used for files in the cache path
 exports.cacheExtension = "d";
-
-//the resources that are to be saved
 exports.cachedResources = new Array();
-
-//call this when you first encounter a resource
-//includeResource takes the httpResponse from phanomjs and remembers it for later
 exports.includeResource = function (httpResponse) {
     if(!(httpResponse.url in exports.cachedResources)){
         exports.cachedResources[httpResponse.url] = new cachedResource(httpResponse);
     }
 }
 
-//this takes an httpResponse and builds the object that will be used to get the file contents
 function cachedResource (httpResponse) {
     this.response = httpResponse;
     this.cacheFile = getUrlCacheFilename(this.response.url);
     this.cacheFileNoPathBeauty = parseUrl.parseUrl(this.response.url).path;
     this.mimetype = this.response.contentType.clearAfter(";");
     this.getContents = function () {
-        //get all of the contents
         var filePath = exports.cachePath+this.cacheFile;
         if (!fs.exists(filePath)) {
             return false;
         }
         var contents = fs.read(filePath,'b');
-        //get the last header
         var lastHeader = this.response.headers[this.response.headers.length-1];
         var indexOfLastHeader = contents.regexIndexOf(lastHeader.name.escapeRegExp());
-        //really good chance this will be a problem with non image content types
-        //I used a hex viewer to open up the QT cache files then came up with this way to find the end of the headers
         var lengthOfLastHeader =
             lastHeader.name.length+4+lastHeader.value.length+1;
         return contents.substr(indexOfLastHeader+lengthOfLastHeader);
     }
 }
 
-//get the name of the file from the QNetworkDiskCache that phantomjs uses
 function getUrlCacheFilename(url,littleEndian,cacheSuffix)
 {
-    //im lazy, so make the last two args optional
     littleEndian = typeof littleEndian !== 'undefined' ? littleEndian : true;
     cacheSuffix = typeof cacheSuffix !== 'undefined' ? cacheSuffix : '.d';
-
-    //convert the sha1 digest to hex
-    //QT handles caching by converting the SHA1 hash to 64 bit qlonglong
-    //   so the hash gets truncated to 8 bytes
     var digest = SHA1(url).substring(0,16).toString();
-
-    //if this is a little endian system, reverse the bytes
     var littleEndian = true;
     if(littleEndian)
     {
         var result = "";
-        //the digest is in hex, so take 2 bytes at a time
         for (var i = digest.length-1; i > 0; i-=2)
         {
             result += digest.substr(i-1, 2);
         }
         digest = result;
     }
-
-    //convert to js int then to base 36 string, then truncate
     var hash = parseInt(digest,16).toString(36).substr(0, 8);
-
-    //in QT the filename of a cached url is hash[0]%16 + '/' + hash + '.d'
     return (parseInt(hash.charCodeAt(hash.length-1))%16).toString(16) + '/' + hash + cacheSuffix;
 }
 
@@ -244,8 +216,6 @@ function SHA1(msg) {
     return temp.toLowerCase();
 
 }
-
-//I'm lazy, this is helpful
 String.prototype.clearAfter = function(text) {
     var indexOf = this.indexOf(text);
     return (indexOf > 0) ? this.substr(0,indexOf) : this.toString();
@@ -256,14 +226,11 @@ String.prototype.clearBefore = function(text) {
     return (indexOf > 0) ? this.substr(indexOf+1) : this.toString();
 }
 
-
-//"
 String.prototype.regexIndexOf = function(regex, startpos) {
     var indexOf = this.substring(startpos || 0).search(regex);
     return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
 }
 
-//"
 String.prototype.escapeRegExp = function() {
     return this.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&").replace(" ","\\s");
 }
