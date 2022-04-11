@@ -27,6 +27,9 @@ $container
     ->setAppDirs(
         $container->get('RootDir'),
         $container->get('Dirs')
+    )
+    ->emptyTestDirs(
+        $container->get('Dirs')
     );
 
 return $container;

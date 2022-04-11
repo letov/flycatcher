@@ -23,7 +23,7 @@ use Psr\Container\ContainerInterface;
 
 return [
     'Test.urlImage' => 'https://static.pleer.ru/i/logo.png',
-    'RootDir' => '/tmp/flycatcher_storage',
+    'RootDir' => '/tmp/flycatcher_storage_test',
     'Dirs' => array(
         'tests' => DI\string('{RootDir}/tests'),
         'browsersData' => DI\string('{RootDir}/browsers_data'),

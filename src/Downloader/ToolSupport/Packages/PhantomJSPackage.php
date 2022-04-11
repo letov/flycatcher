@@ -17,17 +17,19 @@ class PhantomJSPackage implements ToolSupportInterface, DownloaderInterface
     protected ClientInterface $client;
     protected RequestInterface $request;
     protected ResponseInterface $response;
+    protected ?LoggerInterface $logger;
 
     /**
      * @throws Exception
      */
-    public function __construct(LoggerInterface $logger, ArgsSupportInterface $argsSupport)
+    public function __construct(ArgsSupportInterface $argsSupport, ?LoggerInterface $logger = null)
     {
         if (empty($argsSupport->getPhantomJSClient()) || empty($argsSupport->getPhantomJSPath())) {
             throw new Exception("PhantomJSClient or PhantomJSPath empty");
         }
         $this->client = $argsSupport->getPhantomJSClient();
         $this->argsSupport = $argsSupport;
+        $this->logger = $logger;
         $this->setArgsToClient();
     }
 

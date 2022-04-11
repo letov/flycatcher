@@ -24,6 +24,10 @@ class Cache implements CacheInterface
         {
             $this->createDirIfNotExist($dir);
         }
+    }
+
+    public function emptyTestDirs($dirs)
+    {
         $this->emptyDir($dirs['tests']);
         $this->emptyDir($dirs['browsersData']);
     }

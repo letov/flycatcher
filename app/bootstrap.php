@@ -1,15 +1,32 @@
 <?php
 
 use DI\ContainerBuilder;
+use Letov\Flycatcher\CodeGenerator\CodeGeneratorInterface;
+use Letov\Flycatcher\CodeGenerator\CodeGeneratorManager;
+use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupportCodeGenerator;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-ArgsSupportshellCodegen::generate();
+if (!in_array(CodeGeneratorInterface::class, get_declared_interfaces())) {
+    CodeGeneratorManager::generateAll(array(
+        new ArgsSupportCodeGenerator()
+    ));
+}
 
 $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/config.php');
-/*$builder->enableCompilation(__DIR__ . '/tmp');
-$builder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');*/
 $container = $builder->build();
+
+set_exception_handler(function(Exception $e) use ($container) {
+    $container->get('Logger')->error((string) $e);
+    die();
+});
+
+$container
+    ->get('Cache')
+    ->setAppDirs(
+        $container->get('RootDir'),
+        $container->get('Dirs')
+    );
 
 return $container;
