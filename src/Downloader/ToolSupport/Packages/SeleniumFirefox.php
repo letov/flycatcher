@@ -61,10 +61,6 @@ class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface
     {
         try {
             $this->driver->get($url);
-            if (!empty($this->argsSupport->getBeforeDownloadCall()))
-            {
-                $this->argsSupport->getBeforeDownloadCall()($this->driver);
-            }
             $source = $this->driver->getPageSource();
             @file_put_contents($filePath, $source);
             $this->logger->debug($url . '   ->   ' . $filePath);
@@ -74,6 +70,11 @@ class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface
             $this->closeBrowser();
             throw new Exception($e->getMessage());
         }
+    }
+
+    public function driverAction(callable $function)
+    {
+        $function($this->driver);
     }
 
     public function updateArgs(array $args)
