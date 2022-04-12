@@ -19,8 +19,8 @@ class DomNode implements DomNodeInterface
         return (array)$this->node->getAttribute($name);
     }
 
-    public function getText($name): ?string
+    public function getText(): ?string
     {
-        return $this->node->text();
+        return $this->node->innertext();
     }
 }

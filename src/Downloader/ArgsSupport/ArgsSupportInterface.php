@@ -3,7 +3,7 @@
 // DO NOT EDIT
 namespace Letov\Flycatcher\Downloader\ArgsSupport;
 
-interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface, ArgInterfaces\CaptchaTextToImageArgInterface, ArgInterfaces\HTTPArgInterface, ArgInterfaces\PhantomJSArgInterface, ArgInterfaces\ShellArgInterface
+interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface, ArgInterfaces\CaptchaTextToImageArgInterface, ArgInterfaces\HTTPArgInterface, ArgInterfaces\PhantomJSArgInterface, ArgInterfaces\SeleniumArgInterface, ArgInterfaces\ShellArgInterface
 {
 	function __construct(array $args);
 
@@ -90,6 +90,12 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 
 
 	function getPhantomJSClickSelectorMapRepeat(): ?int;
+
+
+	function getOffHeadlessMode(): ?bool;
+
+
+	function getBeforeDownloadCall(): ?callable;
 
 
 	function getShell(): ?\Letov\Flycatcher\Shell\ShellInterface;

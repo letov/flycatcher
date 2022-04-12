@@ -6,6 +6,7 @@ use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
 use Letov\Flycatcher\Downloader\ToolSupport\Packages\PhantomJSPackage;
+use Letov\Flycatcher\Downloader\ToolSupport\Packages\SeleniumFirefox;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Curl;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\PhantomJS;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Wget;
@@ -34,6 +35,7 @@ return [
         $logger = new Logger('log');
         $pid = posix_getpid();
         $logger->pushHandler(new StreamHandler($c->get('Dirs')['logs'] . '/debug_' . $pid . '.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
         return $logger;
     }),
     'Downloader.accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -94,11 +96,12 @@ return [
         return new Shell($c->get('PhantomJS.path'), $c->get('Logger'), '=');
     },
     'PhantomJS.path' => '/usr/local/bin/phantomjs',
-    'PhantomJS.connector.captchaImageToText' => 'PahntomJSConnectors/PhantomJSConnector.js',
+    'PhantomJS.connector.path' => 'PahntomJSConnectors/PhantomJSConnector.js',
     'PhantomJS.connector.pageContentWait' => 10,
     'PhantomJSPackage' => DI\create(PhantomJSPackage::class),
     'PhantomJSPackage.serviceContainer' => DI\factory([serviceContainer::class, 'getInstance']),
     'PhantomJSPackage.client' => DI\factory([Client::class, 'getInstance']),
+    'Selenium.firefox' => DI\create(SeleniumFirefox::class),
     'JsonUrlTree' => DI\create(JsonUrlTree::class),
     'SpyderDepth' => DI\create(SpyderDepth::class),
     'SpyderUrlList' => DI\create(SpyderUrlList::class),

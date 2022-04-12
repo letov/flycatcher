@@ -26,7 +26,7 @@ class Cache implements CacheInterface
         }
     }
 
-    public function emptyTestDirs($dirs)
+    public function emptyDirs(array $dirs)
     {
         $this->emptyDir($dirs['tests']);
         $this->emptyDir($dirs['browsersData']);

@@ -60,7 +60,7 @@ class WorkerTest extends TestCaseContainer
             'CaptchaInputSelector' => '#vericode',
             'CaptchaFormSelector' => '#image_captcha_demo_form',
             'CaptchaSendIncorrectSolveReport' => false,
-            'PhantomJSConnector' => $this->container->get('PhantomJS.connector.captchaImageToText'),
+            'PhantomJSConnector' => $this->container->get('PhantomJS.connector.path'),
             'PhantomJSSnapshotSelector' => 'body',
             'PhantomJSSnapshotPath' => $this->tmpFile . "_snap.png",
         );

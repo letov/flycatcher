@@ -189,6 +189,18 @@ class ArgsSupport implements ArgsSupportInterface
 	}
 
 
+	public function getOffHeadlessMode(): ?bool
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getBeforeDownloadCall(): ?callable
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
 	public function getShell(): ?\Letov\Flycatcher\Shell\ShellInterface
 	{
 		return $this->getArg(__FUNCTION__);

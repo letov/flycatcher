@@ -65,7 +65,7 @@ class SpyderPhantomJSTest extends TestCaseContainer
                 '[data-testid=ProductSlider__up]',
             ),
             'PhantomJSClickSelectorMapRepeat' => 5,
-            'PhantomJSConnector' => $this->container->get('PhantomJS.connector.captchaImageToText'),
+            'PhantomJSConnector' => $this->container->get('PhantomJS.connector.path'),
         );
         for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count") * 2; $i++)
         {

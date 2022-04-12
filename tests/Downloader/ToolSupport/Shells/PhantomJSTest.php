@@ -32,7 +32,7 @@ class PhantomJSTest extends TestCaseContainer
                     'CaptchaInputSelector' => '#vericode',
                     'CaptchaFormSelector' => '#image_captcha_demo_form',
                     'CaptchaSendIncorrectSolveReport' => false,
-                    'PhantomJSConnector' => $this->container->get('PhantomJS.connector.captchaImageToText'),
+                    'PhantomJSConnector' => $this->container->get('PhantomJS.connector.path'),
                     'PhantomJSViewportWidth' => 800,
                     'PhantomJSViewportHeight' => 480,
                     'PhantomJSSnapshotPath' => $this->tmpFile . "_snap.png",

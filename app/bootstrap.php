@@ -17,8 +17,12 @@ $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/config.php');
 $container = $builder->build();
 
-set_exception_handler(function(Exception $e) use ($container) {
-    $container->get('Logger')->error((string) $e);
+set_exception_handler(function($e) use ($container) {
+    $lines = explode("\n", (string) $e);
+    foreach ($lines as $line)
+    {
+        $container->get('Logger')->error($line);
+    }
     die();
 });
 

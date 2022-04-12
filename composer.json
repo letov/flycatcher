@@ -34,6 +34,7 @@
     "adminanticaptcha/anticaptcha-php": "dev-master",
     "dimabdc/php-fast-simple-html-dom-parser": "dev-master",
     "jonnyw/php-phantomjs": "dev-master",
+    "php-webdriver/webdriver": "dev-main",
     "monolog/monolog": "dev-main"
   },
   "require-dev": {

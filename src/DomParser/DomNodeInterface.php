@@ -6,5 +6,5 @@ interface DomNodeInterface
 {
     public function getAttribute($name): array;
 
-    public function getText($name): ?string;
+    public function getText(): ?string;
 }
