@@ -95,8 +95,5 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 	function getOffHeadlessMode(): ?bool;
 
 
-	function getBeforeDownloadCall(): ?callable;
-
-
 	function getShell(): ?\Letov\Flycatcher\Shell\ShellInterface;
 }

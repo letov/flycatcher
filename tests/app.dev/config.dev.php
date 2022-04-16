@@ -67,7 +67,6 @@ return [
     'Gearman.host' => '127.0.0.1',
     'Gearman.port' => 4730,
     'Worker.downloadToolWorker' => DI\create(WorkerDownloadTool::class),
-    'Worker.downloadToolWorker.count' => 15,
     'Cache.maxFileLifetimeSecond' => 60 * 60 * 24 * 5,
     'Cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)
