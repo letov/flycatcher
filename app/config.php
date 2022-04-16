@@ -15,6 +15,7 @@ use Letov\Flycatcher\ProxyPool\Proxy6\ProxyProxy6;
 use Letov\Flycatcher\Shell\Shell;
 use Letov\Flycatcher\Spyder\JsonUrlTree;
 use Letov\Flycatcher\Spyder\SpyderDepth;
+use Letov\Flycatcher\Spyder\SpyderSitemap;
 use Letov\Flycatcher\Spyder\SpyderUrlList;
 use Letov\Flycatcher\Spyder\SpyderUrlTemplate;
 use Letov\Flycatcher\Worker\WorkerDownloadTool;
@@ -66,6 +67,7 @@ return [
     'Gearman.host' => '127.0.0.1',
     'Gearman.port' => 4730,
     'Worker.downloadToolWorker' => DI\create(WorkerDownloadTool::class),
+    'Worker.downloadToolWorker.count' => 3,
     'Cache.maxFileLifetimeSecond' => 60 * 60 * 24 * 5,
     'Cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)
@@ -104,4 +106,5 @@ return [
     'SpyderDepth' => DI\create(SpyderDepth::class),
     'SpyderUrlList' => DI\create(SpyderUrlList::class),
     'SpyderUrlTemplate' => DI\create(SpyderUrlTemplate::class),
+    'SpyderSitemap' => DI\create(SpyderSitemap::class),
 ];

@@ -5,6 +5,7 @@ namespace Letov\Flycatcher\Worker;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
+use Exception;
 use GearmanWorker;
 use Letov\Flycatcher\Downloader\DownloadToolInterface;
 
@@ -47,6 +48,10 @@ class WorkerDownloadTool implements WorkerInterface
             return serialize("");
         });
         $this->gearmanWorker->addFunction("updateArgs", function ($job) {
+            if (!isset($this->downloadTool))
+            {
+                throw new Exception("Call setDownloadTool first");
+            }
             $workload = unserialize($job->workload());
             if (isset($workload['args'])) {
                 $this->downloadTool->updateArgs($workload['args']);
@@ -54,6 +59,10 @@ class WorkerDownloadTool implements WorkerInterface
             return serialize("");
         });
         $this->gearmanWorker->addFunction("download", function ($job) {
+            if (!isset($this->downloadTool))
+            {
+                throw new Exception("Call setDownloadTool first");
+            }
             $workload = unserialize($job->workload());
             if (isset($workload['url']) && isset($workload['filePath'])) {
                 $this->downloadTool->downloadFile($workload['url'], $workload['filePath']);

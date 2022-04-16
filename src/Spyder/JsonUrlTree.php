@@ -33,6 +33,10 @@ class JsonUrlTree implements JsonUrlTreeInterface
             $json = [];
             foreach ($this->storage as $url) {
                 $arr = $this->compilePathArr($url);
+                if (empty($arr))
+                {
+                    continue;
+                }
                 $json = array_merge_recursive($json, $arr);
                 @file_put_contents($this->jsonFilePath, json_encode($json));
             }
@@ -42,6 +46,10 @@ class JsonUrlTree implements JsonUrlTreeInterface
     private function compilePathArr(string $url): array
     {
         $urlParts = parse_url($url);
+        if (!isset($urlParts['path']))
+        {
+            return array();
+        }
         $pathParts = explode('/', $urlParts['path']);
         if (isset($urlParts['query']))
         {

@@ -79,6 +79,6 @@ class Cache implements CacheInterface
 
     private function isFileExpire($filePath): bool
     {
-        return (time() - filemtime($filePath)) > $this->maxFileLifetimeSecond;
+        return (time() - fileatime($filePath)) > $this->maxFileLifetimeSecond;
     }
 }

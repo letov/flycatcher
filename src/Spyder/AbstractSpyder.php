@@ -23,7 +23,7 @@ abstract class AbstractSpyder
         int                   $taskLimit,
         GearmanClient         $client,
         CacheInterface        $cache,
-        JsonUrlTreeInterface $jsonUrlTree
+        JsonUrlTreeInterface  $jsonUrlTree
     )
     {
         $this->host = $host;
@@ -34,6 +34,12 @@ abstract class AbstractSpyder
         $this->cache = $cache;
         $this->jsonUrlTree = $jsonUrlTree;
         $this->jsonUrlTree->setRoot("$this->protocol://$this->host");
+    }
+
+    protected function downloadFromUrl($url, $filePath)
+    {
+        $this->addDownloadTask($url, $filePath);
+        $this->client->runTasks();
     }
 
     protected function downloadFromUrlList($urlList)
