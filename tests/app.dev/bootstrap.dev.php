@@ -17,6 +17,10 @@ $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/config.dev.php');
 $container = $builder->build();
 
+$container->get('Directories')->initAppDirs(
+    array_merge([$container->get('Directories.rootPath')], $container->get('Directories.paths'))
+);
+
 set_exception_handler(function($e) use ($container) {
     $lines = explode("\n", (string) $e);
     foreach ($lines as $line)
@@ -25,17 +29,5 @@ set_exception_handler(function($e) use ($container) {
     }
     die();
 });
-
-$container
-    ->get('Cache')
-    ->setAppDirs(
-        $container->get('RootDir'),
-        $container->get('Dirs')
-    );
-$container
-    ->get('Cache')
-    ->emptyDirs(
-        $container->get('Dirs')
-    );
 
 return $container;

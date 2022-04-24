@@ -27,22 +27,22 @@ class SpyderUrlListTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        $this->container->make("SpyderUrlList", array(
-            'host' => 'www.petshop.ru',
+        $this->container->make('Spyder.urlList', array(
+            'host' => 'www.someurl.ru',
             'protocol' => 'https',
-            'downloadDir' => $this->container->get('Dirs')['tests'],
+            'downloadDir' => $this->container->get('Directories.paths')['download'],
             'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
             'client' => $this->client,
             'cache' => $this->container->get('Cache'),
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
-                'jsonFilePath' => $this->container->get('Dirs')['tests'] . "/struct.json"
+                'jsonFilePath' => $this->container->get('Directories.paths')['download'] . "/struct.json"
             )),
             'urlList' => array(
-                'https://www.petshop.ru/catalog/dogs/sukhoy-korm-premium-klassa-s-kuritsey-dlya-shchenkov-i-molodykh-sobak-krupnykh-i-gigantskikh-porod/',
-                'https://www.petshop.ru/catalog/dogs/syxoi/schenki/for-puppies-toy-breeds-from-2-to-10-months/',
+                'https://www.someurl.ru/page1/',
+                'https://www.someurl.ru/page2/',
             )
         ));
-        $this->assertFileExists($this->container->get('Dirs')['tests'] . "/struct.json");
+        //$this->assertFileExists($this->container->get('Directories.paths')['download'] . "/struct.json");
     }
 
     /**

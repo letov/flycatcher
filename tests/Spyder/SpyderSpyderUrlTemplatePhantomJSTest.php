@@ -7,7 +7,7 @@ use DI\NotFoundException;
 use GearmanClient;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 
-class SpyderPhantomJSTest extends TestCaseContainer
+class SpyderSpyderUrlTemplatePhantomJSTest extends TestCaseContainer
 {
     private GearmanClient $client;
 
@@ -28,18 +28,18 @@ class SpyderPhantomJSTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        $this->container->make("SpyderUrlTemplate", array(
-            'downloadDir' => $this->container->get('Dirs')['tests'],
+        $this->container->make('Spyder.urlTemplate', array(
+            'downloadDir' => $this->container->get('Directories.paths')['download'],
             'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
             'client' => $this->client,
             'cache' => $this->container->get('Cache'),
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
-                'jsonFilePath' => $this->container->get('Dirs')['tests'] . "/struct.json"
+                'jsonFilePath' => $this->container->get('Directories.paths')['download'] . "/struct.json"
             )),
-            'template' => 'https://www.petshop.ru/catalog/dogs/syxoi/schenki/#pn=%d',
+            'template' => 'https://some.com/?page=%d',
             'range' => range(1,4),
         ));
-        $this->assertFileExists($this->container->get('Dirs')['tests'] . "/struct.json");
+        //$this->assertFileExists($this->container->get('Directories.paths')['download'] . "/struct.json");
     }
 
     /**
@@ -51,18 +51,17 @@ class SpyderPhantomJSTest extends TestCaseContainer
         $args = array(
             'CookieFilePath' => $this->tmpCookie,
             'Timeout' => $this->container->get('Downloader.timeoutWithPageContent'),
-            'DiskCachePath' => $this->container->get("Dirs")['browsersData'],
-            'LocalStoragePath' => $this->container->get("Dirs")['browsersData'],
-            'PhantomJSSaveContentPath' => $this->container->get('Dirs')['tests'] . '/save_content',
+            'DiskCachePath' => $this->container->get('Directories.paths')['browsersData'],
+            'LocalStoragePath' => $this->container->get('Directories.paths')['browsersData'],
+            'PhantomJSSaveContentPath' => $this->container->get('Directories.paths')['download'] . '/save_content',
             'PhantomJSSaveContentWait' => $this->container->get('PhantomJS.connector.pageContentWait'),
             'PhantomJSSaveContentMimeFilter' => array(
                 'image/jpeg',
                 'image/png',
             ),
             'PhantomJSClickSelectorMap' => array(
-                '.slick-slide.slick-active.slick-center.slick-current',
-                '.slick-slide.slick-active.slick-current',
-                '[data-testid=ProductSlider__up]',
+                '.someclassname2',
+                '.someclassname1',
             ),
             'PhantomJSClickSelectorMapRepeat' => 5,
             'PhantomJSConnector' => $this->container->get('PhantomJS.connector.path'),

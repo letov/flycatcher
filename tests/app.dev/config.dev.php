@@ -4,6 +4,7 @@ use JonnyW\PhantomJs\Client;
 use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
+use Letov\Flycatcher\Directories\Directories;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
 use Letov\Flycatcher\Downloader\ToolSupport\Packages\PhantomJSPackage;
 use Letov\Flycatcher\Downloader\ToolSupport\Packages\SeleniumFirefox;
@@ -24,18 +25,18 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 
 return [
-    'Test.urlImage' => 'https://static.pleer.ru/i/logo.png',
-    'RootDir' => '/tmp/flycatcher_storage_test',
-    'Dirs' => array(
-        'tests' => DI\string('{RootDir}/tests'),
-        'browsersData' => DI\string('{RootDir}/browsers_data'),
-        'download' => DI\string('{RootDir}/download'),
-        'logs' => DI\string('{RootDir}/logs'),
+    'Test.urlImage' => 'https://c.s-microsoft.com/favicon.ico',
+    'Directories.rootPath' => '/tmp/flycatcher_storage_test',
+    'Directories.paths' => array(
+        'browsersData' => DI\string('{Directories.rootPath}/browsers_data'),
+        'download' => DI\string('{Directories.rootPath}/download'),
+        'logs' => DI\string('{Directories.rootPath}/logs'),
     ),
+    'Directories' => DI\create(Directories::class),
     'Logger' => DI\factory(function ($c) {
         $logger = new Logger('log');
         $pid = posix_getpid();
-        $logger->pushHandler(new StreamHandler($c->get('Dirs')['logs'] . '/debug_' . $pid . '.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler($c->get('Directories.paths')['logs'] . '/debug_' . $pid . '.log', Logger::DEBUG));
         $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
         return $logger;
     }),
@@ -47,7 +48,7 @@ return [
     'Downloader.timeoutWithCaptcha' => 60,
     'Downloader.timeoutWithPageContent' => 60,
     'Proxy' => DI\create(ProxyProxy6::class),
-    'Proxy6.apiKey' => "fceed63ebe-0d6f24275b-dfcbe32351",
+    'Proxy6.apiKey' => "",
     'Proxy6.minCount' => 3,
     'Proxy6.throwIfLessMinCount' => false,
     'Proxy6.httpsCount' => 1,
@@ -58,7 +59,7 @@ return [
             DI\get('Proxy6.throwIfLessMinCount'),
             DI\get('Proxy6.httpsCount'),
         ),
-    'Anticaptcha.apiKey' => '63a2a4966f793615acebd66a7778f17f',
+    'Anticaptcha.apiKey' => '',
     'Captcha.imageToText' => DI\create(ImageToTextAnticaptcha::class)
         ->constructor(
             DI\get('Anticaptcha.apiKey'),
@@ -99,13 +100,10 @@ return [
     'PhantomJS.path' => '/usr/local/bin/phantomjs',
     'PhantomJS.connector.path' => 'PahntomJSConnectors/PhantomJSConnector.js',
     'PhantomJS.connector.pageContentWait' => 10,
-    'PhantomJSPackage' => DI\create(PhantomJSPackage::class),
-    'PhantomJSPackage.serviceContainer' => DI\factory([serviceContainer::class, 'getInstance']),
-    'PhantomJSPackage.client' => DI\factory([Client::class, 'getInstance']),
     'Selenium.firefox' => DI\create(SeleniumFirefox::class),
     'JsonUrlTree' => DI\create(JsonUrlTree::class),
-    'SpyderDepth' => DI\create(SpyderDepth::class),
-    'SpyderUrlList' => DI\create(SpyderUrlList::class),
-    'SpyderUrlTemplate' => DI\create(SpyderUrlTemplate::class),
-    'SpyderSitemap' => DI\create(SpyderSitemap::class),
+    'Spyder.depth' => DI\create(SpyderDepth::class),
+    'Spyder.urlList' => DI\create(SpyderUrlList::class),
+    'Spyder.urlTemplate' => DI\create(SpyderUrlTemplate::class),
+    'Spyder.sitemap' => DI\create(SpyderSitemap::class),
 ];

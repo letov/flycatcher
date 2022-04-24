@@ -16,10 +16,6 @@ interface PhantomJSArgInterface
 
     public function getPhantomJSSnapshotPath(): ?string;
 
-    public function getPhantomJSClient(): ?ClientInterface;
-
-    public function getPhantomJSPath(): ?string;
-
     public function getPhantomJSSaveContentPath(): ?string;
 
     public function getPhantomJSSaveContentMimeFilter(): ?array;

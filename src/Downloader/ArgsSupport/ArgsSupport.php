@@ -147,18 +147,6 @@ class ArgsSupport implements ArgsSupportInterface
 	}
 
 
-	public function getPhantomJSClient(): ?\JonnyW\PhantomJs\ClientInterface
-	{
-		return $this->getArg(__FUNCTION__);
-	}
-
-
-	public function getPhantomJSPath(): ?string
-	{
-		return $this->getArg(__FUNCTION__);
-	}
-
-
 	public function getPhantomJSSaveContentPath(): ?string
 	{
 		return $this->getArg(__FUNCTION__);

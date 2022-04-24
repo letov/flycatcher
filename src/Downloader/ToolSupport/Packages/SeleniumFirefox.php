@@ -8,11 +8,12 @@ use Facebook\WebDriver\Firefox\FirefoxOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupportInterface;
+use Letov\Flycatcher\Downloader\BrowserEmulationInterface;
 use Letov\Flycatcher\Downloader\DownloaderInterface;
 use Letov\Flycatcher\Downloader\ToolSupport\ToolSupportInterface;
 use Psr\Log\LoggerInterface;
 
-class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface
+class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface, BrowserEmulationInterface
 {
     protected FirefoxDriver $driver;
     protected ArgsSupportInterface $argsSupport;
@@ -47,7 +48,13 @@ class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface
         $this->setArgsToClient();
     }
 
-    function closeBrowser()
+
+    public function makeAction(callable $function)
+    {
+        $function($this->driver);
+    }
+
+    public function closeBrowser()
     {
         $this->driver->close();
     }
@@ -57,6 +64,9 @@ class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface
 
     }
 
+    /**
+     * @throws Exception
+     */
     public function downloadFile($url, $filePath)
     {
         try {
@@ -70,11 +80,6 @@ class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface
             $this->closeBrowser();
             throw new Exception($e->getMessage());
         }
-    }
-
-    public function driverAction(callable $function)
-    {
-        $function($this->driver);
     }
 
     public function updateArgs(array $args)

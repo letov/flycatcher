@@ -39,8 +39,11 @@ class SpyderSitemap extends AbstractSpyder
     function parseSitemapUrl($url): array
     {
         $filePath = $this->getFilePath($url);
-        $this->downloadFromUrl($url, $filePath);
         if (!$this->cache->valid($filePath))
+        {
+            $this->downloadFromUrl($url, $filePath);
+        }
+        if (!@file_exists($filePath))
         {
             throw new Exception("Cant get sitemap");
         }
@@ -73,8 +76,11 @@ class SpyderSitemap extends AbstractSpyder
     {
         $url = "$this->protocol://$this->host/robots.txt";
         $filePath = $this->getFilePath($url);
-        $this->downloadFromUrl($url, $filePath);
         if (!$this->cache->valid($filePath))
+        {
+            $this->downloadFromUrl($url, $filePath);
+        }
+        if (!@file_exists($filePath))
         {
             throw new Exception("Cant get robots.txt");
         }

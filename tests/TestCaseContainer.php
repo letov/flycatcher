@@ -22,10 +22,10 @@ class TestCaseContainer extends TestCase
     public function setUp(): void
     {
         $this->container = require 'app.dev/bootstrap.dev.php';
-        $dirs = $this->container->get('Dirs');
+        $dirPaths = $this->container->get('Directories.paths');
         $rnd = $this->generateRandomString();
-        $this->tmpFile = "{$dirs['tests']}/download_$rnd";
-        $this->tmpCookie = "{$dirs['browsersData']}/cookie_$rnd";
+        $this->tmpFile = "{$dirPaths['download']}/download_$rnd";
+        $this->tmpCookie = "{$dirPaths['browsersData']}/cookie_$rnd";
     }
 
     function generateRandomString($length = 20)

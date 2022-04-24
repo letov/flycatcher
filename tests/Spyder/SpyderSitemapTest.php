@@ -27,19 +27,19 @@ class SpyderSitemapTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        /*$this->container->make("SpyderSitemap", array(
-            'host' => 'lastprint.ru',
+        $this->container->make('Spyder.sitemap', array(
+            'host' => 'someurl.ru',
             'protocol' => 'https',
-            'downloadDir' => $this->container->get('Dirs')['tests'],
+            'downloadDir' => $this->container->get('Directories.paths')['download'],
             'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
             'client' => $this->client,
             'cache' => $this->container->get('Cache'),
             'domParser' => $this->container->get('DomParser'),
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
-                'jsonFilePath' => $this->container->get('Dirs')['tests'] . "/struct.json"
+                'jsonFilePath' => $this->container->get('Directories.paths')['download'] . "/struct.json"
             )),
         ));
-        $this->assertFileExists($this->container->get('Dirs')['tests'] . "/struct.json");*/
+        //$this->assertFileExists($this->container->get('Directories.paths')['download'] . "/struct.json");
     }
 
     /**

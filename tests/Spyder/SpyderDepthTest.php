@@ -28,27 +28,27 @@ class SpyderDepthTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        $this->container->make("SpyderDepth", array(
-            'host' => 'www.petshop.ru',
+        $this->container->make('Spyder.depth', array(
+            'host' => 'someSite.com',
             'protocol' => 'https',
-            'downloadDir' => $this->container->get('Dirs')['tests'],
+            'downloadDir' => $this->container->get('Directories.paths')['download'],
             'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
             'client' => $this->client,
             'cache' => $this->container->get('Cache'),
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
-                'jsonFilePath' => $this->container->get('Dirs')['tests'] . "/struct.json"
+                'jsonFilePath' => $this->container->get('Directories.paths')['download'] . "/struct.json"
             )),
-            'rootPath' => '/catalog/dogs/vet/',
+            'rootPath' => '/catalog/some/path/',
             'depthLimit' => 2,
             'includePathList' => array(
-                '/catalog/dogs/vet/vorotniki_popony',
-                '/catalog/dogs/vet/antibiotiki'
+                '/catalog/catalog/some/path/cat1',
+                '/catalog/catalog/some/path/cat2'
             ),
             'excludePathList' => array(
-                '/brand'
+                '/excludepath'
             ),
         ));
-        $this->assertFileExists($this->container->get('Dirs')['tests'] . "/struct.json");
+        /*$this->assertFileExists($this->container->get('Directories.paths')['download'] . "/struct.json");*/
     }
 
     /**

@@ -71,12 +71,6 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 	function getPhantomJSSnapshotPath(): ?string;
 
 
-	function getPhantomJSClient(): ?\JonnyW\PhantomJs\ClientInterface;
-
-
-	function getPhantomJSPath(): ?string;
-
-
 	function getPhantomJSSaveContentPath(): ?string;
 
 

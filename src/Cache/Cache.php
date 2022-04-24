@@ -17,33 +17,6 @@ class Cache implements CacheInterface
         $this->stat = $stat;
     }
 
-    public function setAppDirs($rootDir, $dirs)
-    {
-        $this->createDirIfNotExist($rootDir);
-        foreach ($dirs as $dir)
-        {
-            $this->createDirIfNotExist($dir);
-        }
-    }
-
-    public function emptyDirs(array $dirs)
-    {
-        $this->emptyDir($dirs['tests']);
-        $this->emptyDir($dirs['browsersData']);
-    }
-
-    private function createDirIfNotExist($dirPath)
-    {
-        if (!file_exists($dirPath)) {
-            mkdir($dirPath);
-        }
-    }
-
-    private function emptyDir($dirPath)
-    {
-        shell_exec("rm -rf $dirPath/*");
-    }
-
     public function valid(string $filePath): bool
     {
         if (!file_exists($filePath)) {

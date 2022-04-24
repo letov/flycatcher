@@ -27,18 +27,18 @@ class SpyderUrlTemplateTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        $this->container->make("SpyderUrlTemplate", array(
-            'downloadDir' => $this->container->get('Dirs')['tests'],
+        $this->container->make('Spyder.urlTemplate', array(
+            'downloadDir' => $this->container->get('Directories.paths')['download'],
             'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
             'client' => $this->client,
             'cache' => $this->container->get('Cache'),
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
-                'jsonFilePath' => $this->container->get('Dirs')['tests'] . "/struct.json"
+                'jsonFilePath' => $this->container->get('Directories.paths')['download'] . "/struct.json"
             )),
-            'template' => 'https://www.petshop.ru/catalog/dogs/syxoi/schenki/#pn=%d',
+            'template' => 'https://some.com/?page=%d',
             'range' => range(1,4),
         ));
-        $this->assertFileExists($this->container->get('Dirs')['tests'] . "/struct.json");
+        //$this->assertFileExists($this->container->get('Directories.paths')['download'] . "/struct.json");
     }
 
     /**

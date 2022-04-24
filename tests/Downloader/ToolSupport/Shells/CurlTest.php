@@ -37,8 +37,6 @@ class CurlTest extends TestCaseContainer
                 'logger' => $this->container->get('Logger')
             ))
         ));
-        $curl->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);
-        $this->assertFileDoesNotExist($this->tmpFile);
         $curl->downloadFile($this->container->get('Test.urlImage'), $this->tmpFile);
         $this->assertFileExists($this->tmpFile);
     }

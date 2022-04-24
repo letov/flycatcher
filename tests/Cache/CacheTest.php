@@ -21,16 +21,6 @@ class CacheTest extends TestCaseContainer
     /**
      * @throws ReflectionExceptionAlias
      */
-    /*public function testIsFileExpire() {
-        shell_exec("touch $this->tmpFile");
-        $this->assertFalse($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $this->tmpFile]));
-        sleep(2);
-        $this->assertTrue($this->reflectionMethod($this->cache, 'isFileExpire', ['filePath' => $this->tmpFile]));
-    }*/
-
-    /**
-     * @throws ReflectionExceptionAlias
-     */
     public function testIsZeroSize()
     {
         shell_exec("touch $this->tmpFile");
