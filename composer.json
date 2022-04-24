@@ -9,8 +9,8 @@
       "email": "ruslan.leto@gmail.com"
     }
   ],
-  "repositories": {
-    "anticaptcha-php": {
+  "repositories": [
+    {
       "type": "package",
       "package": {
         "name": "adminanticaptcha/anticaptcha-php",
@@ -22,7 +22,7 @@
         }
       }
     }
-  },
+  ],
   "require": {
     "ext-gearman": "*",
     "ext-pcntl": "*",
@@ -38,7 +38,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "9.5.0"
-  }, 
+  },
   "autoload": {
     "classmap": ["vendor/adminanticaptcha/anticaptcha-php"],
     "psr-4": {
