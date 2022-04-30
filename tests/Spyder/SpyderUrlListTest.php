@@ -31,7 +31,7 @@ class SpyderUrlListTest extends TestCaseContainer
             'host' => 'www.someurl.ru',
             'protocol' => 'https',
             'downloadDir' => $this->container->get('Directories.paths')['download'],
-            'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
+            'taskLimit' => $this->container->get("Worker.downloadTool.count"),
             'client' => $this->client,
             'cache' => $this->container->get('Cache'),
             'jsonUrlTree' => $this->container->make('JsonUrlTree', array(
@@ -55,7 +55,7 @@ class SpyderUrlListTest extends TestCaseContainer
             'CookieFilePath' => $this->tmpCookie,
             'Timeout' => $this->container->get('Downloader.timeout'),
         );
-        for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count") * 2; $i++)
+        for ($i = 0; $i < $this->container->get("Worker.downloadTool.count") * 2; $i++)
         {
             $this->client->addTask("setDownloadTool", serialize(array(
                 'downloadToolName' => 'Wget',

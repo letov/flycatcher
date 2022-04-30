@@ -71,6 +71,11 @@ class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface, Brow
     {
         try {
             $this->driver->get($url);
+            $beforeDownloadCall = $this->argsSupport->getBeforeDownloadCall();
+            if (!empty($beforeDownloadCall))
+            {
+                $beforeDownloadCall($this->driver);
+            }
             $source = $this->driver->getPageSource();
             @file_put_contents($filePath, $source);
             $this->logger->debug($url . '   ->   ' . $filePath);

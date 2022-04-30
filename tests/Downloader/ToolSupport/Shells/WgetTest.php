@@ -20,7 +20,7 @@ class WgetTest extends TestCaseContainer
                     'Timeout' => $this->container->get('Downloader.timeout'),
                     'CookieFilePath' => $this->tmpCookie,
                     'HttpMethod' => 'GET',
-                    'PayloadForm' => array(
+                    /*'PayloadDataArray' => array(
                         'name1' => 'value&val1',
                         'name2' => 'value% val2'
                     ),
@@ -31,15 +31,13 @@ class WgetTest extends TestCaseContainer
                         'Accept-Language' => $this->container->get('Downloader.acceptLanguage'),
                         'Accept-Encoding' => $this->container->get('Downloader.acceptEncoding'),
                         'Connection' => $this->container->get('Downloader.connection'),
-                    ),
+                    ),*/
                     'Shell' => $this->container->get("Wget.shell")
                 ),
                 'logger' => $this->container->get('Logger')
             ))
         ));
-        $wget->downloadFile('https://google.ru/fakeUrl/fakeUrl', $this->tmpFile);
-        $this->assertFileDoesNotExist($this->tmpFile);
-        $wget->downloadFile($this->container->get('Test.urlImage'), $this->tmpFile);
+        $wget->downloadFile('https://google.com', $this->tmpFile);
         $this->assertFileExists($this->tmpFile);
     }
 }

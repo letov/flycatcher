@@ -31,7 +31,7 @@ class SpyderSitemapTest extends TestCaseContainer
             'host' => 'someurl.ru',
             'protocol' => 'https',
             'downloadDir' => $this->container->get('Directories.paths')['download'],
-            'taskLimit' => $this->container->get("Worker.downloadToolWorker.count"),
+            'taskLimit' => $this->container->get("Worker.downloadTool.count"),
             'client' => $this->client,
             'cache' => $this->container->get('Cache'),
             'domParser' => $this->container->get('DomParser'),
@@ -52,7 +52,7 @@ class SpyderSitemapTest extends TestCaseContainer
             'CookieFilePath' => $this->tmpCookie,
             'Timeout' => $this->container->get('Downloader.timeout'),
         );
-        for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count") * 2; $i++)
+        for ($i = 0; $i < $this->container->get("Worker.downloadTool.count") * 2; $i++)
         {
             $this->client->addTask("setDownloadTool", serialize(array(
                 'downloadToolName' => 'Wget',

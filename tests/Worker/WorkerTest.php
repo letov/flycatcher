@@ -27,7 +27,7 @@ class WorkerTest extends TestCaseContainer
         });
         $this->client->setTimeout($this->container->get("Downloader.timeoutWithCaptcha") * 1000 * 2);
         $this->setWorkers();
-        for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count"); $i++) {
+        for ($i = 0; $i < $this->container->get("Worker.downloadTool.count"); $i++) {
             $this->client->addTask("download", serialize(array(
                 'url' => 'http://democaptcha.com/demo-form-eng/image.html',
                 'filePath' => $this->tmpFile . "_res_" . $i,
@@ -49,7 +49,7 @@ class WorkerTest extends TestCaseContainer
         $args = array(
             'CookieFilePath' => $this->tmpCookie,
             'Timeout' => $this->container->get('Downloader.timeoutWithCaptcha'),
-            'PayloadForm' => array(
+            'PayloadDataArray' => array(
                 'message' => 'test',
             ),
             'DiskCachePath' => $this->container->get('Directories.paths')['browsersData'],
@@ -64,7 +64,7 @@ class WorkerTest extends TestCaseContainer
             'PhantomJSSnapshotSelector' => 'body',
             'PhantomJSSnapshotPath' => $this->tmpFile . "_snap.png",
         );
-        for ($i = 0; $i < $this->container->get("Worker.downloadToolWorker.count"); $i++)
+        for ($i = 0; $i < $this->container->get("Worker.downloadTool.count"); $i++)
         {
             $this->client->addTask("setDownloadTool", serialize(array(
                 'downloadToolName' => 'PhantomJS',

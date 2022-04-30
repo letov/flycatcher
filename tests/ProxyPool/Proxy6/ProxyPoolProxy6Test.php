@@ -15,6 +15,6 @@ class ProxyPoolProxy6Test extends TestCaseContainer
     function testProxyPool()
     {
         $proxyList = $this->container->get("ProxyPool")->getProxyList();
-        /*$this->assertGreaterThan(0, count($proxyList));*/
+        $this->assertGreaterThan(0, count($proxyList));
     }
 }

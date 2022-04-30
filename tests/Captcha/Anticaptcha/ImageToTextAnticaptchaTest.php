@@ -29,7 +29,7 @@ class ImageToTextAnticaptchaTest extends TestCaseContainer
             'argsSupport' => $argsSupport,
             'logger' => $this->container->get('Logger')
         ));
-        $this->curl->downloadFile("http://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
+        $this->curl->downloadFile("https://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
         $this->getCaptchaImage();
         $this->sendForm();
         //$this->assertStringContainsString("Your message has been sent", file_get_contents($this->tmpFile));
@@ -68,7 +68,7 @@ class ImageToTextAnticaptchaTest extends TestCaseContainer
                 'Headers' => array(
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ),
-                'PayloadForm' => array(
+                'PayloadDataArray' => array(
                     'message' => 'hello world',
                     'vericode' => $captchaText,
                     'formid' => 'image_captcha_demo_form',

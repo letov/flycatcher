@@ -105,13 +105,25 @@ class ArgsSupport implements ArgsSupportInterface
 	}
 
 
-	public function getPayloadForm(): ?array
+	public function getPayloadDataArray(): ?array
 	{
 		return $this->getArg(__FUNCTION__);
 	}
 
 
-	public function getPayloadRaw(): ?string
+	public function getPayloadDataRaw(): ?string
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPayloadDataFormArray(): ?string
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getPayloadDataFormRaw(): ?string
 	{
 		return $this->getArg(__FUNCTION__);
 	}
@@ -178,6 +190,12 @@ class ArgsSupport implements ArgsSupportInterface
 
 
 	public function getOffHeadlessMode(): ?bool
+	{
+		return $this->getArg(__FUNCTION__);
+	}
+
+
+	public function getBeforeDownloadCall(): ?string
 	{
 		return $this->getArg(__FUNCTION__);
 	}

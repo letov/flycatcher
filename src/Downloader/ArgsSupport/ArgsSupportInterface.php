@@ -50,10 +50,16 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 	function getHttpMethod(): ?string;
 
 
-	function getPayloadForm(): ?array;
+	function getPayloadDataArray(): ?array;
 
 
-	function getPayloadRaw(): ?string;
+	function getPayloadDataRaw(): ?string;
+
+
+	function getPayloadDataFormArray(): ?string;
+
+
+	function getPayloadDataFormRaw(): ?string;
 
 
 	function getPhantomJSConnector(): ?string;
@@ -87,6 +93,9 @@ interface ArgsSupportInterface extends ArgInterfaces\BrowserSettingsArgInterface
 
 
 	function getOffHeadlessMode(): ?bool;
+
+
+	function getBeforeDownloadCall(): ?string;
 
 
 	function getShell(): ?\Letov\Flycatcher\Shell\ShellInterface;

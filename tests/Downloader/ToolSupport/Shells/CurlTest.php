@@ -19,8 +19,8 @@ class CurlTest extends TestCaseContainer
                 'args' => array(
                     'Timeout' => $this->container->get('Downloader.timeout'),
                     'CookieFilePath' => $this->tmpCookie,
-                    'HttpMethod' => 'GET',
-                    'PayloadForm' => array(
+                    /*'HttpMethod' => 'GET',
+                    'PayloadDataArray' => array(
                         'name1' => 'value&val1',
                         'name2' => 'value% val2'
                     ),
@@ -31,13 +31,13 @@ class CurlTest extends TestCaseContainer
                         'Accept-Language' => $this->container->get('Downloader.acceptLanguage'),
                         'Accept-Encoding' => $this->container->get('Downloader.acceptEncoding'),
                         'Connection' => $this->container->get('Downloader.connection'),
-                    ),
+                    ),*/
                     'Shell' => $this->container->get("Curl.shell")
                 ),
                 'logger' => $this->container->get('Logger')
             ))
         ));
-        $curl->downloadFile($this->container->get('Test.urlImage'), $this->tmpFile);
+        $curl->downloadFile('https://google.com', $this->tmpFile);
         $this->assertFileExists($this->tmpFile);
     }
 }

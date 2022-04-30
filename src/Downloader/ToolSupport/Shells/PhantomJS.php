@@ -69,8 +69,8 @@ class PhantomJS extends AbstractShellSupport implements DownloadToolInterface
     private function setPayload($shellDownloadFile)
     {
         $shellDownloadFile->addArg("--method", $this->argsSupport->getHttpMethod());
-        if (!empty($this->argsSupport->getPayloadRaw()) || !empty($this->argsSupport->getPayloadForm())) {
-            $data = $this->argsSupport->getPayloadRaw() ? $this->argsSupport->getPayloadRaw() : http_build_query($this->argsSupport->getPayloadForm());
+        if (!empty($this->argsSupport->getPayloadDataRaw()) || !empty($this->argsSupport->getPayloadDataArray())) {
+            $data = $this->argsSupport->getPayloadDataRaw() ? $this->argsSupport->getPayloadDataRaw() : http_build_query($this->argsSupport->getPayloadDataArray());
             $shellDownloadFile->addArg("--data", $data);
         }
     }

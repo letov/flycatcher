@@ -1,12 +1,9 @@
 <?php
 
-use JonnyW\PhantomJs\Client;
-use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
 use Letov\Flycatcher\Directories\Directories;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
-use Letov\Flycatcher\Downloader\ToolSupport\Packages\PhantomJSPackage;
 use Letov\Flycatcher\Downloader\ToolSupport\Packages\SeleniumFirefox;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\Curl;
 use Letov\Flycatcher\Downloader\ToolSupport\Shells\PhantomJS;
@@ -25,7 +22,6 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 
 return [
-    'Test.urlImage' => 'https://c.s-microsoft.com/favicon.ico',
     'Directories.rootPath' => '/tmp/flycatcher_storage_test',
     'Directories.paths' => array(
         'browsersData' => DI\string('{Directories.rootPath}/browsers_data'),
@@ -59,7 +55,7 @@ return [
             DI\get('Proxy6.throwIfLessMinCount'),
             DI\get('Proxy6.httpsCount'),
         ),
-    'Anticaptcha.apiKey' => '',
+    'Anticaptcha.apiKey' => '63a2a4966f793615acebd66a7778f17f',
     'Captcha.imageToText' => DI\create(ImageToTextAnticaptcha::class)
         ->constructor(
             DI\get('Anticaptcha.apiKey'),
@@ -68,8 +64,8 @@ return [
     'Gearman.client' => DI\create(GearmanClient::class),
     'Gearman.host' => '127.0.0.1',
     'Gearman.port' => 4730,
-    'Worker.downloadToolWorker' => DI\create(WorkerDownloadTool::class),
-    'Worker.downloadToolWorker.count' => 3,
+    'Worker.downloadTool' => DI\create(WorkerDownloadTool::class),
+    'Worker.downloadTool.count' => 3,
     'Cache.maxFileLifetimeSecond' => 60 * 60 * 24 * 5,
     'Cache.imageAlwaysFresh' => true,
     'Cache' => DI\create(Cache::class)

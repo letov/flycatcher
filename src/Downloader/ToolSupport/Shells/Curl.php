@@ -64,9 +64,13 @@ class Curl extends AbstractShellSupport implements DownloadToolInterface
 
     private function setPayload()
     {
-        if (!empty($this->argsSupport->getPayloadRaw()) || !empty($this->argsSupport->getPayloadForm())) {
-            $data = $this->argsSupport->getPayloadRaw() ? $this->argsSupport->getPayloadRaw() : http_build_query($this->argsSupport->getPayloadForm());
+        if (!empty($this->argsSupport->getPayloadDataRaw()) || !empty($this->argsSupport->getPayloadDataArray())) {
+            $data = $this->argsSupport->getPayloadDataRaw() ? $this->argsSupport->getPayloadDataRaw() : http_build_query($this->argsSupport->getPayloadDataArray());
             $this->shell->addArg("--data", $data);
+        }
+        if (!empty($this->argsSupport->getPayloadDataFormRaw()) || !empty($this->argsSupport->getPayloadDataFormArray())) {
+            $form = $this->argsSupport->getPayloadDataFormRaw() ? $this->argsSupport->getPayloadDataFormRaw() : http_build_query($this->argsSupport->getPayloadDataFormArray());
+            $this->shell->addArg("--form", $form);
         }
     }
 }

@@ -23,7 +23,7 @@ class PhantomJSTest extends TestCaseContainer
                         'User-Agent' => 'someUserAgent',
                         'Referer' => 'https://someReferer.com',
                     ),
-                    'PayloadForm' => array(
+                    'PayloadDataArray' => array(
                         'message' => 'test',
                     ),
                     'CaptchaApiKey' => $this->container->get("Anticaptcha.apiKey"),
@@ -42,7 +42,7 @@ class PhantomJSTest extends TestCaseContainer
             )),
             'logger' => $this->container->get('Logger')
         ));
-        $phantomJS->downloadFile("http://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
+        $phantomJS->downloadFile("https://democaptcha.com/demo-form-eng/image.html", $this->tmpFile);
         $this->assertFileExists($this->tmpFile);
         /*$this->assertStringNotContainsString('Invalid verification code', file_get_contents($this->tmpFile));*/
     }

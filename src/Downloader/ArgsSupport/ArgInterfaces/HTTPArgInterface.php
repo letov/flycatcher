@@ -8,7 +8,11 @@ interface HTTPArgInterface
 
     public function getHttpMethod(): ?string;
 
-    public function getPayloadForm(): ?array;
+    public function getPayloadDataArray(): ?array;
 
-    public function getPayloadRaw(): ?string;
+    public function getPayloadDataRaw(): ?string;
+
+    public function getPayloadDataFormArray(): ?string;
+
+    public function getPayloadDataFormRaw(): ?string;
 }
