@@ -1,7 +1,7 @@
 {
   "name": "letov/flycatcher",
   "description": "description",
-  "minimum-stability": "dev", 
+  "minimum-stability": "dev",
   "license": "proprietary",
   "authors": [
     {
@@ -23,7 +23,7 @@
     "php-di/php-di": "dev-master",
     "slruslan/php-proxy6": "dev-master",
     "nette/php-generator": "dev-master",
-    "letov/anticaptcha-php": "dev-master",
+    "letov/anticaptcha-php": "*",
     "dimabdc/php-fast-simple-html-dom-parser": "dev-master",
     "php-webdriver/webdriver": "dev-main",
     "monolog/monolog": "^1.17||^2.0",
