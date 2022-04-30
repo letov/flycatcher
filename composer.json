@@ -1,7 +1,7 @@
 {
   "name": "letov/flycatcher",
   "description": "description",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "license": "proprietary",
   "authors": [
     {
