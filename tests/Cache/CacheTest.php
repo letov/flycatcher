@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Tests\Cache;
 
 use DI\DependencyException;
@@ -8,11 +10,16 @@ use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 use ReflectionException as ReflectionExceptionAlias;
 
-class CacheTest extends TestCaseContainer
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class CacheTest extends TestCaseContainer
 {
     public Cache $cache;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->cache = $this->container->get('Cache');
@@ -21,12 +28,12 @@ class CacheTest extends TestCaseContainer
     /**
      * @throws ReflectionExceptionAlias
      */
-    public function testIsZeroSize()
+    public function testIsZeroSize(): void
     {
-        shell_exec("touch $this->tmpFile");
-        $this->assertTrue($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
-        shell_exec("echo \"test\" > $this->tmpFile");
-        $this->assertFalse($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
+        shell_exec("touch {$this->tmpFile}");
+        static::assertTrue($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
+        shell_exec("echo \"test\" > {$this->tmpFile}");
+        static::assertFalse($this->reflectionMethod($this->cache, 'isZeroSize', ['filePath' => $this->tmpFile]));
     }
 
     /**
@@ -34,12 +41,12 @@ class CacheTest extends TestCaseContainer
      * @throws DependencyException
      * @throws NotFoundException
      */
-    public function testisImageFile()
+    public function testisImageFile(): void
     {
         $imgUrl = $this->container->get('Test.urlImage');
-        shell_exec("wget -q -O $this->tmpFile $imgUrl");
-        $this->assertTrue($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $this->tmpFile]));
-        shell_exec("echo \"crushImageStructure\" > $this->tmpFile");
-        $this->assertFalse($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $this->tmpFile]));
+        shell_exec("wget -q -O {$this->tmpFile} {$imgUrl}");
+        static::assertTrue($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $this->tmpFile]));
+        shell_exec("echo \"crushImageStructure\" > {$this->tmpFile}");
+        static::assertFalse($this->reflectionMethod($this->cache, 'isImageFile', ['filePath' => $this->tmpFile]));
     }
 }

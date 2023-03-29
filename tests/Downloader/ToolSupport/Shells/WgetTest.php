@@ -1,22 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Tests\Downloader\ToolSupport\Shells;
 
 use DI\DependencyException;
 use DI\NotFoundException;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 
-class WgetTest extends TestCaseContainer
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class WgetTest extends TestCaseContainer
 {
     /**
      * @throws NotFoundException
      * @throws DependencyException
      */
-    public function testWgetDownloader()
+    public function testWgetDownloader(): void
     {
-        $wget = $this->container->make('Wget', array(
-            'argsSupport' => $this->container->make('ArgSupport', array(
-                'args' => array(
+        $wget = $this->container->make('Wget', [
+            'argsSupport' => $this->container->make('ArgSupport', [
+                'args' => [
                     'Timeout' => $this->container->get('Downloader.timeout'),
                     'CookieFilePath' => $this->tmpCookie,
                     'HttpMethod' => 'GET',
@@ -32,12 +39,12 @@ class WgetTest extends TestCaseContainer
                         'Accept-Encoding' => $this->container->get('Downloader.acceptEncoding'),
                         'Connection' => $this->container->get('Downloader.connection'),
                     ),*/
-                    'Shell' => $this->container->get("Wget.shell")
-                ),
-                'logger' => $this->container->get('Logger')
-            ))
-        ));
+                    'Shell' => $this->container->get('Wget.shell'),
+                ],
+                'logger' => $this->container->get('Logger'),
+            ]),
+        ]);
         $wget->downloadFile('https://google.com', $this->tmpFile);
-        $this->assertFileExists($this->tmpFile);
+        static::assertFileExists($this->tmpFile);
     }
 }

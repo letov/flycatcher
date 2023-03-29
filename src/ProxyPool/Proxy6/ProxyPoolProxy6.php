@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\ProxyPool\Proxy6;
 
-use Exception;
 use Letov\Flycatcher\ProxyPool\ProxyPoolInterface;
 use Slruslan\Proxy6\ProxyState;
 use Slruslan\Proxy6\ProxyType;
@@ -11,7 +12,6 @@ use Slruslan\Proxy6\Wrapper;
 
 class ProxyPoolProxy6 implements ProxyPoolInterface
 {
-
     private Wrapper $api;
     private object $response;
     private int $minCount;
@@ -19,7 +19,7 @@ class ProxyPoolProxy6 implements ProxyPoolInterface
     private int $httpsCount;
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct(string $apiKey, int $minCount, bool $throwIfLessMinCount = false, int $httpsCount = 0)
     {
@@ -27,31 +27,48 @@ class ProxyPoolProxy6 implements ProxyPoolInterface
         $this->throwIfLessMinCount = $throwIfLessMinCount;
         $this->httpsCount = $httpsCount;
         $this->api = new Wrapper($apiKey);
+
         try {
             $this->makeResponse();
             $this->setProxyType();
-        } catch (Exception $e) {
-            throw new Exception('Response error');
+        } catch (\Exception $e) {
+            throw new \Exception('Response error');
         }
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    private function makeResponse()
+    public function getProxyList(string $proxyType = 'socks5'): array
+    {
+        $result = [];
+        foreach ($this->response->list as $proxy) {
+            if (('socks5' === $proxyType && ProxyType::SOCKS5 === $proxy->type)
+                || ('https' === $proxyType && ProxyType::HTTPS === $proxy->type)) {
+                $result[] = new ProxyProxy6($proxy);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function makeResponse(): void
     {
         $this->response = $this->api->getProxy(ProxyState::ACTIVE);
         if ($this->response->list_count < $this->minCount) {
             $buyCount = $this->minCount - $this->response->list_count;
-            $this->api->buy($buyCount, 30, "ru", ProxyVersion::IPV4);
+            $this->api->buy($buyCount, 30, 'ru', ProxyVersion::IPV4);
             $this->response = $this->api->getProxy(ProxyState::ACTIVE);
             if (true === $this->throwIfLessMinCount && $this->response < $this->minCount) {
-                throw new Exception("Need more money in ProxyProxy6 service");
+                throw new \Exception('Need more money in ProxyProxy6 service');
             }
         }
     }
 
-    private function setProxyType()
+    private function setProxyType(): void
     {
         $keysSocks = [];
         $keysHttps = [];
@@ -59,7 +76,7 @@ class ProxyPoolProxy6 implements ProxyPoolInterface
         foreach ($this->response->list as $proxy) {
             if ($httpsCount > 0) {
                 $keysHttps[] = $proxy->id;
-                $httpsCount--;
+                --$httpsCount;
             } else {
                 $keysSocks[] = $proxy->id;
             }
@@ -67,20 +84,5 @@ class ProxyPoolProxy6 implements ProxyPoolInterface
         $this->api->setType($keysSocks, ProxyType::SOCKS5);
         $this->api->setType($keysHttps, ProxyType::HTTPS);
         $this->response = $this->api->getProxy(ProxyState::ACTIVE);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function getProxyList(string $proxyType = 'socks5'): array
-    {
-        $result = [];
-        foreach ($this->response->list as $proxy) {
-            if (('socks5' == $proxyType && ProxyType::SOCKS5 == $proxy->type) ||
-                ('https' == $proxyType && ProxyType::HTTPS == $proxy->type)) {
-                $result[] = new ProxyProxy6($proxy);
-            }
-        }
-        return $result;
     }
 }

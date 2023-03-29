@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
 use Letov\Flycatcher\Directories\Directories;
@@ -23,17 +25,18 @@ use Psr\Container\ContainerInterface;
 
 return [
     'Directories.rootPath' => '/tmp/flycatcher_storage_test',
-    'Directories.paths' => array(
+    'Directories.paths' => [
         'browsersData' => DI\string('{Directories.rootPath}/browsers_data'),
         'download' => DI\string('{Directories.rootPath}/download'),
         'logs' => DI\string('{Directories.rootPath}/logs'),
-    ),
+    ],
     'Directories' => DI\create(Directories::class),
     'Logger' => DI\factory(function ($c) {
         $logger = new Logger('log');
         $pid = posix_getpid();
-        $logger->pushHandler(new StreamHandler($c->get('Directories.paths')['logs'] . '/debug_' . $pid . '.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler($c->get('Directories.paths')['logs'].'/debug_'.$pid.'.log', Logger::DEBUG));
         $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+
         return $logger;
     }),
     'Downloader.accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -44,7 +47,7 @@ return [
     'Downloader.timeoutWithCaptcha' => 60,
     'Downloader.timeoutWithPageContent' => 60,
     'Proxy' => DI\create(ProxyProxy6::class),
-    'Proxy6.apiKey' => "",
+    'Proxy6.apiKey' => '',
     'Proxy6.minCount' => 3,
     'Proxy6.throwIfLessMinCount' => false,
     'Proxy6.httpsCount' => 1,
@@ -78,7 +81,8 @@ return [
     'Shell' => DI\create(Shell::class),
     'Stat' => function ($c) {
         return (new Shell('stat', $c->get('Logger'), '='))
-            ->addArg('--printf', '%s');
+            ->addArg('--printf', '%s')
+        ;
     },
     'ArgSupport' => DI\create(ArgsSupport::class),
     'Curl' => DI\create(Curl::class),

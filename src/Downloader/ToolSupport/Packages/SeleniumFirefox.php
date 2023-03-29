@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Downloader\ToolSupport\Packages;
 
-use Exception;
 use Facebook\WebDriver\Firefox\FirefoxDriver;
 use Facebook\WebDriver\Firefox\FirefoxOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -19,77 +20,74 @@ class SeleniumFirefox implements ToolSupportInterface, DownloaderInterface, Brow
     protected ArgsSupportInterface $argsSupport;
     protected ?LoggerInterface $logger;
 
-    function __construct(ArgsSupportInterface $argsSupport, ?LoggerInterface $logger = null)
+    public function __construct(ArgsSupportInterface $argsSupport, ?LoggerInterface $logger = null)
     {
         $this->argsSupport = $argsSupport;
         $firefoxOptions = new FirefoxOptions();
-        if (true !== $argsSupport->getOffHeadlessMode())
-        {
+        if (true !== $argsSupport->getOffHeadlessMode()) {
             $firefoxOptions->addArguments(['-headless']);
         }
         $capabilities = DesiredCapabilities::firefox();
         $capabilities->setCapability(FirefoxOptions::CAPABILITY, $firefoxOptions);
-        if (!empty($this->argsSupport->getProxy()))
-        {
+        if (!empty($this->argsSupport->getProxy())) {
             $proxy = $this->argsSupport->getProxy();
-            $capabilities->setCapability(WebDriverCapabilityType::PROXY,
+            $capabilities->setCapability(
+                WebDriverCapabilityType::PROXY,
                 [
-                    "socksProxy" => $proxy->getSocket(),
-                    "socksVersion" => 5
+                    'socksProxy' => $proxy->getSocket(),
+                    'socksVersion' => 5,
                 ]
             );
         }
         $this->driver = FirefoxDriver::start($capabilities);
-        if (!empty($this->argsSupport->getTimeout()))
-        {
+        if (!empty($this->argsSupport->getTimeout())) {
             $this->driver->manage()->timeouts()->pageLoadTimeout($this->argsSupport->getTimeout());
         }
         $this->logger = $logger;
         $this->setArgsToClient();
     }
 
-
-    public function makeAction(callable $function)
+    public function makeAction(callable $function): void
     {
         $function($this->driver);
     }
 
-    public function closeBrowser()
+    public function closeBrowser(): void
     {
         $this->driver->close();
     }
 
-    private function setArgsToClient()
-    {
-
-    }
-
     /**
-     * @throws Exception
+     * @param mixed $url
+     * @param mixed $filePath
+     *
+     * @throws \Exception
      */
-    public function downloadFile($url, $filePath)
+    public function downloadFile($url, $filePath): void
     {
         try {
             $this->driver->get($url);
             $beforeDownloadCall = $this->argsSupport->getBeforeDownloadCall();
-            if (!empty($beforeDownloadCall))
-            {
+            if (!empty($beforeDownloadCall)) {
                 $beforeDownloadCall($this->driver);
             }
             $source = $this->driver->getPageSource();
             @file_put_contents($filePath, $source);
-            $this->logger->debug($url . '   ->   ' . $filePath);
-        }
-        catch (Exception $e)
-        {
+            $this->logger->debug($url.'   ->   '.$filePath);
+        } catch (\Exception $e) {
             $this->closeBrowser();
-            throw new Exception($e->getMessage());
+
+            throw new \Exception($e->getMessage());
         }
     }
 
-    public function updateArgs(array $args)
+    public function updateArgs(array $args): void
     {
         $this->argsSupport->updateArgs($args);
         $this->setArgsToClient();
+    }
+
+    private function setArgsToClient(): void
+    {
     }
 }

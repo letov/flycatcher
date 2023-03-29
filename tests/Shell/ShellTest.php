@@ -1,35 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Tests\Shell;
 
 use DI\DependencyException;
 use DI\NotFoundException as NotFoundExceptionAlias;
-use Exception;
 use Letov\Flycatcher\Tests\TestCaseContainer;
 
-class ShellTest extends TestCaseContainer
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class ShellTest extends TestCaseContainer
 {
     /**
      * @throws DependencyException
      * @throws NotFoundExceptionAlias
      */
-    public function testShell()
+    public function testShell(): void
     {
-        $shell = $this->container->make('Shell',
-            array(
+        $shell = $this->container->make(
+            'Shell',
+            [
                 'cmd' => 'echo',
-                'logger' => $this->container->get('Logger')
-            )
+                'logger' => $this->container->get('Logger'),
+            ]
         );
-        $this->assertSame("flycatcher",
+        static::assertSame(
+            'flycatcher',
             $shell
-                ->addArg("-n")
-                ->addArg("flycatcher")
+                ->addArg('-n')
+                ->addArg('flycatcher')
                 ->run()
         );
-        $this->assertSame("flycatcher next",
+        static::assertSame(
+            'flycatcher next',
             $shell
-                ->addArg("next")
+                ->addArg('next')
                 ->run()
         );
     }
@@ -38,14 +47,15 @@ class ShellTest extends TestCaseContainer
      * @throws DependencyException
      * @throws NotFoundExceptionAlias
      */
-    public function testWrongsCmd()
+    public function testWrongsCmd(): void
     {
-        $this->expectException(Exception::class);
-        $this->container->make('Shell',
-            array(
+        $this->expectException(\Exception::class);
+        $this->container->make(
+            'Shell',
+            [
                 'cmd' => 'fakeCommand',
-                'logger' => $this->container->get('Logger')
-            )
+                'logger' => $this->container->get('Logger'),
+            ]
         );
     }
 }

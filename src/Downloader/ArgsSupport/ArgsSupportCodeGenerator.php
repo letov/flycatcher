@@ -1,28 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Downloader\ArgsSupport;
 
 use Nette\PhpGenerator\PhpNamespace;
-use ReflectionClass;
-use ReflectionException;
 
 class ArgsSupportCodeGenerator
 {
-    static function generate()
+    public static function generate(): void
     {
-
         $allInterfaces = get_declared_interfaces();
-        array_map(function ($interfaceFile) {
+        array_map(function ($interfaceFile): void {
             require_once $interfaceFile;
-        }, glob(__DIR__ . '/ArgInterfaces/*.php'));
+        }, glob(__DIR__.'/ArgInterfaces/*.php'));
         $argInterfaces = array_diff(get_declared_interfaces(), $allInterfaces);
-        if (0 == count($argInterfaces)) {
+        if (0 === \count($argInterfaces)) {
             return;
         }
         $argsSupportInterfaceNamespace = new PhpNamespace(__NAMESPACE__);
-        $argsSupportInterface = $argsSupportInterfaceNamespace->addInterface("ArgsSupportInterface");
+        $argsSupportInterface = $argsSupportInterfaceNamespace->addInterface('ArgsSupportInterface');
         $argsSupportNamespace = new PhpNamespace(__NAMESPACE__);
-        $argsSupport = $argsSupportNamespace->addClass("ArgsSupport");
+        $argsSupport = $argsSupportNamespace->addClass('ArgsSupport');
         foreach ($argInterfaces as $argInterface) {
             $argsSupportInterface->addExtend($argInterface);
         }
@@ -30,63 +29,86 @@ class ArgsSupportCodeGenerator
         $argsStorage = $argsSupport->addProperty('argsStorage');
         $argsStorage
             ->setType('array')
-            ->setPrivate();
+            ->setPrivate()
+        ;
         $construct = $argsSupportInterface
-            ->addMethod('__construct');
+            ->addMethod('__construct')
+        ;
         $construct
             ->addParameter('args')
-            ->setType('array');
+            ->setType('array')
+        ;
         $construct = $argsSupport
-            ->addMethod('__construct');
+            ->addMethod('__construct')
+        ;
         $construct
             ->addParameter('args')
-            ->setType('array');
+            ->setType('array')
+        ;
         $construct
-            ->addBody('$this->argsStorage = $args;');
+            ->addBody('$this->argsStorage = $args;')
+        ;
         $updateArgs = $argsSupportInterface
-            ->addMethod('updateArgs');
+            ->addMethod('updateArgs')
+        ;
         $updateArgs
             ->addParameter('args')
-            ->setType('array');
+            ->setType('array')
+        ;
         $updateArgs = $argsSupport
-            ->addMethod('updateArgs');
+            ->addMethod('updateArgs')
+        ;
         $updateArgs
             ->addParameter('args')
-            ->setType('array');
+            ->setType('array')
+        ;
         $updateArgs
-            ->addBody('$this->argsStorage = array_merge($this->argsStorage, $args);');
+            ->addBody('$this->argsStorage = array_merge($this->argsStorage, $args);')
+        ;
         $getArg = $argsSupport
             ->addMethod('getArg')
-            ->setPrivate();
+            ->setPrivate()
+        ;
         $getArg
             ->addParameter('methodName')
-            ->setType('string');
+            ->setType('string')
+        ;
         $getArg
             ->addBody('$argName = substr($methodName, 3);')
-            ->addBody('return $this->argsStorage[$argName] ?? null;');
-        foreach ($argInterfaces as $argInterface)
+            ->addBody('return $this->argsStorage[$argName] ?? null;')
+        ;
+        foreach ($argInterfaces as $argInterface) {
             try {
-                $interface = new ReflectionClass($argInterface);
+                $interface = new \ReflectionClass($argInterface);
                 $interfaceMethods = $interface->getMethods();
                 foreach ($interfaceMethods as $interfaceMethod) {
                     $argsSupportInterface->addMethod($interfaceMethod->name)
                         ->setReturnType($interfaceMethod->getReturnType())
-                        ->setReturnNullable();
+                        ->setReturnNullable()
+                    ;
                     $argsSupport
                         ->addMethod($interfaceMethod->name)
                         ->setReturnType($interfaceMethod->getReturnType())
                         ->setReturnNullable()
-                        ->addBody('return $this->getArg(__FUNCTION__);');
+                        ->addBody('return $this->getArg(__FUNCTION__);')
+                    ;
                 }
-            } catch (ReflectionException $e) {
+            } catch (\ReflectionException $e) {
                 continue;
             }
-        $argsSupportNamespace = str_replace("\\" . $argsSupportInterface->getName(),
+        }
+        $argsSupportNamespace = str_replace(
+            '\\'.$argsSupportInterface->getName(),
             $argsSupportInterface->getName(),
-            $argsSupportNamespace);
-        file_put_contents(__DIR__ . '/ArgsSupportInterface.php',
-            "<?php\n// autogenerated file\n// DO NOT EDIT\n$argsSupportInterfaceNamespace");
-        file_put_contents(__DIR__ . '/ArgsSupport.php',
-            "<?php\n// autogenerated file\n// DO NOT EDIT\n$argsSupportNamespace");
+            $argsSupportNamespace
+        );
+        file_put_contents(
+            __DIR__.'/ArgsSupportInterface.php',
+            "<?php\n// autogenerated file\n// DO NOT EDIT\n{$argsSupportInterfaceNamespace}"
+        );
+        file_put_contents(
+            __DIR__.'/ArgsSupport.php',
+            "<?php\n// autogenerated file\n// DO NOT EDIT\n{$argsSupportNamespace}"
+        );
     }
 }

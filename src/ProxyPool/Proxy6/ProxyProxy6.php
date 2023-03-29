@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\ProxyPool\Proxy6;
 
 use Letov\Flycatcher\ProxyPool\ProxyInterface;
@@ -45,6 +47,6 @@ class ProxyProxy6 implements ProxyInterface
 
     public function getType(): string
     {
-        return $this->proxy->type == 'http' ? 'https' : 'socks5';
+        return 'http' === $this->proxy->type ? 'https' : 'socks5';
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\DomParser\PhpHtmlParser;
 
 use FastSimpleHTMLDom\Document;
@@ -13,19 +15,20 @@ class DomDocument implements DomDocumentInterface
     {
         if (!file_exists($filePath)) {
             return null;
-        } else {
-            return $this->loadFromString(file_get_contents($filePath));
         }
+
+        return $this->loadFromString(file_get_contents($filePath));
     }
 
     public function loadFromString($html): ?DomDocumentInterface
     {
         $this->dom = Document::str_get_html($html);
+
         return $this;
     }
 
     public function find($selector): array
     {
-        return (array)$this->dom->find($selector);
+        return (array) $this->dom->find($selector);
     }
 }

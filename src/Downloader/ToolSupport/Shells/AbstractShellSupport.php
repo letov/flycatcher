@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Downloader\ToolSupport\Shells;
 
-use Exception;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupportInterface;
 use Letov\Flycatcher\Downloader\ToolSupport\ToolSupportInterface;
 use Letov\Flycatcher\Shell\ShellInterface;
@@ -10,31 +11,30 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractShellSupport implements ToolSupportInterface
 {
-
     protected ArgsSupportInterface $argsSupport;
     protected ShellInterface $shell;
     protected ?LoggerInterface $logger;
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct(ArgsSupportInterface $argsSupport, ?LoggerInterface $logger = null)
     {
         if (empty($argsSupport->getShell())) {
-            throw new Exception("Shell client empty");
+            throw new \Exception('Shell client empty');
         }
         $this->argsSupport = $argsSupport;
         $this->logger = $logger;
         $this->setArgsToShell();
     }
 
-    abstract protected function setArgsToShell();
-
-    public function updateArgs(array $args)
+    public function updateArgs(array $args): void
     {
         $this->argsSupport->updateArgs($args);
         $this->setArgsToShell();
     }
+
+    abstract protected function setArgsToShell();
 
     protected function fileNameAddPid(?string $fileName): ?string
     {
@@ -43,8 +43,9 @@ abstract class AbstractShellSupport implements ToolSupportInterface
         }
         $base = pathinfo($fileName);
         $pid = posix_getpid();
-        $extension = isset($base['extension']) ? ".{$base['extension']}" : "";
-        return "{$base['dirname']}/{$base['filename']}_$pid{$extension}";
+        $extension = isset($base['extension']) ? ".{$base['extension']}" : '';
+
+        return "{$base['dirname']}/{$base['filename']}_{$pid}{$extension}";
     }
 
     protected function dirAddPid(?string $dirName): ?string
@@ -53,10 +54,11 @@ abstract class AbstractShellSupport implements ToolSupportInterface
             return null;
         }
         $pid = posix_getpid();
-        $newDir = "{$dirName}/$pid";
+        $newDir = "{$dirName}/{$pid}";
         if (!file_exists($newDir)) {
             mkdir($newDir);
         }
+
         return $newDir;
     }
 }

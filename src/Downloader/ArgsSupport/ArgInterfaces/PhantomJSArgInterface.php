@@ -1,8 +1,8 @@
 <?php
 
-namespace Letov\Flycatcher\Downloader\ArgsSupport\ArgInterfaces;
+declare(strict_types=1);
 
-use JonnyW\PhantomJs\ClientInterface;
+namespace Letov\Flycatcher\Downloader\ArgsSupport\ArgInterfaces;
 
 interface PhantomJSArgInterface
 {

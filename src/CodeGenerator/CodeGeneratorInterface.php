@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\CodeGenerator;
 
 interface CodeGeneratorInterface
 {
-    function generate();
+    public function generate();
 }

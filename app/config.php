@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Letov\Flycatcher\Cache\Cache;
 use Letov\Flycatcher\Captcha\Anticaptcha\ImageToTextAnticaptcha;
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupport;
@@ -23,16 +25,17 @@ use Psr\Container\ContainerInterface;
 
 return [
     'Directories.rootPath' => '/tmp/flycatcher_storage_test',
-    'Directories.paths' => array(
+    'Directories.paths' => [
         'browsersData' => DI\string('{Directories.rootPath}/browsers_data'),
         'download' => DI\string('{Directories.rootPath}/download'),
         'logs' => DI\string('{Directories.rootPath}/logs'),
-    ),
+    ],
     'Logger' => DI\factory(function ($c) {
         $logger = new Logger('log');
         $pid = posix_getpid();
-        $logger->pushHandler(new StreamHandler($c->get('Dirs')['logs'] . '/debug_' . $pid . '.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler($c->get('Dirs')['logs'].'/debug_'.$pid.'.log', Logger::DEBUG));
         $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+
         return $logger;
     }),
     'Downloader.accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -77,7 +80,8 @@ return [
     'Shell' => DI\create(Shell::class),
     'Stat' => function ($c) {
         return (new Shell('stat', $c->get('Logger'), '='))
-            ->addArg('--printf', '%s');
+            ->addArg('--printf', '%s')
+        ;
     },
     'ArgSupport' => DI\create(ArgsSupport::class),
     'Curl' => DI\create(Curl::class),
@@ -101,7 +105,7 @@ return [
     'Spyder.urlList' => DI\create(SpyderUrlList::class),
     'Spyder.urlTemplate' => DI\create(SpyderUrlTemplate::class),
     'Spyder.sitemap' => DI\create(SpyderSitemap::class),
-    'Google.accountKeyFilePath' => "",
+    'Google.accountKeyFilePath' => '',
     'Google.scope' => 'https://www.googleapis.com/auth/spreadsheets',
     'Google.spreadsheetId' => '',
     'Google.googleSheet' => function (ContainerInterface $c) {

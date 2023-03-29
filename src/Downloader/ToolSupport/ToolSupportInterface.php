@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Downloader\ToolSupport;
 
 use Letov\Flycatcher\Downloader\ArgsSupport\ArgsSupportInterface;
@@ -10,5 +12,4 @@ interface ToolSupportInterface
     public function __construct(ArgsSupportInterface $argsSupport, ?LoggerInterface $logger = null);
 
     public function updateArgs(array $args);
-
 }

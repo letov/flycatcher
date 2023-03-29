@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Spyder;
 
 class JsonUrlTree implements JsonUrlTreeInterface
@@ -13,28 +15,25 @@ class JsonUrlTree implements JsonUrlTreeInterface
         $this->jsonFilePath = $jsonFilePath;
     }
 
-    public function setRoot(?string $root)
+    public function setRoot(?string $root): void
     {
         $this->root = $root;
     }
 
-    public function add(string $url)
+    public function add(string $url): void
     {
-        if(!empty($this->jsonFilePath))
-        {
+        if (!empty($this->jsonFilePath)) {
             $this->storage[] = $url;
         }
     }
 
-    public function save()
+    public function save(): void
     {
-        if(!empty($this->jsonFilePath))
-        {
+        if (!empty($this->jsonFilePath)) {
             $json = [];
             foreach ($this->storage as $url) {
                 $arr = $this->compilePathArr($url);
-                if (empty($arr))
-                {
+                if (empty($arr)) {
                     continue;
                 }
                 $json = array_merge_recursive($json, $arr);
@@ -46,22 +45,19 @@ class JsonUrlTree implements JsonUrlTreeInterface
     private function compilePathArr(string $url): array
     {
         $urlParts = parse_url($url);
-        if (!isset($urlParts['path']))
-        {
-            return array();
+        if (!isset($urlParts['path'])) {
+            return [];
         }
         $pathParts = explode('/', $urlParts['path']);
-        if (isset($urlParts['query']))
-        {
-            $pathParts[] = '?' . $urlParts['query'];
+        if (isset($urlParts['query'])) {
+            $pathParts[] = '?'.$urlParts['query'];
         }
-        if (isset($urlParts['fragment']))
-        {
-            $pathParts[] = '#' . $urlParts['fragment'];
+        if (isset($urlParts['fragment'])) {
+            $pathParts[] = '#'.$urlParts['fragment'];
         }
         $pathParts = array_reverse($pathParts);
         $path = [];
-        $beforePart = "";
+        $beforePart = '';
         foreach ($pathParts as $pathPart) {
             if (!empty(trim($pathPart))) {
                 $path[$pathPart] = $path;
@@ -72,11 +68,11 @@ class JsonUrlTree implements JsonUrlTreeInterface
             }
         }
         if (!empty($this->root)) {
-            return array(
-                $this->root => $path
-            );
-        } else {
-            return $path;
+            return [
+                $this->root => $path,
+            ];
         }
+
+        return $path;
     }
 }

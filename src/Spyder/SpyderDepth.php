@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Letov\Flycatcher\Spyder;
 
-use Exception;
-use GearmanClient;
 use Letov\Flycatcher\Cache\CacheInterface;
 
 class SpyderDepth extends AbstractSpyder
@@ -12,22 +12,21 @@ class SpyderDepth extends AbstractSpyder
     private array $excludePathList;
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    function __construct(
-        string                $host,
-        string                $protocol,
-        string                $downloadDir,
-        int                   $taskLimit,
-        GearmanClient         $client,
-        CacheInterface        $cache,
-        JsonUrlTreeInterface  $jsonUrlTree,
-        string                $rootPath,
-        int                   $depthLimit,
-        array                 $includePathList = [],
-        array                 $excludePathList = []
-    )
-    {
+    public function __construct(
+        string $host,
+        string $protocol,
+        string $downloadDir,
+        int $taskLimit,
+        \GearmanClient $client,
+        CacheInterface $cache,
+        JsonUrlTreeInterface $jsonUrlTree,
+        string $rootPath,
+        int $depthLimit,
+        array $includePathList = [],
+        array $excludePathList = []
+    ) {
         parent::__construct($host, $protocol, $downloadDir, $taskLimit, $client, $cache, $jsonUrlTree);
         $this->includePathList = $includePathList;
         $this->excludePathList = $excludePathList;
@@ -36,13 +35,16 @@ class SpyderDepth extends AbstractSpyder
     }
 
     /**
-     * @throws Exception
+     * @param mixed $rootPath
+     * @param mixed $depth
+     *
+     * @throws \Exception
      */
-    private function start($rootPath, $depth)
+    private function start($rootPath, $depth): void
     {
-        $url = "$this->protocol://$this->host$rootPath";
+        $url = "{$this->protocol}://{$this->host}{$rootPath}";
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new Exception('Root url invalid');
+            throw new \Exception('Root url invalid');
         }
         $this->jsonUrlTree->add($url);
         $filePath = $this->getFilePath($url);
@@ -50,13 +52,13 @@ class SpyderDepth extends AbstractSpyder
             $this->addDownloadTask($url, $filePath);
             $this->client->runTasks();
             if (!$this->cache->valid($filePath)) {
-                throw new Exception('Root url download error');
+                throw new \Exception('Root url download error');
             }
         }
-        $this->iterateUrlList(array($url), $depth);
+        $this->iterateUrlList([$url], $depth);
     }
 
-    private function iterateUrlList($urlList, $depth)
+    private function iterateUrlList($urlList, $depth): void
     {
         if ($depth <= 0) {
             return;
@@ -74,9 +76,9 @@ class SpyderDepth extends AbstractSpyder
 
     private function getUrlListFromHTML($html): array
     {
-        $regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
+        $regexp = '<a\\s[^>]*href=("??)([^" >]*?)\\1[^>]*>(.*)<\\/a>';
         $urls = [];
-        if (preg_match_all("/$regexp/siU", $html, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all("/{$regexp}/siU", $html, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $url = $this->getUrl($match[2]);
                 if (null !== $url) {
@@ -84,8 +86,8 @@ class SpyderDepth extends AbstractSpyder
                 }
             }
         }
-        $urls = array_unique($urls);
-        return $urls;
+
+        return array_unique($urls);
     }
 
     private function getUrl($path): ?string
@@ -93,16 +95,17 @@ class SpyderDepth extends AbstractSpyder
         if (!$this->validatePath($path)) {
             return null;
         }
-        $url = "$this->protocol://$this->host$path";
+        $url = "{$this->protocol}://{$this->host}{$path}";
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             return null;
         }
+
         return $url;
     }
 
     private function validatePath($path): bool
     {
-        if (empty($path) /*|| false !== stripos('#', $path)*/) {
+        if (empty($path) /* || false !== stripos('#', $path) */) {
             return false;
         }
         foreach ($this->includePathList as $includePath) {
@@ -118,10 +121,11 @@ class SpyderDepth extends AbstractSpyder
                 return false;
             }
         }
+
         return true;
     }
 
-    private function downloadFromUrlListDepth($childrenUrlList, $depth)
+    private function downloadFromUrlListDepth($childrenUrlList, $depth): void
     {
         $this->downloadFromUrlList($childrenUrlList);
         $this->iterateUrlList($childrenUrlList, $depth - 1);
