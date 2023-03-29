@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+      dockerfile: Dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - flycatcher-network
+
+  gearman:
+    build:
+      context: ./docker/gearman
+      dockerfile: Dockerfile
+    ports:
+      - "14730:4730"
+    privileged: true
+    depends_on:
+      - php-fpm
+    networks:
+      - flycatcher-network
+
+networks:
+  flycatcher-network:
+    driver: bridge
+
+volumes:
+  mysql:
+    driver: local

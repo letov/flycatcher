@@ -1,0 +1,1 @@
+FROM artefactual/gearmand:latest
